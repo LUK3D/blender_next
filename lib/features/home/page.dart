@@ -6,8 +6,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(AppLocalizations.of(context)!.helloWorld),
+    return Scaffold(
+      body: Center(
+        child: Text(AppLocalizations.of(context)!.helloWorld),
+      ),
     );
   }
 }
