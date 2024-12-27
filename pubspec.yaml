@@ -7,8 +7,16 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
+  dio: ^5.7.0
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_lucide: ^1.6.1
+  get_storage: ^2.1.1
+  html: ^0.15.5
+  intl: any
+  signals: ^6.0.2
 
 dev_dependencies:
   flutter_test:
