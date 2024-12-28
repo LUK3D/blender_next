@@ -17,6 +17,7 @@ dependencies:
   google_fonts: ^6.2.1
   html: ^0.15.5
   intl: any
+  logger: ^2.5.0
   signals: ^6.0.2
   window_manager: ^0.4.3
 

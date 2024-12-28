@@ -1,4 +1,5 @@
 import 'package:blender_next/components/bn_sidebar.dart';
+import 'package:blender_next/data/blender_data_access.dart';
 import 'package:blender_next/data/model/side_menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  final blenderAccess = useBlenderDataAccess();
   late TabController tabController = TabController(length: 4, vsync: this);
   final selectedMenuItem = signal(0);
   @override
@@ -77,9 +79,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   controller: tabController,
                   children: [
                     Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.projectManager,
-                      ),
+                      child: TextButton(
+                          onPressed: () {
+                            blenderAccess.getLatestBuilds();
+                          },
+                          child: const Text("Test service")),
                     ),
                     Center(
                       child: Text(
