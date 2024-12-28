@@ -6,5 +6,6 @@
     "projectManager": "Project Manager",
     "blenderPackages": "Blender Packages",
     "extensions": "Extensions",
-    "workflows": "Workflows"
+    "workflows": "Workflows",
+    "search": "Search..."
 }

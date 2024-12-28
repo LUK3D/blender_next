@@ -25,9 +25,8 @@ class BnSidebarButton extends StatelessWidget {
         style: TextButton.styleFrom(
           alignment: Alignment.centerLeft,
           foregroundColor: Theme.of(context).colorScheme.onSurface,
-          backgroundColor: isSelected
-              ? Theme.of(context).colorScheme.onSurface.withOpacity(0.2)
-              : Colors.transparent,
+          backgroundColor:
+              isSelected ? Theme.of(context).canvasColor : Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

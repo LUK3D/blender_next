@@ -1,10 +1,11 @@
-import 'package:blender_next/components/bn_logo.dart';
 import 'package:blender_next/components/bn_sidebar.dart';
 import 'package:blender_next/data/model/side_menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:signals/signals_flutter.dart';
+
+import '../../components/bn_text_input.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,16 +14,18 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  late TabController tabController = TabController(length: 4, vsync: this);
+  final selectedMenuItem = signal(0);
   @override
   Widget build(BuildContext context) {
-    final selectedMenuItem = signal(0);
     return Scaffold(
       body: Watch((context) {
         return BnSidebar<int>(
           selectedItem: selectedMenuItem.value,
           onItemSelected: (index) {
             selectedMenuItem.value = index;
+            tabController.animateTo(index);
           },
           gap: 5,
           items: [
@@ -47,11 +50,56 @@ class _HomePageState extends State<HomePage> {
               icon: LucideIcons.workflow,
             ),
           ],
-          child: const Center(
-            child: BnLogo(
-              type: BnLogoType.labeledColored,
-              width: 200,
-            ),
+          child: Column(
+            children: [
+              Container(
+                height: 60,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 10,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    BnTextInput(
+                      icon: Icon(
+                        LucideIcons.search,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      hintText: AppLocalizations.of(context)!.search,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: tabController,
+                  children: [
+                    Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.projectManager,
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.blenderPackages,
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.extensions,
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.workflows,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         );
       }),

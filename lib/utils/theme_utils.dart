@@ -8,6 +8,7 @@ final darkTheme = ThemeData.dark().copyWith(
       bodyColor: const Color(0xFF8A8B8B),
       displayColor: const Color(0xFF8A8B8B),
     ),
+    canvasColor: Color(0xFF2B2D2E),
     colorScheme: const ColorScheme.dark(
       surface: Color(0xFF1F2123),
       onSurface: Color(0xFF8A8B8B),
