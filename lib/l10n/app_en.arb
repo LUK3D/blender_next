@@ -2,5 +2,9 @@
     "helloWorld": "Hello World!",
     "@helloWorld": {
         "description": "The conventional newborn programmer greeting"
-    }
+    },
+    "projectManager": "Project Manager",
+    "blenderPackages": "Blender Packages",
+    "extensions": "Extensions",
+    "workflows": "Workflows"
 }

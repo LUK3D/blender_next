@@ -1,3 +1,7 @@
 {
-    "helloWorld": "Ola Mundo!"
+    "helloWorld": "Ola Mundo!",
+    "projectManager": "Gerenciador de Projetos",
+    "blenderPackages": "Pacotes Blender",
+    "extensions": "Extensões",
+    "workflows": "Workflows"
 }
