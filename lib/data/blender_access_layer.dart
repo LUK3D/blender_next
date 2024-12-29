@@ -1,14 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:blender_next/data/data_access.dart';
+import 'package:blender_next/services/settings_service.dart';
+import 'package:blender_next/utils/date_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:html/parser.dart';
 import 'package:blender_next/data/model/blender.dart';
 import 'package:logger/logger.dart';
 
 import 'model/blender_splashscreen.dart';
+import 'model/registry.dart';
 
 class BlenderDataAccess extends DataAccess {
   final dio = Dio();
   static final BlenderDataAccess _singleton = BlenderDataAccess._internal();
+  String oldVarient = "local";
+  Registry registry = Registry(blenders: [], lastUpdate: DateTime.now());
 
   factory BlenderDataAccess() {
     return _singleton;
@@ -16,20 +24,46 @@ class BlenderDataAccess extends DataAccess {
 
   BlenderDataAccess._internal();
 
+  Future initializeData() async {
+    final registryFile = File(useSettingsService().getLocalRegistryFilePath());
+    if (await registryFile.exists()) {
+      final registryJson = jsonDecode(await registryFile.readAsString());
+      registry = Registry.fromJson(registryJson);
+      registry.lastUpdate = DateTime.now().add(const Duration(minutes: 2));
+    }
+
+    Logger().w("Registry initialized");
+  }
+
+  Future saveRegistry() async {
+    final registryFile = File(useSettingsService().getLocalRegistryFilePath());
+    await registryFile.writeAsString(jsonEncode(registry.toJson()));
+    Logger().w("Registry Saved");
+  }
+
+//TODO Update this login to cache the data on the first request of each varient
   @override
-  Future<List<Blender>> getLatestBuilds() async {
-    final result = <Blender>[];
+  Future<List<Blender>> getLatestBuilds({String? varient}) async {
+    if (registry.blenders.isNotEmpty &&
+        registry.lastUpdate.difference(DateTime.now()).inMinutes < 1) {
+      return registry.blenders
+          .where((el) => el.variant.toLowerCase().contains(varient ?? ''))
+          .toList();
+    }
+    oldVarient = varient ?? "";
+    List<Blender> result = [];
+    List<Blender> finalResult = [];
 
     final splashScreens = await getSpashScreens();
 
     final getResult =
-        await dio.get('https://builder.blender.org/download/daily/');
+        await dio.get('https://builder.blender.org/download/daily/archive/');
 
     if (getResult.statusCode == 200) {
       final data = getResult.data;
       var document = parse(data);
 
-      final d = document
+      result = document
           .querySelectorAll(".builds-list-container > ul > li.t-row.build")
           .map((e) {
             final version = (e
@@ -60,16 +94,41 @@ class BlenderDataAccess extends DataAccess {
               downloadUrl:
                   e.querySelector("div.b-down > a")?.attributes["href"] ?? "",
               version: version,
-            ).toJson();
+            );
           })
           .toList()
-          .where((el) => el["downloadUrl"].split('.').last != 'sha256')
+          .where((el) =>
+              el.downloadUrl.split('.').last != 'sha256' &&
+              el.architecture.toLowerCase().contains("windows") &&
+              !el.architecture.toLowerCase().contains("arm64") &&
+              el.variant.toLowerCase().contains(varient ?? '') &&
+              el.downloadUrl.contains(".zip"))
           .toList();
-
-      Logger().i(d);
     }
 
-    return result;
+    for (var i = 0; i < result.length; i++) {
+      final b = result[i];
+
+      final old = finalResult
+          .where((element) =>
+              element.version == b.version && element.variant == b.variant)
+          .firstOrNull;
+
+      if (old == null) {
+        finalResult.add(b);
+        continue;
+      }
+
+      if (parseDate(old.date).isBefore(parseDate(b.date))) {
+        finalResult.remove(old);
+        finalResult.add(b);
+      }
+    }
+
+    registry.blenders = finalResult;
+    registry.lastUpdate = DateTime.now();
+
+    return finalResult;
   }
 
   @override
@@ -83,8 +142,7 @@ class BlenderDataAccess extends DataAccess {
       final data = getResult.data;
       var document = parse(data);
 
-      final d =
-          document.querySelectorAll("#splash .cards .cards-item").map((el) {
+      document.querySelectorAll("#splash .cards .cards-item").map((el) {
         String? size = (el
             .querySelectorAll(".cards-item-excerpt p")
             .lastOrNull

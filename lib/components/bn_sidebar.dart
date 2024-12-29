@@ -1,7 +1,6 @@
 import 'package:blender_next/components/bn_logo.dart';
 import 'package:blender_next/data/model/side_menu_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'bn_sidebar_button.dart';

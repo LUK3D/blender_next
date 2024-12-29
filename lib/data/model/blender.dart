@@ -41,7 +41,7 @@ class Blender {
       sha: json['sha'],
       date: json['date'],
       architecture: json['architecture'],
-      splashscreen: json['splashscreen']
+      splashscreen: json['splashscreen'] != null
           ? BlenderSplashscreen.fromJson(json['splashscreen'])
           : null,
       downloadUrl: json['downloadUrl'],

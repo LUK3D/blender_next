@@ -5,12 +5,18 @@ class BnSidebarButton extends StatelessWidget {
   final String label;
   final bool isSelected;
   final Function()? onPressed;
+  final double borderRadius;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
   const BnSidebarButton({
     super.key,
     this.icon,
     required this.label,
     this.onPressed,
     this.isSelected = false,
+    this.borderRadius = 10,
+    this.backgroundColor,
+    this.foregroundColor,
   });
 
   @override
@@ -24,11 +30,13 @@ class BnSidebarButton extends StatelessWidget {
         icon: icon,
         style: TextButton.styleFrom(
           alignment: Alignment.centerLeft,
-          foregroundColor: Theme.of(context).colorScheme.onSurface,
-          backgroundColor:
-              isSelected ? Theme.of(context).canvasColor : Colors.transparent,
+          foregroundColor:
+              foregroundColor ?? Theme.of(context).colorScheme.onSurface,
+          backgroundColor: isSelected
+              ? backgroundColor ?? Theme.of(context).canvasColor
+              : backgroundColor ?? Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
       ),

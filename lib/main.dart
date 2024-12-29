@@ -1,5 +1,8 @@
+import 'package:blender_next/data/blender_access_layer.dart';
+import 'package:blender_next/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:signals/signals_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'features/home/page.dart';
@@ -8,10 +11,13 @@ import 'utils/theme_utils.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  SignalsObserver.instance = null; //Disable Signal logs
+  await useSettingsService().init();
+  await useBlenderDataAccess().initializeData();
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(1000, 700),
+    size: Size(1200, 800),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
