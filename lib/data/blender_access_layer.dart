@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
 import 'package:blender_next/data/data_access.dart';
+import 'package:blender_next/services/downloader_service.dart';
 import 'package:blender_next/services/settings_service.dart';
 import 'package:blender_next/utils/date_parser.dart';
 import 'package:dio/dio.dart';
@@ -41,9 +43,73 @@ class BlenderDataAccess extends DataAccess {
     Logger().w("Registry Saved");
   }
 
+  Future installBlender({
+    required Blender blender,
+    required Function(double progress) onProgress,
+    required Function(File? file) onDone,
+  }) async {
+    await DownloaderService.downloadFileWithProgress(
+      blender.downloadUrl,
+      "${useSettingsService().getInstallersFolder()}/${blender.downloadUrl.split("/").last}",
+      onProgress,
+      onDone: (file) {
+        if (file != null) {
+          blender.installed = true;
+          blender.installationPath = file.path;
+          updateBlenderState(blender);
+        }
+      },
+    );
+
+    File file = File(blender.installationPath!);
+    final instalationPath =
+        "${file.parent.path}/${blender.version}-${blender.variant.split(" ").join('-').toLowerCase()}";
+    await extractFileToDisk(blender.installationPath!, file.parent.path);
+    final dir = Directory(file.path.split(".zip").join(""));
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (await dir.exists()) {
+      await dir.rename(instalationPath);
+    }
+    await file.delete();
+    blender.installationPath = instalationPath;
+    await updateBlenderState(blender);
+    final blenderExe = File("$instalationPath/blender.exe");
+    onDone(blenderExe);
+  }
+
+  Future unInstallBlender(Blender blender) async {
+    if (blender.installationPath == null) {
+      return;
+    }
+    final dir = Directory(blender.installationPath!);
+    await dir.delete(recursive: true);
+
+    blender.installed = false;
+    blender.installationPath = "";
+
+    updateBlenderState(blender);
+  }
+
+  Future updateBlenderState(Blender blender) async {
+    registry.blenders = registry.blenders.map((b) {
+      if (b.version == blender.version &&
+          b.variant == blender.variant &&
+          b.architecture == blender.architecture) {
+        return blender;
+      }
+      return b;
+    }).toList();
+
+    await saveRegistry();
+  }
+
 //TODO Update this login to cache the data on the first request of each varient
   @override
   Future<List<Blender>> getLatestBuilds({String? varient}) async {
+    if (varient == "installed") {
+      return registry.blenders.where((b) => b.installed).toList();
+    }
     if (registry.blenders.isNotEmpty &&
         registry.lastUpdate.difference(DateTime.now()).inMinutes < 1) {
       return registry.blenders
@@ -125,10 +191,21 @@ class BlenderDataAccess extends DataAccess {
       }
     }
 
-    registry.blenders = finalResult;
+    //in order to mantain the state of the local blender versions and avoid duplication
+    //We should only add to list, the ones that are new
+    //This logic should be moved to the previous for loop
+    for (var b in result) {
+      if (registry.blenders
+          .where((ob) => (ob.architecture == b.architecture &&
+              ob.variant == b.variant &&
+              ob.version == b.version))
+          .isEmpty) {
+        registry.blenders.add(b);
+      }
+    }
     registry.lastUpdate = DateTime.now();
 
-    return finalResult;
+    return registry.blenders;
   }
 
   @override

@@ -12,7 +12,8 @@ class DownloaderService {
   DownloaderService._internal();
 
   static Future<File?> downloadFileWithProgress(
-      String url, String savePath, Function(double progress) onProgress) async {
+      String url, String savePath, Function(double progress) onProgress,
+      {Function(File? file)? onDone}) async {
     Dio dio = Dio();
 
     try {
@@ -29,10 +30,10 @@ class DownloaderService {
       );
       Logger().i(savePath);
       final file = File(savePath);
-      if (await file.exists()) {
-        return file;
-      }
-      return null;
+
+      final result = await file.exists() ? file : null;
+      onDone?.call(result);
+      return result;
     } catch (e) {
       return null;
     }

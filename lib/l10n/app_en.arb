@@ -19,5 +19,7 @@
     "releaseCandidate": "Release Candidate",
     "alpha": "Alpha",
     "beta": "Beta",
-    "install": "Instalar"
+    "install": "Instalar",
+    "uninstall": "Uninstall",
+    "installed": "Installed"
 }

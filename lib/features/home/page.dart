@@ -2,8 +2,6 @@ import 'package:blender_next/components/bn_sidebar.dart';
 import 'package:blender_next/data/blender_access_layer.dart';
 import 'package:blender_next/data/model/blender.dart';
 import 'package:blender_next/data/model/side_menu_item.dart';
-import 'package:blender_next/services/downloader_service.dart';
-import 'package:blender_next/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
@@ -113,6 +111,11 @@ class _HomePageState extends State<HomePage>
                 child: TabBarView(
                   controller: tabController,
                   children: [
+                    Center(
+                      child: Text(
+                        AppLocalizations.of(context)!.projectManager,
+                      ),
+                    ),
                     Watch.builder(
                         builder: (context) => FutureBuilder<List<Blender>>(
                               initialData: blenderAccess.registry.blenders,
@@ -146,22 +149,28 @@ class _HomePageState extends State<HomePage>
                                           "url": blender.downloadUrl,
                                         };
 
-                                        DownloaderService.downloadFileWithProgress(
-                                            blender.downloadUrl,
-                                            "${useSettingsService().getInstallersFolder()}/${blender.downloadUrl.split("/").last}",
-                                            (progresss) {
-                                          progresssSignal.value = progresss;
-                                        });
+                                        blenderAccess.installBlender(
+                                          blender: blender,
+                                          onProgress: (progress) {
+                                            progresssSignal.value = progress;
+                                          },
+                                          onDone: (file) {
+                                            if (file != null) {
+                                              setState(() {});
+                                            }
+                                          },
+                                        );
+
+                                        setState(() {});
+                                      },
+                                      onUninstall: (blender) async {
+                                        await blenderAccess
+                                            .unInstallBlender(blender);
                                         setState(() {});
                                       },
                                     ));
                               },
                             )),
-                    Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.blenderPackages,
-                      ),
-                    ),
                     Center(
                       child: Text(
                         AppLocalizations.of(context)!.extensions,

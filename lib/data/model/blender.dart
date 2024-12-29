@@ -15,6 +15,8 @@ class Blender {
   final String architecture;
   final BlenderSplashscreen? splashscreen;
   final String downloadUrl;
+  bool installed;
+  String? installationPath;
 
   Blender({
     required this.title,
@@ -27,8 +29,10 @@ class Blender {
     required this.shaUrl,
     required this.date,
     required this.architecture,
-    this.splashscreen,
     required this.downloadUrl,
+    this.splashscreen,
+    this.installed = false,
+    this.installationPath,
   });
 
   static fromJson(Map<String, dynamic> json) {
@@ -47,6 +51,8 @@ class Blender {
       downloadUrl: json['downloadUrl'],
       referenceUrl: json['referenceUrl'],
       shaUrl: json['shaUrl'],
+      installed: json['installed'] ?? false,
+      installationPath: json['installation_path'],
     );
   }
 
@@ -68,6 +74,8 @@ class Blender {
       'architecture': architecture,
       'splashscreen': splashscreen?.toJson(),
       'downloadUrl': downloadUrl,
+      'installed': installed,
+      'installation_path': installationPath,
     };
   }
 }

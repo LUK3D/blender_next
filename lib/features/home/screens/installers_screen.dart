@@ -10,6 +10,7 @@ class InstallersSreen extends StatelessWidget {
   final List<Blender> installers;
   final Function(String? value) onFilterChange;
   final Function(Blender blender) onDownload;
+  final Function(Blender blender) onUninstall;
   final String filterValue;
   final bool isLoading;
   final Map<String, dynamic> blenderDownloadsTracker;
@@ -20,6 +21,7 @@ class InstallersSreen extends StatelessWidget {
     required this.filterValue,
     this.isLoading = false,
     required this.onDownload,
+    required this.onUninstall,
     required this.blenderDownloadsTracker,
   });
 
@@ -46,7 +48,7 @@ class InstallersSreen extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      AppLocalizations.of(context)!.blenderDownloadManager,
+                      "${AppLocalizations.of(context)!.blenderDownloadManager} (${installers.length})",
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -91,6 +93,24 @@ class InstallersSreen extends StatelessWidget {
                             value: "beta",
                             child: Text(AppLocalizations.of(context)!.beta),
                           ),
+                          DropdownMenuItem(
+                            value: "installed",
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Divider(
+                                  color: Theme.of(context)
+                                      .dividerColor
+                                      .withOpacity(0.5),
+                                  height: 1,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(AppLocalizations.of(context)!.installed),
+                              ],
+                            ),
+                          ),
                         ],
                         onChanged: onFilterChange,
                       );
@@ -124,6 +144,10 @@ class InstallersSreen extends StatelessWidget {
                             crossAxisSpacing: 20),
                     itemBuilder: (context, index) {
                       final installer = installers[index];
+                      final FlutterSignal<
+                          double>? progressSignal = blenderDownloadsTracker[
+                              "${installer.version}-${installer.variant}-${installer.architecture}"]
+                          ?["progress"];
                       return Material(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(10),
@@ -174,9 +198,8 @@ class InstallersSreen extends StatelessWidget {
                                 width: double.infinity,
                                 child: Row(
                                   children: [
-                                    blenderDownloadsTracker[
-                                                "${installer.version}-${installer.variant}-${installer.architecture}"] !=
-                                            null
+                                    progressSignal != null &&
+                                            !installer.installed
                                         ? Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -189,10 +212,8 @@ class InstallersSreen extends StatelessWidget {
                                                       color: Theme.of(context)
                                                           .colorScheme
                                                           .secondary,
-                                                      value: blenderDownloadsTracker[
-                                                                  "${installer.version}-${installer.variant}-${installer.architecture}"]
-                                                              ["progress"]
-                                                          .value,
+                                                      value:
+                                                          progressSignal.value,
                                                       backgroundColor:
                                                           Theme.of(context)
                                                               .cardColor,
@@ -204,7 +225,7 @@ class InstallersSreen extends StatelessWidget {
                                               const SizedBox(width: 10),
                                               Watch(
                                                 (context) => Text(
-                                                  "${(blenderDownloadsTracker["${installer.version}-${installer.variant}-${installer.architecture}"]["progress"].value * 100).floor()}%",
+                                                  "${(progressSignal.value * 100).floor()}%",
                                                 ),
                                               )
                                             ],
@@ -222,26 +243,45 @@ class InstallersSreen extends StatelessWidget {
                                     width: 150,
                                     height: 40,
                                     child: BnSidebarButton(
-                                      label:
-                                          AppLocalizations.of(context)!.install,
+                                      label: installer.installed
+                                          ? AppLocalizations.of(context)!
+                                              .uninstall
+                                          : AppLocalizations.of(context)!
+                                              .install,
                                       onPressed: () {
+                                        if (installer.installed) {
+                                          onUninstall(installer);
+                                          return;
+                                        }
                                         onDownload(installer);
                                       },
-                                      icon: const Icon(
-                                          LucideIcons.cloud_download),
+                                      icon: Icon(
+                                        installer.installed
+                                            ? LucideIcons.package_x
+                                            : LucideIcons.cloud_download,
+                                      ),
                                       backgroundColor:
                                           Theme.of(context).canvasColor,
-                                      foregroundColor:
-                                          Theme.of(context).primaryColor,
+                                      foregroundColor: installer.installed
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .onSurface
+                                          : Theme.of(context).primaryColor,
                                       borderRadius: 50,
                                     ),
                                   ),
                                   IconButton.filled(
                                     onPressed: () {
                                       showDialog(
-                                          context: context,
-                                          builder: (ctx) => blenderInforDialog(
-                                              ctx, installer));
+                                        context: context,
+                                        builder: (ctx) => blenderInforDialog(
+                                          ctx,
+                                          installer,
+                                          progressSignal,
+                                          onDownload,
+                                          onUninstall,
+                                        ),
+                                      );
                                     },
                                     icon: const Icon(
                                       LucideIcons.info,

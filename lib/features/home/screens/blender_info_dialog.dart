@@ -3,8 +3,14 @@ import 'package:blender_next/data/model/blender.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:signals/signals_flutter.dart';
 
-Dialog blenderInforDialog(BuildContext context, Blender blender) {
+Dialog blenderInforDialog(
+    BuildContext context,
+    Blender blender,
+    FlutterSignal<double>? signal,
+    Function(Blender blender) onDownload,
+    Function(Blender blender) onUninstall) {
   return Dialog(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
@@ -38,6 +44,30 @@ Dialog blenderInforDialog(BuildContext context, Blender blender) {
                 const SizedBox(
                   height: 10,
                 ),
+                if (signal != null)
+                  SizedBox(
+                    height: 20,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                            child: Watch(
+                          (context) => LinearProgressIndicator(
+                            color: Theme.of(context).colorScheme.secondary,
+                            value: signal.value,
+                            backgroundColor: Theme.of(context).cardColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        )),
+                        const SizedBox(width: 10),
+                        Watch(
+                          (context) => Text(
+                            "${(signal.value * 100).floor()}%",
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 Row(
                   children: [
                     Text(
@@ -115,16 +145,31 @@ Dialog blenderInforDialog(BuildContext context, Blender blender) {
                       width: 150,
                       height: 45,
                       child: BnSidebarButton(
-                        label: AppLocalizations.of(context)!.install,
-                        icon: const Icon(
-                          LucideIcons.cloud_download,
+                        label: blender.installed
+                            ? AppLocalizations.of(context)!.uninstall
+                            : AppLocalizations.of(context)!.install,
+                        onPressed: () {
+                          if (blender.installed) {
+                            onUninstall(blender);
+                            return;
+                          }
+                          onDownload(blender);
+                          Navigator.of(context).pop();
+                        },
+                        icon: Icon(
+                          blender.installed
+                              ? LucideIcons.package_x
+                              : LucideIcons.cloud_download,
                         ),
-                        backgroundColor: Theme.of(context).primaryColor,
-                        foregroundColor: Colors.white,
+                        backgroundColor: blender.installed
+                            ? Theme.of(context).canvasColor
+                            : Theme.of(context).primaryColor,
+                        foregroundColor: blender.installed
+                            ? Theme.of(context).colorScheme.onSurface
+                            : Colors.white,
                         borderRadius: 50,
-                        onPressed: () {},
                       ),
-                    )
+                    ),
                   ],
                 )
               ],
