@@ -4,6 +4,7 @@ import 'package:blender_next/features/home/screens/blender_info_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:signals/signals_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InstallersSreen extends StatelessWidget {
   final List<Blender> installers;
@@ -44,9 +45,9 @@ class InstallersSreen extends StatelessWidget {
                     const SizedBox(
                       width: 10,
                     ),
-                    const Text(
-                      "Blender Download Manager",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.blenderDownloadManager,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
@@ -54,38 +55,47 @@ class InstallersSreen extends StatelessWidget {
                     )
                   ],
                 ),
-                Container(
-                  width: 180,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: BorderRadius.circular(10),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 180,
                   ),
-                  child: Watch((context) {
-                    return DropdownButton<String>(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).canvasColor,
                       borderRadius: BorderRadius.circular(10),
-                      value: filterValue,
-                      underline: const SizedBox(),
-                      padding: const EdgeInsets.all(0),
-                      items: const [
-                        DropdownMenuItem(value: "", child: Text("All")),
-                        DropdownMenuItem(
-                            value: "stable", child: Text("Stable")),
-                        DropdownMenuItem(
-                            value: "release candidate",
-                            child: Text("Release Candidate")),
-                        DropdownMenuItem(
-                          value: "alpha",
-                          child: Text("Alpha"),
-                        ),
-                        DropdownMenuItem(
-                          value: "beta",
-                          child: Text("Beta"),
-                        ),
-                      ],
-                      onChanged: onFilterChange,
-                    );
-                  }),
+                    ),
+                    child: Watch((context) {
+                      return DropdownButton<String>(
+                        borderRadius: BorderRadius.circular(10),
+                        value: filterValue,
+                        underline: const SizedBox(),
+                        padding: const EdgeInsets.all(0),
+                        items: [
+                          DropdownMenuItem(
+                              value: "",
+                              child: Text(AppLocalizations.of(context)!.all)),
+                          DropdownMenuItem(
+                              value: "stable",
+                              child:
+                                  Text(AppLocalizations.of(context)!.stable)),
+                          DropdownMenuItem(
+                              value: "release candidate",
+                              child: Text(AppLocalizations.of(context)!
+                                  .releaseCandidate)),
+                          DropdownMenuItem(
+                            value: "alpha",
+                            child: Text(AppLocalizations.of(context)!.alpha),
+                          ),
+                          DropdownMenuItem(
+                            value: "beta",
+                            child: Text(AppLocalizations.of(context)!.beta),
+                          ),
+                        ],
+                        onChanged: onFilterChange,
+                      );
+                    }),
+                  ),
                 )
               ],
             ),
@@ -212,7 +222,8 @@ class InstallersSreen extends StatelessWidget {
                                     width: 150,
                                     height: 40,
                                     child: BnSidebarButton(
-                                      label: "Install",
+                                      label:
+                                          AppLocalizations.of(context)!.install,
                                       onPressed: () {
                                         onDownload(installer);
                                       },

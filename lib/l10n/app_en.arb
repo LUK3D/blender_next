@@ -7,5 +7,17 @@
     "blenderPackages": "Blender Packages",
     "extensions": "Extensions",
     "workflows": "Workflows",
-    "search": "Search..."
+    "search": "Search...",
+    "variant": "Variant:",
+    "architecture": "Architecture:",
+    "date": "Date:",
+    "reference": "Reference:",
+    "download": "Download",
+    "blenderDownloadManager": "Blender download manager",
+    "all": "All",
+    "stable": "Stable",
+    "releaseCandidate": "Release Candidate",
+    "alpha": "Alpha",
+    "beta": "Beta",
+    "install": "Instalar"
 }

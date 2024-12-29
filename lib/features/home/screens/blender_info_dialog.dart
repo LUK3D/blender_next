@@ -2,6 +2,7 @@ import 'package:blender_next/components/bn_sidebar_button.dart';
 import 'package:blender_next/data/model/blender.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Dialog blenderInforDialog(BuildContext context, Blender blender) {
   return Dialog(
@@ -55,24 +56,24 @@ Dialog blenderInforDialog(BuildContext context, Blender blender) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Variant:",
-                          style: TextStyle(fontSize: 18),
+                          AppLocalizations.of(context)!.variant,
+                          style: const TextStyle(fontSize: 18),
                         ),
                         Text(
-                          "Architecture:",
-                          style: TextStyle(fontSize: 18),
+                          AppLocalizations.of(context)!.architecture,
+                          style: const TextStyle(fontSize: 18),
                         ),
                         Text(
-                          "Date:",
-                          style: TextStyle(fontSize: 18),
+                          AppLocalizations.of(context)!.date,
+                          style: const TextStyle(fontSize: 18),
                         ),
                         Text(
-                          "Reference:",
-                          style: TextStyle(fontSize: 18),
+                          AppLocalizations.of(context)!.reference,
+                          style: const TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -114,7 +115,7 @@ Dialog blenderInforDialog(BuildContext context, Blender blender) {
                       width: 150,
                       height: 45,
                       child: BnSidebarButton(
-                        label: "Download",
+                        label: AppLocalizations.of(context)!.install,
                         icon: const Icon(
                           LucideIcons.cloud_download,
                         ),

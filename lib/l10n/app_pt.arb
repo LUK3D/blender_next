@@ -4,5 +4,17 @@
     "blenderPackages": "Pacotes Blender",
     "extensions": "Extensões",
     "workflows": "Workflows",
-    "search": "Pesquisar..."
+    "search": "Pesquisar...",
+    "variant": "Variante:",
+    "architecture": "Arquitetura:",
+    "date": "Data:",
+    "reference": "Referência:",
+    "download": "Baixar",
+    "blenderDownloadManager": "Gerenciador de downloads de blender",
+    "all": "Todos",
+    "stable": "Estáveis",
+    "releaseCandidate": "Candidatos para Release",
+    "alpha": "Alfa",
+    "beta": "Beta",
+    "install": "Instalar"
 }
