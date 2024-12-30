@@ -2,6 +2,7 @@ import 'package:blender_next/components/bn_sidebar.dart';
 import 'package:blender_next/data/blender_access_layer.dart';
 import 'package:blender_next/data/model/blender.dart';
 import 'package:blender_next/data/model/side_menu_item.dart';
+import 'package:blender_next/features/home/screens/projects_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
@@ -111,10 +112,8 @@ class _HomePageState extends State<HomePage>
                 child: TabBarView(
                   controller: tabController,
                   children: [
-                    Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.projectManager,
-                      ),
+                    const ProjectsScreen(
+                      isLoading: false,
                     ),
                     Watch.builder(
                         builder: (context) => FutureBuilder<List<Blender>>(
