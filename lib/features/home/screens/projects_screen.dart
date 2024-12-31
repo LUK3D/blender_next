@@ -47,7 +47,7 @@ class ProjectsScreen extends StatelessWidget {
                     backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Colors.white,
                     borderRadius: 100,
-                    icon: Icon(LucideIcons.plus),
+                    icon: const Icon(LucideIcons.plus),
                     onPressed: () {},
                   ),
                 )
@@ -103,9 +103,9 @@ class ProjectsScreen extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       "Project title goes here",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w900,
                                       ),
@@ -115,10 +115,11 @@ class ProjectsScreen extends StatelessWidget {
                                         height: 40,
                                         child: IconButton(
                                             onPressed: () {},
-                                            icon: Icon(LucideIcons.ellipsis)))
+                                            icon: const Icon(
+                                                LucideIcons.ellipsis)))
                                   ],
                                 ),
-                                Expanded(
+                                const Expanded(
                                   child: Opacity(
                                     opacity: 0.5,
                                     child: Text(
@@ -143,19 +144,19 @@ class ProjectsScreen extends StatelessWidget {
                                               .colorScheme
                                               .onSurface,
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 2,
                                         ),
-                                        Text(
+                                        const Text(
                                           "2024-12-24",
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 12,
                                           ),
                                         ),
                                       ],
                                     ),
                                     Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                         horizontal: 4,
                                         vertical: 1,
                                       ),

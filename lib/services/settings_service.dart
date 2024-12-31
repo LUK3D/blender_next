@@ -29,10 +29,6 @@ class SettingsService {
   String getInstallersFolder() {
     return "${getContentPath()}/installs";
   }
-
-  String getLocalRegistryFilePath() {
-    return "${getContentPath()}/manifest.json";
-  }
 }
 
 SettingsService useSettingsService() => SettingsService();

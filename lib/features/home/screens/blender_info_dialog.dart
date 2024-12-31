@@ -1,16 +1,18 @@
 import 'package:blender_next/components/bn_sidebar_button.dart';
-import 'package:blender_next/data/model/blender.dart';
+import 'package:blender_next/data/database/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:signals/signals_flutter.dart';
 
 Dialog blenderInforDialog(
-    BuildContext context,
-    Blender blender,
-    FlutterSignal<double>? signal,
-    Function(Blender blender) onDownload,
-    Function(Blender blender) onUninstall) {
+  BuildContext context,
+  BlenderVersion blender,
+  FlutterSignal<double>? signal,
+  Function(BlenderVersion blender) onDownload,
+  Function(BlenderVersion blender) onUninstall,
+  SplashScreen? splashScreen,
+) {
   return Dialog(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
@@ -34,9 +36,9 @@ Dialog blenderInforDialog(
                     borderRadius: BorderRadius.circular(7),
                     color: Theme.of(context).canvasColor,
                     clipBehavior: Clip.antiAlias,
-                    child: blender.splashscreen?.imageUrl != null
+                    child: splashScreen?.imageUrl != null
                         ? Image.network(
-                            blender.splashscreen?.imageUrl ?? "",
+                            splashScreen?.imageUrl ?? "",
                           )
                         : null,
                   ),

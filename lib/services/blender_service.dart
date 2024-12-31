@@ -1,126 +1,101 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:blender_next/data/data_access.dart';
+import 'package:blender_next/data/database/database.dart';
+import 'package:blender_next/data/local_db_access_layer.dart';
 import 'package:blender_next/services/downloader_service.dart';
 import 'package:blender_next/services/settings_service.dart';
 import 'package:blender_next/utils/date_parser.dart';
 import 'package:dio/dio.dart';
+import 'package:drift/drift.dart';
 import 'package:html/parser.dart';
-import 'package:blender_next/data/model/blender.dart';
-import 'package:logger/logger.dart';
 
-import 'model/blender_splashscreen.dart';
-import 'model/registry.dart';
-
-class BlenderDataAccess extends DataAccess {
-  final dio = Dio();
-  static final BlenderDataAccess _singleton = BlenderDataAccess._internal();
-  String oldVarient = "local";
-  Registry registry = Registry(blenders: [], lastUpdate: DateTime.now());
-
-  factory BlenderDataAccess() {
+class BlenderService {
+  static final BlenderService _singleton = BlenderService._internal();
+  factory BlenderService() {
     return _singleton;
   }
+  BlenderService._internal();
 
-  BlenderDataAccess._internal();
+  final db = useLocalDbAccessLayer();
+  final dio = Dio();
+  String oldVarient = "local";
 
-  Future initializeData() async {
-    final registryFile = File(useSettingsService().getLocalRegistryFilePath());
-    if (await registryFile.exists()) {
-      final registryJson = jsonDecode(await registryFile.readAsString());
-      registry = Registry.fromJson(registryJson);
-      registry.lastUpdate = DateTime.now().add(const Duration(minutes: 2));
-    }
+  Future<BlenderService> initializeData() async {
+    // await db.clearDatabase();
 
-    Logger().w("Registry initialized");
-  }
-
-  Future saveRegistry() async {
-    final registryFile = File(useSettingsService().getLocalRegistryFilePath());
-    await registryFile.writeAsString(jsonEncode(registry.toJson()));
-    Logger().w("Registry Saved");
+    return this;
   }
 
   Future installBlender({
-    required Blender blender,
+    required BlenderVersion blender,
     required Function(double progress) onProgress,
     required Function(File? file) onDone,
   }) async {
+    String tmpInstalationPath = '';
     await DownloaderService.downloadFileWithProgress(
       blender.downloadUrl,
       "${useSettingsService().getInstallersFolder()}/${blender.downloadUrl.split("/").last}",
       onProgress,
       onDone: (file) {
         if (file != null) {
-          blender.installed = true;
-          blender.installationPath = file.path;
-          updateBlenderState(blender);
+          tmpInstalationPath = file.path;
         }
       },
     );
 
-    File file = File(blender.installationPath!);
+    File file = File(tmpInstalationPath);
     final instalationPath =
         "${file.parent.path}/${blender.version}-${blender.variant.split(" ").join('-').toLowerCase()}";
-    await extractFileToDisk(blender.installationPath!, file.parent.path);
+    await extractFileToDisk(tmpInstalationPath, file.parent.path);
     final dir = Directory(file.path.split(".zip").join(""));
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 2));
 
     if (await dir.exists()) {
       await dir.rename(instalationPath);
     }
     await file.delete();
-    blender.installationPath = instalationPath;
-    await updateBlenderState(blender);
+    await updateBlenderState(blender.copyWith(
+        installationPath: Value(instalationPath), installed: true));
     final blenderExe = File("$instalationPath/blender.exe");
     onDone(blenderExe);
   }
 
-  Future unInstallBlender(Blender blender) async {
+  Future unInstallBlender(BlenderVersion blender) async {
     if (blender.installationPath == null) {
       return;
     }
     final dir = Directory(blender.installationPath!);
     await dir.delete(recursive: true);
 
-    blender.installed = false;
-    blender.installationPath = "";
-
-    updateBlenderState(blender);
+    updateBlenderState(
+        blender.copyWith(installed: false, installationPath: const Value("")));
   }
 
-  Future updateBlenderState(Blender blender) async {
-    registry.blenders = registry.blenders.map((b) {
-      if (b.version == blender.version &&
-          b.variant == blender.variant &&
-          b.architecture == blender.architecture) {
-        return blender;
+  Future updateBlenderState(BlenderVersion blender) async {
+    await db.updateBuild(blender);
+    await db.getLatestBuilds();
+  }
+
+//TODO Update this function to cache the data on the first request of each varient
+  Future<List<BlenderVersion>> getLatestBuilds(
+      {String? varient, bool? forceRefresh}) async {
+    final info = await db.getInfo();
+
+    if (info.createdAt != null) {
+      if (info.createdAt!
+              .add(const Duration(minutes: 2))
+              .isBefore(DateTime.now()) &&
+          db.cachedBlenderVersions.isNotEmpty) {
+        await db.updateInfo(info.copyWith(createdAt: Value(DateTime.now())));
+        return db.cachedBlenderVersions;
       }
-      return b;
-    }).toList();
-
-    await saveRegistry();
-  }
-
-//TODO Update this login to cache the data on the first request of each varient
-  @override
-  Future<List<Blender>> getLatestBuilds({String? varient}) async {
-    if (varient == "installed") {
-      return registry.blenders.where((b) => b.installed).toList();
-    }
-    if (registry.blenders.isNotEmpty &&
-        registry.lastUpdate.difference(DateTime.now()).inMinutes < 1) {
-      return registry.blenders
-          .where((el) => el.variant.toLowerCase().contains(varient ?? ''))
-          .toList();
     }
     oldVarient = varient ?? "";
-    List<Blender> result = [];
-    List<Blender> finalResult = [];
+    List<BlenderVersion> result = [];
+    List<BlenderVersion> finalResult = [];
 
-    final splashScreens = await getSpashScreens();
+    final splashScreens = await getSplashScreens();
 
     final getResult =
         await dio.get('https://builder.blender.org/download/daily/archive/');
@@ -138,7 +113,11 @@ class BlenderDataAccess extends DataAccess {
                     .split(" ")
                     .elementAtOrNull(1)) ??
                 "";
-            return Blender(
+            final splashScreen = splashScreens
+                .where((s) => s.blenderVersion == version.substring(0, 3));
+
+            return BlenderVersion(
+              installed: false,
               title: (e
                       .querySelector("a.t-cell.b-version")
                       ?.text
@@ -156,7 +135,7 @@ class BlenderDataAccess extends DataAccess {
               date: e.querySelector("div.t-cell.b-date")?.text ?? "",
               architecture: e.querySelector("div.t-cell.b-arch")?.text ?? "",
               description: "",
-              splashscreen: splashScreens[version.substring(0, 3)],
+              splashScreen: splashScreen.firstOrNull?.id,
               downloadUrl:
                   e.querySelector("div.b-down > a")?.attributes["href"] ?? "",
               version: version,
@@ -195,22 +174,22 @@ class BlenderDataAccess extends DataAccess {
     //We should only add to list, the ones that are new
     //This logic should be moved to the previous for loop
     for (var b in result) {
-      if (registry.blenders
+      if (db.cachedBlenderVersions
           .where((ob) => (ob.architecture == b.architecture &&
               ob.variant == b.variant &&
               ob.version == b.version))
           .isEmpty) {
-        registry.blenders.add(b);
+        db.cachedBlenderVersions.add(b);
       }
     }
-    registry.lastUpdate = DateTime.now();
 
-    return registry.blenders;
+    await db.saveBuilds(blenderBuilds: db.cachedBlenderVersions);
+
+    return db.cachedBlenderVersions;
   }
 
-  @override
-  Future<Map<String, BlenderSplashscreen>> getSpashScreens() async {
-    final result = <String, BlenderSplashscreen>{};
+  Future<List<SplashScreen>> getSplashScreens() async {
+    List<SplashScreen> result = [];
 
     final getResult =
         await dio.get("https://www.blender.org/download/demo-files/");
@@ -219,7 +198,8 @@ class BlenderDataAccess extends DataAccess {
       final data = getResult.data;
       var document = parse(data);
 
-      document.querySelectorAll("#splash .cards .cards-item").map((el) {
+      result =
+          document.querySelectorAll("#splash .cards .cards-item").map((el) {
         String? size = (el
             .querySelectorAll(".cards-item-excerpt p")
             .lastOrNull
@@ -229,7 +209,7 @@ class BlenderDataAccess extends DataAccess {
 
         final title = el.querySelector(".cards-item-title")?.text ?? '';
 
-        return BlenderSplashscreen(
+        return SplashScreen(
           title: title,
           blenderVersion: title
                   .split("Blender ")
@@ -264,13 +244,13 @@ class BlenderDataAccess extends DataAccess {
                   '')
               .trim(),
         );
-      }).forEach((bSc) {
-        result[bSc.blenderVersion] = bSc;
-      });
+      }).toList();
     }
 
-    return result;
+    await db.saveSplashCreens(result);
+
+    return db.cachedSplashscreens;
   }
 }
 
-BlenderDataAccess useBlenderDataAccess() => BlenderDataAccess();
+BlenderService useBlenderService() => BlenderService();

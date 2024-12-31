@@ -1,5 +1,6 @@
 import 'package:blender_next/components/bn_sidebar_button.dart';
-import 'package:blender_next/data/model/blender.dart';
+import 'package:blender_next/data/database/database.dart';
+import 'package:blender_next/data/local_db_access_layer.dart';
 import 'package:blender_next/features/home/screens/blender_info_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
@@ -7,10 +8,10 @@ import 'package:signals/signals_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InstallersSreen extends StatelessWidget {
-  final List<Blender> installers;
+  final List<BlenderVersion> installers;
   final Function(String? value) onFilterChange;
-  final Function(Blender blender) onDownload;
-  final Function(Blender blender) onUninstall;
+  final Function(BlenderVersion blender) onDownload;
+  final Function(BlenderVersion blender) onUninstall;
   final String filterValue;
   final bool isLoading;
   final Map<String, dynamic> blenderDownloadsTracker;
@@ -27,6 +28,7 @@ class InstallersSreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localDbAccess = useLocalDbAccessLayer();
     return Scaffold(
       body: Column(
         children: [
@@ -148,6 +150,9 @@ class InstallersSreen extends StatelessWidget {
                           double>? progressSignal = blenderDownloadsTracker[
                               "${installer.version}-${installer.variant}-${installer.architecture}"]
                           ?["progress"];
+
+                      final splashScreen = localDbAccess
+                          .getSplashScreenById(installer.splashScreen);
                       return Material(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(10),
@@ -163,16 +168,15 @@ class InstallersSreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(7),
                                   color: Theme.of(context).canvasColor,
                                 ),
-                                child:
-                                    (installer.splashscreen?.imageUrl != null)
-                                        ? Hero(
-                                            tag: installer.title,
-                                            child: Image.network(
-                                              installer.splashscreen!.imageUrl,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          )
-                                        : null,
+                                child: (splashScreen?.imageUrl != null)
+                                    ? Hero(
+                                        tag: installer.title,
+                                        child: Image.network(
+                                          splashScreen!.imageUrl,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : null,
                               ),
                               Row(
                                 mainAxisAlignment:
@@ -280,6 +284,7 @@ class InstallersSreen extends StatelessWidget {
                                           progressSignal,
                                           onDownload,
                                           onUninstall,
+                                          splashScreen,
                                         ),
                                       );
                                     },

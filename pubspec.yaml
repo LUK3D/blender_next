@@ -9,6 +9,8 @@ environment:
 dependencies:
   archive: ^4.0.2
   dio: ^5.7.0
+  drift: ^2.23.0
+  drift_flutter: ^0.2.3
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -27,6 +29,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  drift_dev: ^2.23.0
+  build_runner: ^2.4.13
 
 flutter:
   uses-material-design: true

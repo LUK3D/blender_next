@@ -1,4 +1,4 @@
-import 'package:blender_next/data/blender_access_layer.dart';
+import 'package:blender_next/services/blender_service.dart';
 import 'package:blender_next/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,7 +13,10 @@ void main() async {
 
   SignalsObserver.instance = null; //Disable Signal logs
   await useSettingsService().init();
-  await useBlenderDataAccess().initializeData();
+  //Initialize database and refresh blender versions
+  await useBlenderService()
+      .initializeData()
+      .then((bac) => bac.getLatestBuilds());
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
