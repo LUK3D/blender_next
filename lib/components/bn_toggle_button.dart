@@ -23,11 +23,13 @@ class BnToggleButton extends StatelessWidget {
         minHeight: 90,
       ),
       child: IconButton.outlined(
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.primary,
           style: IconButton.styleFrom(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             side: BorderSide(
-              color: Theme.of(context).canvasColor,
+              color: selected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).canvasColor,
               width: 3,
             ),
             shape: RoundedRectangleBorder(
@@ -36,7 +38,7 @@ class BnToggleButton extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: () {},
+          onPressed: onClick,
           icon: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

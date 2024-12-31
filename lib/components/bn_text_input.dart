@@ -9,6 +9,7 @@ class BnTextInput extends StatelessWidget {
   final double? height;
   final Color? backgroundColor;
   final Color? textColor;
+  final String? initialValue;
 
   const BnTextInput({
     super.key,
@@ -20,6 +21,7 @@ class BnTextInput extends StatelessWidget {
     this.height,
     this.backgroundColor,
     this.textColor,
+    this.initialValue,
   });
 
   @override
@@ -37,6 +39,7 @@ class BnTextInput extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         onChanged: onChanged,
+        initialValue: initialValue,
         decoration: InputDecoration(
           fillColor: textColor,
           icon: icon,

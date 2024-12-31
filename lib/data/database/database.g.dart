@@ -1511,6 +1511,1404 @@ class BnextInfoCompanion extends UpdateCompanion<BnextInfoData> {
   }
 }
 
+class $BnexProjectsTable extends BnexProjects
+    with TableInfo<$BnexProjectsTable, BnexProject> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BnexProjectsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, true,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, true,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: false,
+      clientDefault: () => "value");
+  static const VerificationMeta _blenderVersionMeta =
+      const VerificationMeta('blenderVersion');
+  @override
+  late final GeneratedColumn<String> blenderVersion = GeneratedColumn<String>(
+      'blender_version', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _templateMeta =
+      const VerificationMeta('template');
+  @override
+  late final GeneratedColumn<String> template = GeneratedColumn<String>(
+      'template', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _usingVersionControlMeta =
+      const VerificationMeta('usingVersionControl');
+  @override
+  late final GeneratedColumn<bool> usingVersionControl = GeneratedColumn<bool>(
+      'using_version_control', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("using_version_control" IN (0, 1))'),
+      clientDefault: () => false);
+  static const VerificationMeta _clearExtentionsMeta =
+      const VerificationMeta('clearExtentions');
+  @override
+  late final GeneratedColumn<bool> clearExtentions = GeneratedColumn<bool>(
+      'clear_extentions', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("clear_extentions" IN (0, 1))'),
+      clientDefault: () => false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        createdAt,
+        name,
+        blenderVersion,
+        template,
+        usingVersionControl,
+        clearExtentions
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'bnex_projects';
+  @override
+  VerificationContext validateIntegrity(Insertable<BnexProject> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    }
+    if (data.containsKey('blender_version')) {
+      context.handle(
+          _blenderVersionMeta,
+          blenderVersion.isAcceptableOrUnknown(
+              data['blender_version']!, _blenderVersionMeta));
+    } else if (isInserting) {
+      context.missing(_blenderVersionMeta);
+    }
+    if (data.containsKey('template')) {
+      context.handle(_templateMeta,
+          template.isAcceptableOrUnknown(data['template']!, _templateMeta));
+    } else if (isInserting) {
+      context.missing(_templateMeta);
+    }
+    if (data.containsKey('using_version_control')) {
+      context.handle(
+          _usingVersionControlMeta,
+          usingVersionControl.isAcceptableOrUnknown(
+              data['using_version_control']!, _usingVersionControlMeta));
+    }
+    if (data.containsKey('clear_extentions')) {
+      context.handle(
+          _clearExtentionsMeta,
+          clearExtentions.isAcceptableOrUnknown(
+              data['clear_extentions']!, _clearExtentionsMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  BnexProject map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BnexProject(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      blenderVersion: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}blender_version'])!,
+      template: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}template'])!,
+      usingVersionControl: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}using_version_control'])!,
+      clearExtentions: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}clear_extentions'])!,
+    );
+  }
+
+  @override
+  $BnexProjectsTable createAlias(String alias) {
+    return $BnexProjectsTable(attachedDatabase, alias);
+  }
+}
+
+class BnexProject extends DataClass implements Insertable<BnexProject> {
+  final int? id;
+  final DateTime? createdAt;
+  final String name;
+  final String blenderVersion;
+  final String template;
+  final bool usingVersionControl;
+  final bool clearExtentions;
+  const BnexProject(
+      {this.id,
+      this.createdAt,
+      required this.name,
+      required this.blenderVersion,
+      required this.template,
+      required this.usingVersionControl,
+      required this.clearExtentions});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
+    map['name'] = Variable<String>(name);
+    map['blender_version'] = Variable<String>(blenderVersion);
+    map['template'] = Variable<String>(template);
+    map['using_version_control'] = Variable<bool>(usingVersionControl);
+    map['clear_extentions'] = Variable<bool>(clearExtentions);
+    return map;
+  }
+
+  BnexProjectsCompanion toCompanion(bool nullToAbsent) {
+    return BnexProjectsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      name: Value(name),
+      blenderVersion: Value(blenderVersion),
+      template: Value(template),
+      usingVersionControl: Value(usingVersionControl),
+      clearExtentions: Value(clearExtentions),
+    );
+  }
+
+  factory BnexProject.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BnexProject(
+      id: serializer.fromJson<int?>(json['id']),
+      createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
+      name: serializer.fromJson<String>(json['name']),
+      blenderVersion: serializer.fromJson<String>(json['blenderVersion']),
+      template: serializer.fromJson<String>(json['template']),
+      usingVersionControl:
+          serializer.fromJson<bool>(json['usingVersionControl']),
+      clearExtentions: serializer.fromJson<bool>(json['clearExtentions']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int?>(id),
+      'createdAt': serializer.toJson<DateTime?>(createdAt),
+      'name': serializer.toJson<String>(name),
+      'blenderVersion': serializer.toJson<String>(blenderVersion),
+      'template': serializer.toJson<String>(template),
+      'usingVersionControl': serializer.toJson<bool>(usingVersionControl),
+      'clearExtentions': serializer.toJson<bool>(clearExtentions),
+    };
+  }
+
+  BnexProject copyWith(
+          {Value<int?> id = const Value.absent(),
+          Value<DateTime?> createdAt = const Value.absent(),
+          String? name,
+          String? blenderVersion,
+          String? template,
+          bool? usingVersionControl,
+          bool? clearExtentions}) =>
+      BnexProject(
+        id: id.present ? id.value : this.id,
+        createdAt: createdAt.present ? createdAt.value : this.createdAt,
+        name: name ?? this.name,
+        blenderVersion: blenderVersion ?? this.blenderVersion,
+        template: template ?? this.template,
+        usingVersionControl: usingVersionControl ?? this.usingVersionControl,
+        clearExtentions: clearExtentions ?? this.clearExtentions,
+      );
+  BnexProject copyWithCompanion(BnexProjectsCompanion data) {
+    return BnexProject(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      name: data.name.present ? data.name.value : this.name,
+      blenderVersion: data.blenderVersion.present
+          ? data.blenderVersion.value
+          : this.blenderVersion,
+      template: data.template.present ? data.template.value : this.template,
+      usingVersionControl: data.usingVersionControl.present
+          ? data.usingVersionControl.value
+          : this.usingVersionControl,
+      clearExtentions: data.clearExtentions.present
+          ? data.clearExtentions.value
+          : this.clearExtentions,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BnexProject(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('name: $name, ')
+          ..write('blenderVersion: $blenderVersion, ')
+          ..write('template: $template, ')
+          ..write('usingVersionControl: $usingVersionControl, ')
+          ..write('clearExtentions: $clearExtentions')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, createdAt, name, blenderVersion, template,
+      usingVersionControl, clearExtentions);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BnexProject &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.name == this.name &&
+          other.blenderVersion == this.blenderVersion &&
+          other.template == this.template &&
+          other.usingVersionControl == this.usingVersionControl &&
+          other.clearExtentions == this.clearExtentions);
+}
+
+class BnexProjectsCompanion extends UpdateCompanion<BnexProject> {
+  final Value<int?> id;
+  final Value<DateTime?> createdAt;
+  final Value<String> name;
+  final Value<String> blenderVersion;
+  final Value<String> template;
+  final Value<bool> usingVersionControl;
+  final Value<bool> clearExtentions;
+  const BnexProjectsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.name = const Value.absent(),
+    this.blenderVersion = const Value.absent(),
+    this.template = const Value.absent(),
+    this.usingVersionControl = const Value.absent(),
+    this.clearExtentions = const Value.absent(),
+  });
+  BnexProjectsCompanion.insert({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.name = const Value.absent(),
+    required String blenderVersion,
+    required String template,
+    this.usingVersionControl = const Value.absent(),
+    this.clearExtentions = const Value.absent(),
+  })  : blenderVersion = Value(blenderVersion),
+        template = Value(template);
+  static Insertable<BnexProject> custom({
+    Expression<int>? id,
+    Expression<DateTime>? createdAt,
+    Expression<String>? name,
+    Expression<String>? blenderVersion,
+    Expression<String>? template,
+    Expression<bool>? usingVersionControl,
+    Expression<bool>? clearExtentions,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (name != null) 'name': name,
+      if (blenderVersion != null) 'blender_version': blenderVersion,
+      if (template != null) 'template': template,
+      if (usingVersionControl != null)
+        'using_version_control': usingVersionControl,
+      if (clearExtentions != null) 'clear_extentions': clearExtentions,
+    });
+  }
+
+  BnexProjectsCompanion copyWith(
+      {Value<int?>? id,
+      Value<DateTime?>? createdAt,
+      Value<String>? name,
+      Value<String>? blenderVersion,
+      Value<String>? template,
+      Value<bool>? usingVersionControl,
+      Value<bool>? clearExtentions}) {
+    return BnexProjectsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      name: name ?? this.name,
+      blenderVersion: blenderVersion ?? this.blenderVersion,
+      template: template ?? this.template,
+      usingVersionControl: usingVersionControl ?? this.usingVersionControl,
+      clearExtentions: clearExtentions ?? this.clearExtentions,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (blenderVersion.present) {
+      map['blender_version'] = Variable<String>(blenderVersion.value);
+    }
+    if (template.present) {
+      map['template'] = Variable<String>(template.value);
+    }
+    if (usingVersionControl.present) {
+      map['using_version_control'] = Variable<bool>(usingVersionControl.value);
+    }
+    if (clearExtentions.present) {
+      map['clear_extentions'] = Variable<bool>(clearExtentions.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BnexProjectsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('name: $name, ')
+          ..write('blenderVersion: $blenderVersion, ')
+          ..write('template: $template, ')
+          ..write('usingVersionControl: $usingVersionControl, ')
+          ..write('clearExtentions: $clearExtentions')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BnextExtensionsTable extends BnextExtensions
+    with TableInfo<$BnextExtensionsTable, BnextExtension> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BnextExtensionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, true,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, true,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  static const VerificationMeta _schemaVersionMeta =
+      const VerificationMeta('schemaVersion');
+  @override
+  late final GeneratedColumn<String> schemaVersion = GeneratedColumn<String>(
+      'schema_version', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _extIdMeta = const VerificationMeta('extId');
+  @override
+  late final GeneratedColumn<String> extId = GeneratedColumn<String>(
+      'ext_id', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _versionMeta =
+      const VerificationMeta('version');
+  @override
+  late final GeneratedColumn<String> version = GeneratedColumn<String>(
+      'version', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _taglineMeta =
+      const VerificationMeta('tagline');
+  @override
+  late final GeneratedColumn<String> tagline = GeneratedColumn<String>(
+      'tagline', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _maintainerMeta =
+      const VerificationMeta('maintainer');
+  @override
+  late final GeneratedColumn<String> maintainer = GeneratedColumn<String>(
+      'maintainer', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+      'type', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _tagsMeta = const VerificationMeta('tags');
+  @override
+  late final GeneratedColumn<String> tags = GeneratedColumn<String>(
+      'tags', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _blenderMinVersionMeta =
+      const VerificationMeta('blenderMinVersion');
+  @override
+  late final GeneratedColumn<String> blenderMinVersion =
+      GeneratedColumn<String>('blender_min_version', aliasedName, false,
+          type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _licenceMeta =
+      const VerificationMeta('licence');
+  @override
+  late final GeneratedColumn<String> licence = GeneratedColumn<String>(
+      'licence', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _websiteMeta =
+      const VerificationMeta('website');
+  @override
+  late final GeneratedColumn<String> website = GeneratedColumn<String>(
+      'website', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _copyrightMeta =
+      const VerificationMeta('copyright');
+  @override
+  late final GeneratedColumn<String> copyright = GeneratedColumn<String>(
+      'copyright', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _permissionsMeta =
+      const VerificationMeta('permissions');
+  @override
+  late final GeneratedColumn<String> permissions = GeneratedColumn<String>(
+      'permissions', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        createdAt,
+        schemaVersion,
+        extId,
+        name,
+        version,
+        tagline,
+        maintainer,
+        type,
+        tags,
+        blenderMinVersion,
+        licence,
+        website,
+        copyright,
+        permissions
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'bnext_extensions';
+  @override
+  VerificationContext validateIntegrity(Insertable<BnextExtension> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('schema_version')) {
+      context.handle(
+          _schemaVersionMeta,
+          schemaVersion.isAcceptableOrUnknown(
+              data['schema_version']!, _schemaVersionMeta));
+    } else if (isInserting) {
+      context.missing(_schemaVersionMeta);
+    }
+    if (data.containsKey('ext_id')) {
+      context.handle(
+          _extIdMeta, extId.isAcceptableOrUnknown(data['ext_id']!, _extIdMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    }
+    if (data.containsKey('version')) {
+      context.handle(_versionMeta,
+          version.isAcceptableOrUnknown(data['version']!, _versionMeta));
+    } else if (isInserting) {
+      context.missing(_versionMeta);
+    }
+    if (data.containsKey('tagline')) {
+      context.handle(_taglineMeta,
+          tagline.isAcceptableOrUnknown(data['tagline']!, _taglineMeta));
+    }
+    if (data.containsKey('maintainer')) {
+      context.handle(
+          _maintainerMeta,
+          maintainer.isAcceptableOrUnknown(
+              data['maintainer']!, _maintainerMeta));
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+          _typeMeta, type.isAcceptableOrUnknown(data['type']!, _typeMeta));
+    }
+    if (data.containsKey('tags')) {
+      context.handle(
+          _tagsMeta, tags.isAcceptableOrUnknown(data['tags']!, _tagsMeta));
+    }
+    if (data.containsKey('blender_min_version')) {
+      context.handle(
+          _blenderMinVersionMeta,
+          blenderMinVersion.isAcceptableOrUnknown(
+              data['blender_min_version']!, _blenderMinVersionMeta));
+    } else if (isInserting) {
+      context.missing(_blenderMinVersionMeta);
+    }
+    if (data.containsKey('licence')) {
+      context.handle(_licenceMeta,
+          licence.isAcceptableOrUnknown(data['licence']!, _licenceMeta));
+    }
+    if (data.containsKey('website')) {
+      context.handle(_websiteMeta,
+          website.isAcceptableOrUnknown(data['website']!, _websiteMeta));
+    }
+    if (data.containsKey('copyright')) {
+      context.handle(_copyrightMeta,
+          copyright.isAcceptableOrUnknown(data['copyright']!, _copyrightMeta));
+    }
+    if (data.containsKey('permissions')) {
+      context.handle(
+          _permissionsMeta,
+          permissions.isAcceptableOrUnknown(
+              data['permissions']!, _permissionsMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  BnextExtension map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BnextExtension(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
+      schemaVersion: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}schema_version'])!,
+      extId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ext_id']),
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name']),
+      version: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}version'])!,
+      tagline: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tagline']),
+      maintainer: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}maintainer']),
+      type: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}type']),
+      tags: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tags']),
+      blenderMinVersion: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}blender_min_version'])!,
+      licence: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}licence']),
+      website: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}website']),
+      copyright: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}copyright']),
+      permissions: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}permissions']),
+    );
+  }
+
+  @override
+  $BnextExtensionsTable createAlias(String alias) {
+    return $BnextExtensionsTable(attachedDatabase, alias);
+  }
+}
+
+class BnextExtension extends DataClass implements Insertable<BnextExtension> {
+  final int? id;
+  final DateTime? createdAt;
+  final String schemaVersion;
+  final String? extId;
+  final String? name;
+  final String version;
+  final String? tagline;
+  final String? maintainer;
+  final String? type;
+  final String? tags;
+  final String blenderMinVersion;
+  final String? licence;
+  final String? website;
+  final String? copyright;
+  final String? permissions;
+  const BnextExtension(
+      {this.id,
+      this.createdAt,
+      required this.schemaVersion,
+      this.extId,
+      this.name,
+      required this.version,
+      this.tagline,
+      this.maintainer,
+      this.type,
+      this.tags,
+      required this.blenderMinVersion,
+      this.licence,
+      this.website,
+      this.copyright,
+      this.permissions});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
+    map['schema_version'] = Variable<String>(schemaVersion);
+    if (!nullToAbsent || extId != null) {
+      map['ext_id'] = Variable<String>(extId);
+    }
+    if (!nullToAbsent || name != null) {
+      map['name'] = Variable<String>(name);
+    }
+    map['version'] = Variable<String>(version);
+    if (!nullToAbsent || tagline != null) {
+      map['tagline'] = Variable<String>(tagline);
+    }
+    if (!nullToAbsent || maintainer != null) {
+      map['maintainer'] = Variable<String>(maintainer);
+    }
+    if (!nullToAbsent || type != null) {
+      map['type'] = Variable<String>(type);
+    }
+    if (!nullToAbsent || tags != null) {
+      map['tags'] = Variable<String>(tags);
+    }
+    map['blender_min_version'] = Variable<String>(blenderMinVersion);
+    if (!nullToAbsent || licence != null) {
+      map['licence'] = Variable<String>(licence);
+    }
+    if (!nullToAbsent || website != null) {
+      map['website'] = Variable<String>(website);
+    }
+    if (!nullToAbsent || copyright != null) {
+      map['copyright'] = Variable<String>(copyright);
+    }
+    if (!nullToAbsent || permissions != null) {
+      map['permissions'] = Variable<String>(permissions);
+    }
+    return map;
+  }
+
+  BnextExtensionsCompanion toCompanion(bool nullToAbsent) {
+    return BnextExtensionsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      schemaVersion: Value(schemaVersion),
+      extId:
+          extId == null && nullToAbsent ? const Value.absent() : Value(extId),
+      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
+      version: Value(version),
+      tagline: tagline == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tagline),
+      maintainer: maintainer == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maintainer),
+      type: type == null && nullToAbsent ? const Value.absent() : Value(type),
+      tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
+      blenderMinVersion: Value(blenderMinVersion),
+      licence: licence == null && nullToAbsent
+          ? const Value.absent()
+          : Value(licence),
+      website: website == null && nullToAbsent
+          ? const Value.absent()
+          : Value(website),
+      copyright: copyright == null && nullToAbsent
+          ? const Value.absent()
+          : Value(copyright),
+      permissions: permissions == null && nullToAbsent
+          ? const Value.absent()
+          : Value(permissions),
+    );
+  }
+
+  factory BnextExtension.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BnextExtension(
+      id: serializer.fromJson<int?>(json['id']),
+      createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
+      schemaVersion: serializer.fromJson<String>(json['schemaVersion']),
+      extId: serializer.fromJson<String?>(json['extId']),
+      name: serializer.fromJson<String?>(json['name']),
+      version: serializer.fromJson<String>(json['version']),
+      tagline: serializer.fromJson<String?>(json['tagline']),
+      maintainer: serializer.fromJson<String?>(json['maintainer']),
+      type: serializer.fromJson<String?>(json['type']),
+      tags: serializer.fromJson<String?>(json['tags']),
+      blenderMinVersion: serializer.fromJson<String>(json['blenderMinVersion']),
+      licence: serializer.fromJson<String?>(json['licence']),
+      website: serializer.fromJson<String?>(json['website']),
+      copyright: serializer.fromJson<String?>(json['copyright']),
+      permissions: serializer.fromJson<String?>(json['permissions']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int?>(id),
+      'createdAt': serializer.toJson<DateTime?>(createdAt),
+      'schemaVersion': serializer.toJson<String>(schemaVersion),
+      'extId': serializer.toJson<String?>(extId),
+      'name': serializer.toJson<String?>(name),
+      'version': serializer.toJson<String>(version),
+      'tagline': serializer.toJson<String?>(tagline),
+      'maintainer': serializer.toJson<String?>(maintainer),
+      'type': serializer.toJson<String?>(type),
+      'tags': serializer.toJson<String?>(tags),
+      'blenderMinVersion': serializer.toJson<String>(blenderMinVersion),
+      'licence': serializer.toJson<String?>(licence),
+      'website': serializer.toJson<String?>(website),
+      'copyright': serializer.toJson<String?>(copyright),
+      'permissions': serializer.toJson<String?>(permissions),
+    };
+  }
+
+  BnextExtension copyWith(
+          {Value<int?> id = const Value.absent(),
+          Value<DateTime?> createdAt = const Value.absent(),
+          String? schemaVersion,
+          Value<String?> extId = const Value.absent(),
+          Value<String?> name = const Value.absent(),
+          String? version,
+          Value<String?> tagline = const Value.absent(),
+          Value<String?> maintainer = const Value.absent(),
+          Value<String?> type = const Value.absent(),
+          Value<String?> tags = const Value.absent(),
+          String? blenderMinVersion,
+          Value<String?> licence = const Value.absent(),
+          Value<String?> website = const Value.absent(),
+          Value<String?> copyright = const Value.absent(),
+          Value<String?> permissions = const Value.absent()}) =>
+      BnextExtension(
+        id: id.present ? id.value : this.id,
+        createdAt: createdAt.present ? createdAt.value : this.createdAt,
+        schemaVersion: schemaVersion ?? this.schemaVersion,
+        extId: extId.present ? extId.value : this.extId,
+        name: name.present ? name.value : this.name,
+        version: version ?? this.version,
+        tagline: tagline.present ? tagline.value : this.tagline,
+        maintainer: maintainer.present ? maintainer.value : this.maintainer,
+        type: type.present ? type.value : this.type,
+        tags: tags.present ? tags.value : this.tags,
+        blenderMinVersion: blenderMinVersion ?? this.blenderMinVersion,
+        licence: licence.present ? licence.value : this.licence,
+        website: website.present ? website.value : this.website,
+        copyright: copyright.present ? copyright.value : this.copyright,
+        permissions: permissions.present ? permissions.value : this.permissions,
+      );
+  BnextExtension copyWithCompanion(BnextExtensionsCompanion data) {
+    return BnextExtension(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      schemaVersion: data.schemaVersion.present
+          ? data.schemaVersion.value
+          : this.schemaVersion,
+      extId: data.extId.present ? data.extId.value : this.extId,
+      name: data.name.present ? data.name.value : this.name,
+      version: data.version.present ? data.version.value : this.version,
+      tagline: data.tagline.present ? data.tagline.value : this.tagline,
+      maintainer:
+          data.maintainer.present ? data.maintainer.value : this.maintainer,
+      type: data.type.present ? data.type.value : this.type,
+      tags: data.tags.present ? data.tags.value : this.tags,
+      blenderMinVersion: data.blenderMinVersion.present
+          ? data.blenderMinVersion.value
+          : this.blenderMinVersion,
+      licence: data.licence.present ? data.licence.value : this.licence,
+      website: data.website.present ? data.website.value : this.website,
+      copyright: data.copyright.present ? data.copyright.value : this.copyright,
+      permissions:
+          data.permissions.present ? data.permissions.value : this.permissions,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BnextExtension(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('schemaVersion: $schemaVersion, ')
+          ..write('extId: $extId, ')
+          ..write('name: $name, ')
+          ..write('version: $version, ')
+          ..write('tagline: $tagline, ')
+          ..write('maintainer: $maintainer, ')
+          ..write('type: $type, ')
+          ..write('tags: $tags, ')
+          ..write('blenderMinVersion: $blenderMinVersion, ')
+          ..write('licence: $licence, ')
+          ..write('website: $website, ')
+          ..write('copyright: $copyright, ')
+          ..write('permissions: $permissions')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      createdAt,
+      schemaVersion,
+      extId,
+      name,
+      version,
+      tagline,
+      maintainer,
+      type,
+      tags,
+      blenderMinVersion,
+      licence,
+      website,
+      copyright,
+      permissions);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BnextExtension &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.schemaVersion == this.schemaVersion &&
+          other.extId == this.extId &&
+          other.name == this.name &&
+          other.version == this.version &&
+          other.tagline == this.tagline &&
+          other.maintainer == this.maintainer &&
+          other.type == this.type &&
+          other.tags == this.tags &&
+          other.blenderMinVersion == this.blenderMinVersion &&
+          other.licence == this.licence &&
+          other.website == this.website &&
+          other.copyright == this.copyright &&
+          other.permissions == this.permissions);
+}
+
+class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
+  final Value<int?> id;
+  final Value<DateTime?> createdAt;
+  final Value<String> schemaVersion;
+  final Value<String?> extId;
+  final Value<String?> name;
+  final Value<String> version;
+  final Value<String?> tagline;
+  final Value<String?> maintainer;
+  final Value<String?> type;
+  final Value<String?> tags;
+  final Value<String> blenderMinVersion;
+  final Value<String?> licence;
+  final Value<String?> website;
+  final Value<String?> copyright;
+  final Value<String?> permissions;
+  const BnextExtensionsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.schemaVersion = const Value.absent(),
+    this.extId = const Value.absent(),
+    this.name = const Value.absent(),
+    this.version = const Value.absent(),
+    this.tagline = const Value.absent(),
+    this.maintainer = const Value.absent(),
+    this.type = const Value.absent(),
+    this.tags = const Value.absent(),
+    this.blenderMinVersion = const Value.absent(),
+    this.licence = const Value.absent(),
+    this.website = const Value.absent(),
+    this.copyright = const Value.absent(),
+    this.permissions = const Value.absent(),
+  });
+  BnextExtensionsCompanion.insert({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    required String schemaVersion,
+    this.extId = const Value.absent(),
+    this.name = const Value.absent(),
+    required String version,
+    this.tagline = const Value.absent(),
+    this.maintainer = const Value.absent(),
+    this.type = const Value.absent(),
+    this.tags = const Value.absent(),
+    required String blenderMinVersion,
+    this.licence = const Value.absent(),
+    this.website = const Value.absent(),
+    this.copyright = const Value.absent(),
+    this.permissions = const Value.absent(),
+  })  : schemaVersion = Value(schemaVersion),
+        version = Value(version),
+        blenderMinVersion = Value(blenderMinVersion);
+  static Insertable<BnextExtension> custom({
+    Expression<int>? id,
+    Expression<DateTime>? createdAt,
+    Expression<String>? schemaVersion,
+    Expression<String>? extId,
+    Expression<String>? name,
+    Expression<String>? version,
+    Expression<String>? tagline,
+    Expression<String>? maintainer,
+    Expression<String>? type,
+    Expression<String>? tags,
+    Expression<String>? blenderMinVersion,
+    Expression<String>? licence,
+    Expression<String>? website,
+    Expression<String>? copyright,
+    Expression<String>? permissions,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (schemaVersion != null) 'schema_version': schemaVersion,
+      if (extId != null) 'ext_id': extId,
+      if (name != null) 'name': name,
+      if (version != null) 'version': version,
+      if (tagline != null) 'tagline': tagline,
+      if (maintainer != null) 'maintainer': maintainer,
+      if (type != null) 'type': type,
+      if (tags != null) 'tags': tags,
+      if (blenderMinVersion != null) 'blender_min_version': blenderMinVersion,
+      if (licence != null) 'licence': licence,
+      if (website != null) 'website': website,
+      if (copyright != null) 'copyright': copyright,
+      if (permissions != null) 'permissions': permissions,
+    });
+  }
+
+  BnextExtensionsCompanion copyWith(
+      {Value<int?>? id,
+      Value<DateTime?>? createdAt,
+      Value<String>? schemaVersion,
+      Value<String?>? extId,
+      Value<String?>? name,
+      Value<String>? version,
+      Value<String?>? tagline,
+      Value<String?>? maintainer,
+      Value<String?>? type,
+      Value<String?>? tags,
+      Value<String>? blenderMinVersion,
+      Value<String?>? licence,
+      Value<String?>? website,
+      Value<String?>? copyright,
+      Value<String?>? permissions}) {
+    return BnextExtensionsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      schemaVersion: schemaVersion ?? this.schemaVersion,
+      extId: extId ?? this.extId,
+      name: name ?? this.name,
+      version: version ?? this.version,
+      tagline: tagline ?? this.tagline,
+      maintainer: maintainer ?? this.maintainer,
+      type: type ?? this.type,
+      tags: tags ?? this.tags,
+      blenderMinVersion: blenderMinVersion ?? this.blenderMinVersion,
+      licence: licence ?? this.licence,
+      website: website ?? this.website,
+      copyright: copyright ?? this.copyright,
+      permissions: permissions ?? this.permissions,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (schemaVersion.present) {
+      map['schema_version'] = Variable<String>(schemaVersion.value);
+    }
+    if (extId.present) {
+      map['ext_id'] = Variable<String>(extId.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (version.present) {
+      map['version'] = Variable<String>(version.value);
+    }
+    if (tagline.present) {
+      map['tagline'] = Variable<String>(tagline.value);
+    }
+    if (maintainer.present) {
+      map['maintainer'] = Variable<String>(maintainer.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (tags.present) {
+      map['tags'] = Variable<String>(tags.value);
+    }
+    if (blenderMinVersion.present) {
+      map['blender_min_version'] = Variable<String>(blenderMinVersion.value);
+    }
+    if (licence.present) {
+      map['licence'] = Variable<String>(licence.value);
+    }
+    if (website.present) {
+      map['website'] = Variable<String>(website.value);
+    }
+    if (copyright.present) {
+      map['copyright'] = Variable<String>(copyright.value);
+    }
+    if (permissions.present) {
+      map['permissions'] = Variable<String>(permissions.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BnextExtensionsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('schemaVersion: $schemaVersion, ')
+          ..write('extId: $extId, ')
+          ..write('name: $name, ')
+          ..write('version: $version, ')
+          ..write('tagline: $tagline, ')
+          ..write('maintainer: $maintainer, ')
+          ..write('type: $type, ')
+          ..write('tags: $tags, ')
+          ..write('blenderMinVersion: $blenderMinVersion, ')
+          ..write('licence: $licence, ')
+          ..write('website: $website, ')
+          ..write('copyright: $copyright, ')
+          ..write('permissions: $permissions')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BnextProjectExtensionsTable extends BnextProjectExtensions
+    with TableInfo<$BnextProjectExtensionsTable, BnextProjectExtension> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BnextProjectExtensionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, true,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, true,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  static const VerificationMeta _projectMeta =
+      const VerificationMeta('project');
+  @override
+  late final GeneratedColumn<int> project = GeneratedColumn<int>(
+      'project', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES bnex_projects (id)'));
+  static const VerificationMeta _bnextExtensionMeta =
+      const VerificationMeta('bnextExtension');
+  @override
+  late final GeneratedColumn<int> bnextExtension = GeneratedColumn<int>(
+      'bnext_extension', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'REFERENCES bnext_extensions (id)'));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, createdAt, project, bnextExtension];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'bnext_project_extensions';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<BnextProjectExtension> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('project')) {
+      context.handle(_projectMeta,
+          project.isAcceptableOrUnknown(data['project']!, _projectMeta));
+    } else if (isInserting) {
+      context.missing(_projectMeta);
+    }
+    if (data.containsKey('bnext_extension')) {
+      context.handle(
+          _bnextExtensionMeta,
+          bnextExtension.isAcceptableOrUnknown(
+              data['bnext_extension']!, _bnextExtensionMeta));
+    } else if (isInserting) {
+      context.missing(_bnextExtensionMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  BnextProjectExtension map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BnextProjectExtension(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
+      project: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}project'])!,
+      bnextExtension: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}bnext_extension'])!,
+    );
+  }
+
+  @override
+  $BnextProjectExtensionsTable createAlias(String alias) {
+    return $BnextProjectExtensionsTable(attachedDatabase, alias);
+  }
+}
+
+class BnextProjectExtension extends DataClass
+    implements Insertable<BnextProjectExtension> {
+  final int? id;
+  final DateTime? createdAt;
+  final int project;
+  final int bnextExtension;
+  const BnextProjectExtension(
+      {this.id,
+      this.createdAt,
+      required this.project,
+      required this.bnextExtension});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
+    map['project'] = Variable<int>(project);
+    map['bnext_extension'] = Variable<int>(bnextExtension);
+    return map;
+  }
+
+  BnextProjectExtensionsCompanion toCompanion(bool nullToAbsent) {
+    return BnextProjectExtensionsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      project: Value(project),
+      bnextExtension: Value(bnextExtension),
+    );
+  }
+
+  factory BnextProjectExtension.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BnextProjectExtension(
+      id: serializer.fromJson<int?>(json['id']),
+      createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
+      project: serializer.fromJson<int>(json['project']),
+      bnextExtension: serializer.fromJson<int>(json['bnextExtension']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int?>(id),
+      'createdAt': serializer.toJson<DateTime?>(createdAt),
+      'project': serializer.toJson<int>(project),
+      'bnextExtension': serializer.toJson<int>(bnextExtension),
+    };
+  }
+
+  BnextProjectExtension copyWith(
+          {Value<int?> id = const Value.absent(),
+          Value<DateTime?> createdAt = const Value.absent(),
+          int? project,
+          int? bnextExtension}) =>
+      BnextProjectExtension(
+        id: id.present ? id.value : this.id,
+        createdAt: createdAt.present ? createdAt.value : this.createdAt,
+        project: project ?? this.project,
+        bnextExtension: bnextExtension ?? this.bnextExtension,
+      );
+  BnextProjectExtension copyWithCompanion(
+      BnextProjectExtensionsCompanion data) {
+    return BnextProjectExtension(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      project: data.project.present ? data.project.value : this.project,
+      bnextExtension: data.bnextExtension.present
+          ? data.bnextExtension.value
+          : this.bnextExtension,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BnextProjectExtension(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('project: $project, ')
+          ..write('bnextExtension: $bnextExtension')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, createdAt, project, bnextExtension);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BnextProjectExtension &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.project == this.project &&
+          other.bnextExtension == this.bnextExtension);
+}
+
+class BnextProjectExtensionsCompanion
+    extends UpdateCompanion<BnextProjectExtension> {
+  final Value<int?> id;
+  final Value<DateTime?> createdAt;
+  final Value<int> project;
+  final Value<int> bnextExtension;
+  const BnextProjectExtensionsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.project = const Value.absent(),
+    this.bnextExtension = const Value.absent(),
+  });
+  BnextProjectExtensionsCompanion.insert({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    required int project,
+    required int bnextExtension,
+  })  : project = Value(project),
+        bnextExtension = Value(bnextExtension);
+  static Insertable<BnextProjectExtension> custom({
+    Expression<int>? id,
+    Expression<DateTime>? createdAt,
+    Expression<int>? project,
+    Expression<int>? bnextExtension,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (project != null) 'project': project,
+      if (bnextExtension != null) 'bnext_extension': bnextExtension,
+    });
+  }
+
+  BnextProjectExtensionsCompanion copyWith(
+      {Value<int?>? id,
+      Value<DateTime?>? createdAt,
+      Value<int>? project,
+      Value<int>? bnextExtension}) {
+    return BnextProjectExtensionsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      project: project ?? this.project,
+      bnextExtension: bnextExtension ?? this.bnextExtension,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (project.present) {
+      map['project'] = Variable<int>(project.value);
+    }
+    if (bnextExtension.present) {
+      map['bnext_extension'] = Variable<int>(bnextExtension.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BnextProjectExtensionsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('project: $project, ')
+          ..write('bnextExtension: $bnextExtension')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1518,12 +2916,23 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $BlenderVersionsTable blenderVersions =
       $BlenderVersionsTable(this);
   late final $BnextInfoTable bnextInfo = $BnextInfoTable(this);
+  late final $BnexProjectsTable bnexProjects = $BnexProjectsTable(this);
+  late final $BnextExtensionsTable bnextExtensions =
+      $BnextExtensionsTable(this);
+  late final $BnextProjectExtensionsTable bnextProjectExtensions =
+      $BnextProjectExtensionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [splashScreens, blenderVersions, bnextInfo];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        splashScreens,
+        blenderVersions,
+        bnextInfo,
+        bnexProjects,
+        bnextExtensions,
+        bnextProjectExtensions
+      ];
 }
 
 typedef $$SplashScreensTableCreateCompanionBuilder = SplashScreensCompanion
@@ -2432,6 +3841,1048 @@ typedef $$BnextInfoTableProcessedTableManager = ProcessedTableManager<
     ),
     BnextInfoData,
     PrefetchHooks Function()>;
+typedef $$BnexProjectsTableCreateCompanionBuilder = BnexProjectsCompanion
+    Function({
+  Value<int?> id,
+  Value<DateTime?> createdAt,
+  Value<String> name,
+  required String blenderVersion,
+  required String template,
+  Value<bool> usingVersionControl,
+  Value<bool> clearExtentions,
+});
+typedef $$BnexProjectsTableUpdateCompanionBuilder = BnexProjectsCompanion
+    Function({
+  Value<int?> id,
+  Value<DateTime?> createdAt,
+  Value<String> name,
+  Value<String> blenderVersion,
+  Value<String> template,
+  Value<bool> usingVersionControl,
+  Value<bool> clearExtentions,
+});
+
+final class $$BnexProjectsTableReferences
+    extends BaseReferences<_$AppDatabase, $BnexProjectsTable, BnexProject> {
+  $$BnexProjectsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$BnextProjectExtensionsTable,
+      List<BnextProjectExtension>> _bnextProjectExtensionsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.bnextProjectExtensions,
+          aliasName: $_aliasNameGenerator(
+              db.bnexProjects.id, db.bnextProjectExtensions.project));
+
+  $$BnextProjectExtensionsTableProcessedTableManager
+      get bnextProjectExtensionsRefs {
+    final manager = $$BnextProjectExtensionsTableTableManager(
+            $_db, $_db.bnextProjectExtensions)
+        .filter((f) => f.project.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_bnextProjectExtensionsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$BnexProjectsTableFilterComposer
+    extends Composer<_$AppDatabase, $BnexProjectsTable> {
+  $$BnexProjectsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get blenderVersion => $composableBuilder(
+      column: $table.blenderVersion,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get template => $composableBuilder(
+      column: $table.template, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get usingVersionControl => $composableBuilder(
+      column: $table.usingVersionControl,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get clearExtentions => $composableBuilder(
+      column: $table.clearExtentions,
+      builder: (column) => ColumnFilters(column));
+
+  Expression<bool> bnextProjectExtensionsRefs(
+      Expression<bool> Function($$BnextProjectExtensionsTableFilterComposer f)
+          f) {
+    final $$BnextProjectExtensionsTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.bnextProjectExtensions,
+            getReferencedColumn: (t) => t.project,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$BnextProjectExtensionsTableFilterComposer(
+                  $db: $db,
+                  $table: $db.bnextProjectExtensions,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$BnexProjectsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BnexProjectsTable> {
+  $$BnexProjectsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get blenderVersion => $composableBuilder(
+      column: $table.blenderVersion,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get template => $composableBuilder(
+      column: $table.template, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get usingVersionControl => $composableBuilder(
+      column: $table.usingVersionControl,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get clearExtentions => $composableBuilder(
+      column: $table.clearExtentions,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$BnexProjectsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BnexProjectsTable> {
+  $$BnexProjectsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get blenderVersion => $composableBuilder(
+      column: $table.blenderVersion, builder: (column) => column);
+
+  GeneratedColumn<String> get template =>
+      $composableBuilder(column: $table.template, builder: (column) => column);
+
+  GeneratedColumn<bool> get usingVersionControl => $composableBuilder(
+      column: $table.usingVersionControl, builder: (column) => column);
+
+  GeneratedColumn<bool> get clearExtentions => $composableBuilder(
+      column: $table.clearExtentions, builder: (column) => column);
+
+  Expression<T> bnextProjectExtensionsRefs<T extends Object>(
+      Expression<T> Function($$BnextProjectExtensionsTableAnnotationComposer a)
+          f) {
+    final $$BnextProjectExtensionsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.bnextProjectExtensions,
+            getReferencedColumn: (t) => t.project,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$BnextProjectExtensionsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.bnextProjectExtensions,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$BnexProjectsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $BnexProjectsTable,
+    BnexProject,
+    $$BnexProjectsTableFilterComposer,
+    $$BnexProjectsTableOrderingComposer,
+    $$BnexProjectsTableAnnotationComposer,
+    $$BnexProjectsTableCreateCompanionBuilder,
+    $$BnexProjectsTableUpdateCompanionBuilder,
+    (BnexProject, $$BnexProjectsTableReferences),
+    BnexProject,
+    PrefetchHooks Function({bool bnextProjectExtensionsRefs})> {
+  $$BnexProjectsTableTableManager(_$AppDatabase db, $BnexProjectsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BnexProjectsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BnexProjectsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BnexProjectsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            Value<String> blenderVersion = const Value.absent(),
+            Value<String> template = const Value.absent(),
+            Value<bool> usingVersionControl = const Value.absent(),
+            Value<bool> clearExtentions = const Value.absent(),
+          }) =>
+              BnexProjectsCompanion(
+            id: id,
+            createdAt: createdAt,
+            name: name,
+            blenderVersion: blenderVersion,
+            template: template,
+            usingVersionControl: usingVersionControl,
+            clearExtentions: clearExtentions,
+          ),
+          createCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            Value<String> name = const Value.absent(),
+            required String blenderVersion,
+            required String template,
+            Value<bool> usingVersionControl = const Value.absent(),
+            Value<bool> clearExtentions = const Value.absent(),
+          }) =>
+              BnexProjectsCompanion.insert(
+            id: id,
+            createdAt: createdAt,
+            name: name,
+            blenderVersion: blenderVersion,
+            template: template,
+            usingVersionControl: usingVersionControl,
+            clearExtentions: clearExtentions,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$BnexProjectsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({bnextProjectExtensionsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (bnextProjectExtensionsRefs) db.bnextProjectExtensions
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (bnextProjectExtensionsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$BnexProjectsTableReferences
+                            ._bnextProjectExtensionsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$BnexProjectsTableReferences(db, table, p0)
+                                .bnextProjectExtensionsRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.project == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$BnexProjectsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $BnexProjectsTable,
+    BnexProject,
+    $$BnexProjectsTableFilterComposer,
+    $$BnexProjectsTableOrderingComposer,
+    $$BnexProjectsTableAnnotationComposer,
+    $$BnexProjectsTableCreateCompanionBuilder,
+    $$BnexProjectsTableUpdateCompanionBuilder,
+    (BnexProject, $$BnexProjectsTableReferences),
+    BnexProject,
+    PrefetchHooks Function({bool bnextProjectExtensionsRefs})>;
+typedef $$BnextExtensionsTableCreateCompanionBuilder = BnextExtensionsCompanion
+    Function({
+  Value<int?> id,
+  Value<DateTime?> createdAt,
+  required String schemaVersion,
+  Value<String?> extId,
+  Value<String?> name,
+  required String version,
+  Value<String?> tagline,
+  Value<String?> maintainer,
+  Value<String?> type,
+  Value<String?> tags,
+  required String blenderMinVersion,
+  Value<String?> licence,
+  Value<String?> website,
+  Value<String?> copyright,
+  Value<String?> permissions,
+});
+typedef $$BnextExtensionsTableUpdateCompanionBuilder = BnextExtensionsCompanion
+    Function({
+  Value<int?> id,
+  Value<DateTime?> createdAt,
+  Value<String> schemaVersion,
+  Value<String?> extId,
+  Value<String?> name,
+  Value<String> version,
+  Value<String?> tagline,
+  Value<String?> maintainer,
+  Value<String?> type,
+  Value<String?> tags,
+  Value<String> blenderMinVersion,
+  Value<String?> licence,
+  Value<String?> website,
+  Value<String?> copyright,
+  Value<String?> permissions,
+});
+
+final class $$BnextExtensionsTableReferences extends BaseReferences<
+    _$AppDatabase, $BnextExtensionsTable, BnextExtension> {
+  $$BnextExtensionsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$BnextProjectExtensionsTable,
+      List<BnextProjectExtension>> _bnextProjectExtensionsRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.bnextProjectExtensions,
+          aliasName: $_aliasNameGenerator(
+              db.bnextExtensions.id, db.bnextProjectExtensions.bnextExtension));
+
+  $$BnextProjectExtensionsTableProcessedTableManager
+      get bnextProjectExtensionsRefs {
+    final manager = $$BnextProjectExtensionsTableTableManager(
+            $_db, $_db.bnextProjectExtensions)
+        .filter((f) => f.bnextExtension.id($_item.id));
+
+    final cache =
+        $_typedResult.readTableOrNull(_bnextProjectExtensionsRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$BnextExtensionsTableFilterComposer
+    extends Composer<_$AppDatabase, $BnextExtensionsTable> {
+  $$BnextExtensionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get schemaVersion => $composableBuilder(
+      column: $table.schemaVersion, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get extId => $composableBuilder(
+      column: $table.extId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get tagline => $composableBuilder(
+      column: $table.tagline, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get maintainer => $composableBuilder(
+      column: $table.maintainer, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get tags => $composableBuilder(
+      column: $table.tags, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get blenderMinVersion => $composableBuilder(
+      column: $table.blenderMinVersion,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get licence => $composableBuilder(
+      column: $table.licence, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get website => $composableBuilder(
+      column: $table.website, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get copyright => $composableBuilder(
+      column: $table.copyright, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get permissions => $composableBuilder(
+      column: $table.permissions, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> bnextProjectExtensionsRefs(
+      Expression<bool> Function($$BnextProjectExtensionsTableFilterComposer f)
+          f) {
+    final $$BnextProjectExtensionsTableFilterComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.bnextProjectExtensions,
+            getReferencedColumn: (t) => t.bnextExtension,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$BnextProjectExtensionsTableFilterComposer(
+                  $db: $db,
+                  $table: $db.bnextProjectExtensions,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$BnextExtensionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BnextExtensionsTable> {
+  $$BnextExtensionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get schemaVersion => $composableBuilder(
+      column: $table.schemaVersion,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get extId => $composableBuilder(
+      column: $table.extId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get version => $composableBuilder(
+      column: $table.version, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tagline => $composableBuilder(
+      column: $table.tagline, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get maintainer => $composableBuilder(
+      column: $table.maintainer, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get type => $composableBuilder(
+      column: $table.type, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tags => $composableBuilder(
+      column: $table.tags, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get blenderMinVersion => $composableBuilder(
+      column: $table.blenderMinVersion,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get licence => $composableBuilder(
+      column: $table.licence, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get website => $composableBuilder(
+      column: $table.website, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get copyright => $composableBuilder(
+      column: $table.copyright, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get permissions => $composableBuilder(
+      column: $table.permissions, builder: (column) => ColumnOrderings(column));
+}
+
+class $$BnextExtensionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BnextExtensionsTable> {
+  $$BnextExtensionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get schemaVersion => $composableBuilder(
+      column: $table.schemaVersion, builder: (column) => column);
+
+  GeneratedColumn<String> get extId =>
+      $composableBuilder(column: $table.extId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<String> get tagline =>
+      $composableBuilder(column: $table.tagline, builder: (column) => column);
+
+  GeneratedColumn<String> get maintainer => $composableBuilder(
+      column: $table.maintainer, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get tags =>
+      $composableBuilder(column: $table.tags, builder: (column) => column);
+
+  GeneratedColumn<String> get blenderMinVersion => $composableBuilder(
+      column: $table.blenderMinVersion, builder: (column) => column);
+
+  GeneratedColumn<String> get licence =>
+      $composableBuilder(column: $table.licence, builder: (column) => column);
+
+  GeneratedColumn<String> get website =>
+      $composableBuilder(column: $table.website, builder: (column) => column);
+
+  GeneratedColumn<String> get copyright =>
+      $composableBuilder(column: $table.copyright, builder: (column) => column);
+
+  GeneratedColumn<String> get permissions => $composableBuilder(
+      column: $table.permissions, builder: (column) => column);
+
+  Expression<T> bnextProjectExtensionsRefs<T extends Object>(
+      Expression<T> Function($$BnextProjectExtensionsTableAnnotationComposer a)
+          f) {
+    final $$BnextProjectExtensionsTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.bnextProjectExtensions,
+            getReferencedColumn: (t) => t.bnextExtension,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$BnextProjectExtensionsTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.bnextProjectExtensions,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
+}
+
+class $$BnextExtensionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $BnextExtensionsTable,
+    BnextExtension,
+    $$BnextExtensionsTableFilterComposer,
+    $$BnextExtensionsTableOrderingComposer,
+    $$BnextExtensionsTableAnnotationComposer,
+    $$BnextExtensionsTableCreateCompanionBuilder,
+    $$BnextExtensionsTableUpdateCompanionBuilder,
+    (BnextExtension, $$BnextExtensionsTableReferences),
+    BnextExtension,
+    PrefetchHooks Function({bool bnextProjectExtensionsRefs})> {
+  $$BnextExtensionsTableTableManager(
+      _$AppDatabase db, $BnextExtensionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BnextExtensionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BnextExtensionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BnextExtensionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            Value<String> schemaVersion = const Value.absent(),
+            Value<String?> extId = const Value.absent(),
+            Value<String?> name = const Value.absent(),
+            Value<String> version = const Value.absent(),
+            Value<String?> tagline = const Value.absent(),
+            Value<String?> maintainer = const Value.absent(),
+            Value<String?> type = const Value.absent(),
+            Value<String?> tags = const Value.absent(),
+            Value<String> blenderMinVersion = const Value.absent(),
+            Value<String?> licence = const Value.absent(),
+            Value<String?> website = const Value.absent(),
+            Value<String?> copyright = const Value.absent(),
+            Value<String?> permissions = const Value.absent(),
+          }) =>
+              BnextExtensionsCompanion(
+            id: id,
+            createdAt: createdAt,
+            schemaVersion: schemaVersion,
+            extId: extId,
+            name: name,
+            version: version,
+            tagline: tagline,
+            maintainer: maintainer,
+            type: type,
+            tags: tags,
+            blenderMinVersion: blenderMinVersion,
+            licence: licence,
+            website: website,
+            copyright: copyright,
+            permissions: permissions,
+          ),
+          createCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            required String schemaVersion,
+            Value<String?> extId = const Value.absent(),
+            Value<String?> name = const Value.absent(),
+            required String version,
+            Value<String?> tagline = const Value.absent(),
+            Value<String?> maintainer = const Value.absent(),
+            Value<String?> type = const Value.absent(),
+            Value<String?> tags = const Value.absent(),
+            required String blenderMinVersion,
+            Value<String?> licence = const Value.absent(),
+            Value<String?> website = const Value.absent(),
+            Value<String?> copyright = const Value.absent(),
+            Value<String?> permissions = const Value.absent(),
+          }) =>
+              BnextExtensionsCompanion.insert(
+            id: id,
+            createdAt: createdAt,
+            schemaVersion: schemaVersion,
+            extId: extId,
+            name: name,
+            version: version,
+            tagline: tagline,
+            maintainer: maintainer,
+            type: type,
+            tags: tags,
+            blenderMinVersion: blenderMinVersion,
+            licence: licence,
+            website: website,
+            copyright: copyright,
+            permissions: permissions,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$BnextExtensionsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({bnextProjectExtensionsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (bnextProjectExtensionsRefs) db.bnextProjectExtensions
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (bnextProjectExtensionsRefs)
+                    await $_getPrefetchedData(
+                        currentTable: table,
+                        referencedTable: $$BnextExtensionsTableReferences
+                            ._bnextProjectExtensionsRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$BnextExtensionsTableReferences(db, table, p0)
+                                .bnextProjectExtensionsRefs,
+                        referencedItemsForCurrentItem:
+                            (item, referencedItems) => referencedItems
+                                .where((e) => e.bnextExtension == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$BnextExtensionsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $BnextExtensionsTable,
+    BnextExtension,
+    $$BnextExtensionsTableFilterComposer,
+    $$BnextExtensionsTableOrderingComposer,
+    $$BnextExtensionsTableAnnotationComposer,
+    $$BnextExtensionsTableCreateCompanionBuilder,
+    $$BnextExtensionsTableUpdateCompanionBuilder,
+    (BnextExtension, $$BnextExtensionsTableReferences),
+    BnextExtension,
+    PrefetchHooks Function({bool bnextProjectExtensionsRefs})>;
+typedef $$BnextProjectExtensionsTableCreateCompanionBuilder
+    = BnextProjectExtensionsCompanion Function({
+  Value<int?> id,
+  Value<DateTime?> createdAt,
+  required int project,
+  required int bnextExtension,
+});
+typedef $$BnextProjectExtensionsTableUpdateCompanionBuilder
+    = BnextProjectExtensionsCompanion Function({
+  Value<int?> id,
+  Value<DateTime?> createdAt,
+  Value<int> project,
+  Value<int> bnextExtension,
+});
+
+final class $$BnextProjectExtensionsTableReferences extends BaseReferences<
+    _$AppDatabase, $BnextProjectExtensionsTable, BnextProjectExtension> {
+  $$BnextProjectExtensionsTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $BnexProjectsTable _projectTable(_$AppDatabase db) =>
+      db.bnexProjects.createAlias($_aliasNameGenerator(
+          db.bnextProjectExtensions.project, db.bnexProjects.id));
+
+  $$BnexProjectsTableProcessedTableManager get project {
+    final manager = $$BnexProjectsTableTableManager($_db, $_db.bnexProjects)
+        .filter((f) => f.id($_item.project!));
+    final item = $_typedResult.readTableOrNull(_projectTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $BnextExtensionsTable _bnextExtensionTable(_$AppDatabase db) =>
+      db.bnextExtensions.createAlias($_aliasNameGenerator(
+          db.bnextProjectExtensions.bnextExtension, db.bnextExtensions.id));
+
+  $$BnextExtensionsTableProcessedTableManager get bnextExtension {
+    final manager =
+        $$BnextExtensionsTableTableManager($_db, $_db.bnextExtensions)
+            .filter((f) => f.id($_item.bnextExtension!));
+    final item = $_typedResult.readTableOrNull(_bnextExtensionTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$BnextProjectExtensionsTableFilterComposer
+    extends Composer<_$AppDatabase, $BnextProjectExtensionsTable> {
+  $$BnextProjectExtensionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  $$BnexProjectsTableFilterComposer get project {
+    final $$BnexProjectsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.project,
+        referencedTable: $db.bnexProjects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BnexProjectsTableFilterComposer(
+              $db: $db,
+              $table: $db.bnexProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$BnextExtensionsTableFilterComposer get bnextExtension {
+    final $$BnextExtensionsTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.bnextExtension,
+        referencedTable: $db.bnextExtensions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BnextExtensionsTableFilterComposer(
+              $db: $db,
+              $table: $db.bnextExtensions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BnextProjectExtensionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BnextProjectExtensionsTable> {
+  $$BnextProjectExtensionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  $$BnexProjectsTableOrderingComposer get project {
+    final $$BnexProjectsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.project,
+        referencedTable: $db.bnexProjects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BnexProjectsTableOrderingComposer(
+              $db: $db,
+              $table: $db.bnexProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$BnextExtensionsTableOrderingComposer get bnextExtension {
+    final $$BnextExtensionsTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.bnextExtension,
+        referencedTable: $db.bnextExtensions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BnextExtensionsTableOrderingComposer(
+              $db: $db,
+              $table: $db.bnextExtensions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BnextProjectExtensionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BnextProjectExtensionsTable> {
+  $$BnextProjectExtensionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  $$BnexProjectsTableAnnotationComposer get project {
+    final $$BnexProjectsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.project,
+        referencedTable: $db.bnexProjects,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BnexProjectsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.bnexProjects,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$BnextExtensionsTableAnnotationComposer get bnextExtension {
+    final $$BnextExtensionsTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.bnextExtension,
+        referencedTable: $db.bnextExtensions,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BnextExtensionsTableAnnotationComposer(
+              $db: $db,
+              $table: $db.bnextExtensions,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BnextProjectExtensionsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $BnextProjectExtensionsTable,
+    BnextProjectExtension,
+    $$BnextProjectExtensionsTableFilterComposer,
+    $$BnextProjectExtensionsTableOrderingComposer,
+    $$BnextProjectExtensionsTableAnnotationComposer,
+    $$BnextProjectExtensionsTableCreateCompanionBuilder,
+    $$BnextProjectExtensionsTableUpdateCompanionBuilder,
+    (BnextProjectExtension, $$BnextProjectExtensionsTableReferences),
+    BnextProjectExtension,
+    PrefetchHooks Function({bool project, bool bnextExtension})> {
+  $$BnextProjectExtensionsTableTableManager(
+      _$AppDatabase db, $BnextProjectExtensionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BnextProjectExtensionsTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BnextProjectExtensionsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BnextProjectExtensionsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            Value<int> project = const Value.absent(),
+            Value<int> bnextExtension = const Value.absent(),
+          }) =>
+              BnextProjectExtensionsCompanion(
+            id: id,
+            createdAt: createdAt,
+            project: project,
+            bnextExtension: bnextExtension,
+          ),
+          createCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            required int project,
+            required int bnextExtension,
+          }) =>
+              BnextProjectExtensionsCompanion.insert(
+            id: id,
+            createdAt: createdAt,
+            project: project,
+            bnextExtension: bnextExtension,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$BnextProjectExtensionsTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({project = false, bnextExtension = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (project) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.project,
+                    referencedTable: $$BnextProjectExtensionsTableReferences
+                        ._projectTable(db),
+                    referencedColumn: $$BnextProjectExtensionsTableReferences
+                        ._projectTable(db)
+                        .id,
+                  ) as T;
+                }
+                if (bnextExtension) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.bnextExtension,
+                    referencedTable: $$BnextProjectExtensionsTableReferences
+                        ._bnextExtensionTable(db),
+                    referencedColumn: $$BnextProjectExtensionsTableReferences
+                        ._bnextExtensionTable(db)
+                        .id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$BnextProjectExtensionsTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $BnextProjectExtensionsTable,
+        BnextProjectExtension,
+        $$BnextProjectExtensionsTableFilterComposer,
+        $$BnextProjectExtensionsTableOrderingComposer,
+        $$BnextProjectExtensionsTableAnnotationComposer,
+        $$BnextProjectExtensionsTableCreateCompanionBuilder,
+        $$BnextProjectExtensionsTableUpdateCompanionBuilder,
+        (BnextProjectExtension, $$BnextProjectExtensionsTableReferences),
+        BnextProjectExtension,
+        PrefetchHooks Function({bool project, bool bnextExtension})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2442,4 +4893,11 @@ class $AppDatabaseManager {
       $$BlenderVersionsTableTableManager(_db, _db.blenderVersions);
   $$BnextInfoTableTableManager get bnextInfo =>
       $$BnextInfoTableTableManager(_db, _db.bnextInfo);
+  $$BnexProjectsTableTableManager get bnexProjects =>
+      $$BnexProjectsTableTableManager(_db, _db.bnexProjects);
+  $$BnextExtensionsTableTableManager get bnextExtensions =>
+      $$BnextExtensionsTableTableManager(_db, _db.bnextExtensions);
+  $$BnextProjectExtensionsTableTableManager get bnextProjectExtensions =>
+      $$BnextProjectExtensionsTableTableManager(
+          _db, _db.bnextProjectExtensions);
 }

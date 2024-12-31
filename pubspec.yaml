@@ -12,6 +12,7 @@ dependencies:
   dio: ^5.7.0
   drift: ^2.23.0
   drift_flutter: ^0.2.3
+  file_selector: ^1.0.3
   flutter:
     sdk: flutter
   flutter_localizations:

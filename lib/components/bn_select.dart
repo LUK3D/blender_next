@@ -2,8 +2,18 @@ import 'package:blender_next/vendor/flutter_simple_multiselect/flutter_simple_mu
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 
+class BnSelectItem {
+  final int id;
+  final String name;
+
+  BnSelectItem({required this.id, required this.name});
+}
+
 class BnSelect extends StatefulWidget {
-  const BnSelect({super.key});
+  final List<BnSelectItem> items;
+  final Function(List<int> ids) onChange;
+
+  const BnSelect({super.key, required this.onChange, required this.items});
 
   @override
   State<BnSelect> createState() => _BnSelectState();
@@ -11,32 +21,21 @@ class BnSelect extends StatefulWidget {
 
 class _BnSelectState extends State<BnSelect> {
   late Color lineColor = const Color.fromRGBO(36, 37, 51, 0.04);
-  List selectedItems = [];
+  List<BnSelectItem> selectedItems = [];
   List selectedItemsAsync = [];
   Map? singleItem;
   bool isLoading = false;
 
-  List<Map<String, dynamic>> testData = [
-    {"uuid": 1, "name": "Cycles Render Engine"},
-    {"uuid": 2, "name": "FBX format"},
-    {"uuid": 3, "name": "glTF"},
-    {"uuid": 4, "name": "Node wrangler"},
-    {"uuid": 5, "name": "OCD"},
-    {"uuid": 6, "name": "Rigify"},
-    {"uuid": 7, "name": "Scalable Vector Graphic"},
-    {"uuid": 8, "name": "UV Layout"}
-  ];
-
-  Future<List<Map<String, dynamic>>> searchFunction(query) async {
-    return testData.where((element) {
-      return element["name"].toLowerCase().contains(query.toLowerCase());
+  Future<List<BnSelectItem>> searchFunction(query) async {
+    return widget.items.where((element) {
+      return element.name.toLowerCase().contains(query.toLowerCase());
     }).toList();
   }
 
-  Future<List<Map<String, dynamic>>> searchFunctionAsync(query) async {
+  Future<List<BnSelectItem>> searchFunctionAsync(query) async {
     return Future.delayed(const Duration(seconds: 1), () {
-      return testData.where((element) {
-        return element["name"].toLowerCase().contains(query.toLowerCase());
+      return widget.items.where((element) {
+        return element.name.toLowerCase().contains(query.toLowerCase());
       }).toList();
     });
   }
@@ -69,16 +68,20 @@ class _BnSelectState extends State<BnSelect> {
         length: selectedItems.length,
         tagBuilder: (context, index) => SelectTag(
               index: index,
-              label: selectedItems[index]["name"],
+              label: selectedItems[index].name,
               onDeleted: (value) {
                 selectedItems.removeAt(index);
+                widget.onChange(
+                    List<int>.from(selectedItems.map((e) => e.id).toList()));
                 setState(() {});
               },
             ),
         suggestionBuilder: (context, state, data) {
-          var existingIndex = selectedItems
-              .indexWhere((element) => element["uuid"] == data["uuid"]);
+          var existingIndex =
+              selectedItems.indexWhere((element) => element.id == data.id);
           var selectedData = data;
+          widget.onChange(
+              List<int>.from(selectedItems.map((e) => e.id).toList()));
           return Material(
             elevation: 0,
             child: GestureDetector(
@@ -91,6 +94,8 @@ class _BnSelectState extends State<BnSelect> {
                 }
 
                 state.selectAndClose(data);
+                widget.onChange(
+                    List<int>.from(selectedItems.map((e) => e.id).toList()));
                 setState(() {});
               },
               child: ListTile(
@@ -99,7 +104,7 @@ class _BnSelectState extends State<BnSelect> {
                 trailing: existingIndex >= 0 ? const Icon(Icons.check) : null,
                 selectedColor: Colors.white,
                 selectedTileColor: Theme.of(context).colorScheme.secondary,
-                title: Text(selectedData["name"].toString()),
+                title: Text(selectedData.name.toString()),
               ),
             ),
           );
