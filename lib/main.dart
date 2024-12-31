@@ -45,7 +45,6 @@ class MainApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
       darkTheme: darkTheme,
       themeMode: ThemeMode.dark,
-      locale: Locale("en"),
       home: const HomePage(),
     );
   }
