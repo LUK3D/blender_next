@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   archive: ^4.0.2
+  debounce_throttle: ^2.0.0
   dio: ^5.7.0
   drift: ^2.23.0
   drift_flutter: ^0.2.3
@@ -22,6 +23,7 @@ dependencies:
   intl: any
   logger: ^2.5.0
   path_provider: ^2.1.5
+  pointer_interceptor: ^0.10.1+2
   signals: ^6.0.2
   window_manager: ^0.4.3
 

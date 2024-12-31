@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'create_project_dialog.dart';
+
 class ProjectsScreen extends StatelessWidget {
   const ProjectsScreen({super.key, required this.isLoading});
 
@@ -48,7 +50,12 @@ class ProjectsScreen extends StatelessWidget {
                     foregroundColor: Colors.white,
                     borderRadius: 100,
                     icon: const Icon(LucideIcons.plus),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => showCreateProjectDialog(context),
+                      );
+                    },
                   ),
                 )
               ],
