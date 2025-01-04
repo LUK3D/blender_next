@@ -1,12 +1,36 @@
+import 'dart:io';
+
+import 'package:blender_next/components/bn_confirmation_dialog.dart';
 import 'package:blender_next/components/bn_sidebar_button.dart';
+import 'package:blender_next/data/database/database.dart';
+import 'package:blender_next/services/project_manager_service.dart';
+import 'package:blender_next/utils/utils.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:logger/logger.dart';
+import 'package:signals/signals_flutter.dart';
+import 'create_project_dialog.dart';
 
-class ProjectsScreen extends StatelessWidget {
-  const ProjectsScreen({super.key, required this.isLoading});
+class ProjectsScreen extends StatefulWidget {
+  final List<BnexProject> projects;
+  const ProjectsScreen({
+    super.key,
+    required this.isLoading,
+    required this.projects,
+  });
 
   final bool isLoading;
+
+  @override
+  State<ProjectsScreen> createState() => _ProjectsScreenState();
+}
+
+class _ProjectsScreenState extends State<ProjectsScreen> {
+  File getFile(String filePath) {
+    return File(filePath);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +55,7 @@ class ProjectsScreen extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      "${AppLocalizations.of(context)!.projectManager})",
+                      "${AppLocalizations.of(context)!.projectManager}(${widget.projects.length})",
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -48,7 +72,12 @@ class ProjectsScreen extends StatelessWidget {
                     foregroundColor: Colors.white,
                     borderRadius: 100,
                     icon: const Icon(LucideIcons.plus),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => showCreateProjectDialog(context),
+                      );
+                    },
                   ),
                 )
               ],
@@ -58,11 +87,12 @@ class ProjectsScreen extends StatelessWidget {
             color: Theme.of(context).dividerColor,
           ),
           Expanded(
-            child: (isLoading)
+            child: (widget.isLoading)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : GridView.builder(
+                    itemCount: widget.projects.length,
                     padding: const EdgeInsets.only(
                       left: 20,
                       right: 20,
@@ -76,11 +106,21 @@ class ProjectsScreen extends StatelessWidget {
                             mainAxisSpacing: 20,
                             crossAxisSpacing: 20),
                     itemBuilder: (context, index) {
+                      final project = widget.projects[index];
+                      final cover = project.cover != null
+                          ? getFile(project.cover!)
+                          : null;
                       return Material(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(10),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            useProjectManagerService()
+                                .runProject(project)
+                                .then((res) {
+                              setState(() {});
+                            });
+                          },
                           borderRadius: BorderRadius.circular(10),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -94,42 +134,209 @@ class ProjectsScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(7),
                                     color: Theme.of(context).canvasColor,
                                   ),
-                                  child: Image.network(
-                                    "https://i.pinimg.com/736x/c8/c1/19/c8c1195229120baef9f643b8d25eb345.jpg",
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: (cover != null && cover.existsSync())
+                                      ? Image.memory(
+                                          cover.readAsBytesSync(),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
                                 ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text(
-                                      "Project title goes here",
-                                      style: TextStyle(
+                                    Text(
+                                      project.name,
+                                      style: const TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w900,
                                       ),
                                     ),
                                     SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                                LucideIcons.ellipsis)))
+                                      width: 40,
+                                      height: 40,
+                                      child: Material(
+                                        clipBehavior: Clip.antiAlias,
+                                        color: Theme.of(context).canvasColor,
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton2(
+                                            onChanged: (value) {
+                                              final checkedSignal =
+                                                  signal(false);
+                                              if (value == "delete") {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      showConfirmationDialog(
+                                                          context,
+                                                          height: 300,
+                                                          title:
+                                                              "Deleting Project",
+                                                          message:
+                                                              "You ara about to delete ${project.name}. Are you sure?",
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Watch(
+                                                                  (ctx) =>
+                                                                      Checkbox(
+                                                                        value: checkedSignal
+                                                                            .value,
+                                                                        onChanged:
+                                                                            (val) {
+                                                                          checkedSignal.value =
+                                                                              val ?? false;
+                                                                        },
+                                                                      )),
+                                                              const SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              const Text(
+                                                                "Delete all files from disk",
+                                                              ),
+                                                            ],
+                                                          ), onConfirm: () {
+                                                    useProjectManagerService()
+                                                        .deleteProject(
+                                                      project,
+                                                      deleteAllFiles:
+                                                          checkedSignal.value,
+                                                    );
+                                                  }),
+                                                );
+                                                return;
+                                              }
+
+                                              if (value ==
+                                                  'refresh_thumbnail') {
+                                                useProjectManagerService()
+                                                    .generateThumbnail(project);
+                                                return;
+                                              }
+                                            },
+                                            customButton: Container(
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                              child: Icon(
+                                                LucideIcons.ellipsis,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                            ),
+                                            items: [
+                                              DropdownMenuItem<String>(
+                                                value: "edit",
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      LucideIcons.pen,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    const Text("Edit"),
+                                                  ],
+                                                ),
+                                              ),
+                                              DropdownMenuItem<String>(
+                                                value: "refresh_thumbnail",
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      LucideIcons.refresh_ccw,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    const Text(
+                                                        "Refresh Thumbnail"),
+                                                  ],
+                                                ),
+                                              ),
+                                              DropdownMenuItem<String>(
+                                                value: "delete",
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      LucideIcons.trash,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    const Text("Delete"),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                            dropdownStyleData:
+                                                DropdownStyleData(
+                                              width: 230,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 6),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                color: Theme.of(context)
+                                                    .canvasColor,
+                                              ),
+                                              offset: const Offset(0, 8),
+                                            ),
+                                            menuItemStyleData:
+                                                const MenuItemStyleData(
+                                              padding: EdgeInsets.only(
+                                                left: 16,
+                                                right: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
-                                const Expanded(
+                                Expanded(
                                   child: Opacity(
                                     opacity: 0.5,
                                     child: Text(
-                                      "union include pencil sea center than pole cloth hang powerful cook wool crack themselves headed certain putting thick threw composed riding anywhere soldier neck",
-                                      style:
-                                          TextStyle(fontSize: 14, height: 1.1),
+                                      project.description ?? "",
+                                      style: const TextStyle(
+                                          fontSize: 14, height: 1.1),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                     ),
                                   ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 3),
+                                  child: Divider(
+                                    height: 1,
+                                    color: Theme.of(context).dividerColor,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Size: ${project.size ?? ''}",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 Row(
                                   mainAxisAlignment:
@@ -147,9 +354,9 @@ class ProjectsScreen extends StatelessWidget {
                                         const SizedBox(
                                           width: 2,
                                         ),
-                                        const Text(
-                                          "2024-12-24",
-                                          style: TextStyle(
+                                        Text(
+                                          getProjectDate(project.createdAt),
+                                          style: const TextStyle(
                                             fontSize: 12,
                                           ),
                                         ),
@@ -165,7 +372,7 @@ class ProjectsScreen extends StatelessWidget {
                                         color: Theme.of(context).primaryColor,
                                       ),
                                       child: Text(
-                                        "Blender 3.4.0-Beta",
+                                        "Blender ${project.blenderVersion}",
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme

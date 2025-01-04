@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:blender_next/utils/blender_scripts.dart';
 import 'package:get_storage/get_storage.dart';
 
 class SettingsService {
@@ -28,6 +29,25 @@ class SettingsService {
 
   String getInstallersFolder() {
     return "${getContentPath()}/installs";
+  }
+
+  Future<void> setProjectsFolder(String path) async {
+    if (path.isEmpty) {
+      return;
+    }
+    await box.write("projects_folder", path);
+  }
+
+  String? getProjectsFolder() {
+    return box.read<String>("projects_folder");
+  }
+
+  Future<void> setDefaultRenderingEngine(String engine) async {
+    await box.write("default_rendering_engine", engine);
+  }
+
+  String? getDefaultRenderingEngine() {
+    return box.read<String>("default_rendering_engine") ?? BlenderEngines.eevee;
   }
 }
 

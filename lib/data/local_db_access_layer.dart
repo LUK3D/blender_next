@@ -1,5 +1,6 @@
 import 'package:blender_next/data/data_access.dart';
 import 'package:drift/drift.dart';
+import 'package:logger/logger.dart';
 
 import 'database/database.dart';
 
@@ -14,11 +15,13 @@ class LocalDbAccessLayer extends DataAccess {
 
   List<SplashScreen> cachedSplashscreens = [];
   List<BlenderVersion> cachedBlenderVersions = [];
+  List<BlenderVersion> localBlenderVersions = [];
 
   @override
   Future<List<BlenderVersion>> getLatestBuilds({String? varient}) async {
     final result = await database.managers.blenderVersions.get();
     cachedBlenderVersions = result;
+    localBlenderVersions = result;
     return result;
   }
 
@@ -30,15 +33,52 @@ class LocalDbAccessLayer extends DataAccess {
   }
 
   @override
+  Future<List<BlenderVersion>> getBuildById(int id) async {
+    return await database.managers.blenderVersions
+        .filter((e) => e.id.equals(id) & e.installed.equals(true))
+        .get();
+  }
+
+  @override
+  Future<List<BlenderVersion>> getBuildByVersion(String version,
+      {String? varient, String? architecture, bool? instaled}) async {
+    if (instaled != null) {
+      return await database.managers.blenderVersions.filter((e) {
+        return platFormFilter(e, varient) &
+            e.version.startsWith(version) &
+            e.installed.equals(instaled);
+      }).get();
+    }
+    return await database.managers.blenderVersions.filter((e) {
+      return platFormFilter(e, varient) & e.version.startsWith(version);
+    }).get();
+  }
+
+  @override
   Future<bool> saveBuilds({required List<BlenderVersion> blenderBuilds}) async {
+    if (localBlenderVersions.isEmpty) {
+      await getLatestBuilds();
+    }
     try {
-      await database.managers.blenderVersions.bulkCreate((o) => blenderBuilds,
-          mode: InsertMode.insertOrReplace,
-          onConflict: DoNothing(target: [
-            database.blenderVersions.architecture,
-            database.blenderVersions.variant,
-            database.blenderVersions.version,
-          ]));
+      final blendersToSave = <BlenderVersion>[];
+
+      for (final blender in blenderBuilds) {
+        final existing = localBlenderVersions
+            .where((e) =>
+                e.version == blender.version &&
+                e.id != null &&
+                e.variant == blender.variant &&
+                e.architecture == blender.architecture)
+            .firstOrNull;
+        if (existing == null) {
+          blendersToSave.add(blender);
+        }
+      }
+
+      await database.managers.blenderVersions.bulkCreate(
+        (o) => blendersToSave,
+        mode: InsertMode.insertOrReplace,
+      );
       //Update the cache when we save something new
       await getLatestBuilds();
       return true;
@@ -93,8 +133,12 @@ class LocalDbAccessLayer extends DataAccess {
 
   @override
   Future<bool> clearDatabase() async {
-    await database.managers.blenderVersions.delete();
-    await database.managers.splashScreens.delete();
+    // await database.managers.blenderVersions.delete();
+    // await database.managers.splashScreens.delete();
+    await database.managers.bnexProjects.delete();
+
+    // await database.deleteAll();
+    // Logger().e("All deleted!!");
 
     return true;
   }
@@ -122,6 +166,48 @@ class LocalDbAccessLayer extends DataAccess {
         .filter((f) => f.id.equals(bnextInfo.id))
         .update((o) => bnextInfo);
     return bnextInfo;
+  }
+
+  @override
+  Future<BnexProject> createProject(BnexProject project) async {
+    final id = await database.managers.bnexProjects.create((o) => project);
+    return project.copyWith(id: Value(id));
+  }
+
+//Change this so we only hide the project instead of deleting it
+  @override
+  Future<void> deleteProject(BnexProject project, {bool unlist = false}) async {
+    if (unlist) {
+      await updateProject(project.copyWith(unlisted: true));
+      return;
+    }
+    await database.managers.bnexProjects
+        .filter((e) => e.id.equals(project.id))
+        .delete();
+  }
+
+  @override
+  Future<BnexProject> unlistProject(BnexProject project) async {
+    await database.managers.bnexProjects
+        .filter((e) => e.id.equals(project.id))
+        .update((o) => o(unlisted: const Value(true)));
+    return project;
+  }
+
+  @override
+  Stream<List<BnexProject>> getProjects() {
+    return database.managers.bnexProjects
+        .filter((e) => e.unlisted.equals(false))
+        .watch();
+  }
+
+  @override
+  Future<BnexProject> updateProject(BnexProject project) async {
+    await database.managers.bnexProjects
+        .filter((e) => e.id.equals(project.id))
+        .update((o) => project);
+
+    return project;
   }
 }
 

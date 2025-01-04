@@ -46,7 +46,50 @@ class BnextInfo extends Table with TableMixin {
       dateTime().nullable().withDefault(currentDateAndTime)();
 }
 
-@DriftDatabase(tables: [BlenderVersions, SplashScreens, BnextInfo])
+class BnexProjects extends Table with TableMixin {
+  late final name = text().clientDefault(() => "value")();
+  late final description = text().nullable()();
+  late final size = text().nullable()();
+  late final tags = text().nullable()();
+  late final blenderVariant = text()();
+  late final blenderVersion = text()();
+  late final template = text()();
+  late final usingVersionControl = boolean().clientDefault(() => false)();
+  late final clearExtentions = boolean().clientDefault(() => false)();
+  late final dir = text()();
+  late final cover = text().nullable()();
+  late final unlisted = boolean().clientDefault(() => false)();
+}
+
+class BnextExtensions extends Table with TableMixin {
+  late final schemaVersion = text()();
+  late final extId = text().nullable()();
+  late final name = text().nullable()();
+  late final version = text()();
+  late final tagline = text().nullable()();
+  late final maintainer = text().nullable()();
+  late final type = text().nullable()();
+  late final tags = text().nullable()();
+  late final blenderMinVersion = text()();
+  late final licence = text().nullable()();
+  late final website = text().nullable()();
+  late final copyright = text().nullable()();
+  late final permissions = text().nullable()();
+}
+
+class BnextProjectExtensions extends Table with TableMixin {
+  late final project = integer().references(BnexProjects, #id)();
+  late final bnextExtension = integer().references(BnextExtensions, #id)();
+}
+
+@DriftDatabase(tables: [
+  BlenderVersions,
+  SplashScreens,
+  BnextInfo,
+  BnexProjects,
+  BnextExtensions,
+  BnextProjectExtensions
+])
 class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter
   // and a constructor telling drift where the database should be stored.
@@ -54,7 +97,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration {
@@ -66,6 +109,14 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
     );
+  }
+
+  Future deleteAll() async {
+    final m = createMigrator();
+    // Going through tables in reverse because they are sorted for foreign keys
+    for (final table in allTables.toList().reversed) {
+      await m.deleteTable(table.actualTableName);
+    }
   }
 
   static QueryExecutor _openConnection() {
