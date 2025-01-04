@@ -25,7 +25,9 @@ dependencies:
   logger: ^2.5.0
   path_provider: ^2.1.5
   pointer_interceptor: ^0.10.1+2
+  process_run: ^1.2.2+1
   signals: ^6.0.2
+  timeago: ^3.7.0
   window_manager: ^0.4.3
 
 dev_dependencies:
@@ -40,3 +42,5 @@ flutter:
   generate: true
   assets:
     - assets/
+    - assets/data/
+    - assets/data/bpy_scripts/

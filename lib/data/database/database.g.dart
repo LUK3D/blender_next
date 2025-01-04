@@ -1541,6 +1541,28 @@ class $BnexProjectsTable extends BnexProjects
       type: DriftSqlType.string,
       requiredDuringInsert: false,
       clientDefault: () => "value");
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _sizeMeta = const VerificationMeta('size');
+  @override
+  late final GeneratedColumn<String> size = GeneratedColumn<String>(
+      'size', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _tagsMeta = const VerificationMeta('tags');
+  @override
+  late final GeneratedColumn<String> tags = GeneratedColumn<String>(
+      'tags', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _blenderVariantMeta =
+      const VerificationMeta('blenderVariant');
+  @override
+  late final GeneratedColumn<String> blenderVariant = GeneratedColumn<String>(
+      'blender_variant', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _blenderVersionMeta =
       const VerificationMeta('blenderVersion');
   @override
@@ -1573,15 +1595,42 @@ class $BnexProjectsTable extends BnexProjects
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("clear_extentions" IN (0, 1))'),
       clientDefault: () => false);
+  static const VerificationMeta _dirMeta = const VerificationMeta('dir');
+  @override
+  late final GeneratedColumn<String> dir = GeneratedColumn<String>(
+      'dir', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _coverMeta = const VerificationMeta('cover');
+  @override
+  late final GeneratedColumn<String> cover = GeneratedColumn<String>(
+      'cover', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _unlistedMeta =
+      const VerificationMeta('unlisted');
+  @override
+  late final GeneratedColumn<bool> unlisted = GeneratedColumn<bool>(
+      'unlisted', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("unlisted" IN (0, 1))'),
+      clientDefault: () => false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
         createdAt,
         name,
+        description,
+        size,
+        tags,
+        blenderVariant,
         blenderVersion,
         template,
         usingVersionControl,
-        clearExtentions
+        clearExtentions,
+        dir,
+        cover,
+        unlisted
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1603,6 +1652,28 @@ class $BnexProjectsTable extends BnexProjects
     if (data.containsKey('name')) {
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('size')) {
+      context.handle(
+          _sizeMeta, size.isAcceptableOrUnknown(data['size']!, _sizeMeta));
+    }
+    if (data.containsKey('tags')) {
+      context.handle(
+          _tagsMeta, tags.isAcceptableOrUnknown(data['tags']!, _tagsMeta));
+    }
+    if (data.containsKey('blender_variant')) {
+      context.handle(
+          _blenderVariantMeta,
+          blenderVariant.isAcceptableOrUnknown(
+              data['blender_variant']!, _blenderVariantMeta));
+    } else if (isInserting) {
+      context.missing(_blenderVariantMeta);
     }
     if (data.containsKey('blender_version')) {
       context.handle(
@@ -1630,6 +1701,20 @@ class $BnexProjectsTable extends BnexProjects
           clearExtentions.isAcceptableOrUnknown(
               data['clear_extentions']!, _clearExtentionsMeta));
     }
+    if (data.containsKey('dir')) {
+      context.handle(
+          _dirMeta, dir.isAcceptableOrUnknown(data['dir']!, _dirMeta));
+    } else if (isInserting) {
+      context.missing(_dirMeta);
+    }
+    if (data.containsKey('cover')) {
+      context.handle(
+          _coverMeta, cover.isAcceptableOrUnknown(data['cover']!, _coverMeta));
+    }
+    if (data.containsKey('unlisted')) {
+      context.handle(_unlistedMeta,
+          unlisted.isAcceptableOrUnknown(data['unlisted']!, _unlistedMeta));
+    }
     return context;
   }
 
@@ -1645,6 +1730,14 @@ class $BnexProjectsTable extends BnexProjects
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      size: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}size']),
+      tags: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tags']),
+      blenderVariant: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}blender_variant'])!,
       blenderVersion: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}blender_version'])!,
       template: attachedDatabase.typeMapping
@@ -1653,6 +1746,12 @@ class $BnexProjectsTable extends BnexProjects
           DriftSqlType.bool, data['${effectivePrefix}using_version_control'])!,
       clearExtentions: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}clear_extentions'])!,
+      dir: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}dir'])!,
+      cover: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cover']),
+      unlisted: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}unlisted'])!,
     );
   }
 
@@ -1666,18 +1765,32 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
   final int? id;
   final DateTime? createdAt;
   final String name;
+  final String? description;
+  final String? size;
+  final String? tags;
+  final String blenderVariant;
   final String blenderVersion;
   final String template;
   final bool usingVersionControl;
   final bool clearExtentions;
+  final String dir;
+  final String? cover;
+  final bool unlisted;
   const BnexProject(
       {this.id,
       this.createdAt,
       required this.name,
+      this.description,
+      this.size,
+      this.tags,
+      required this.blenderVariant,
       required this.blenderVersion,
       required this.template,
       required this.usingVersionControl,
-      required this.clearExtentions});
+      required this.clearExtentions,
+      required this.dir,
+      this.cover,
+      required this.unlisted});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1688,10 +1801,25 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
       map['created_at'] = Variable<DateTime>(createdAt);
     }
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    if (!nullToAbsent || size != null) {
+      map['size'] = Variable<String>(size);
+    }
+    if (!nullToAbsent || tags != null) {
+      map['tags'] = Variable<String>(tags);
+    }
+    map['blender_variant'] = Variable<String>(blenderVariant);
     map['blender_version'] = Variable<String>(blenderVersion);
     map['template'] = Variable<String>(template);
     map['using_version_control'] = Variable<bool>(usingVersionControl);
     map['clear_extentions'] = Variable<bool>(clearExtentions);
+    map['dir'] = Variable<String>(dir);
+    if (!nullToAbsent || cover != null) {
+      map['cover'] = Variable<String>(cover);
+    }
+    map['unlisted'] = Variable<bool>(unlisted);
     return map;
   }
 
@@ -1702,10 +1830,20 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
           ? const Value.absent()
           : Value(createdAt),
       name: Value(name),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      size: size == null && nullToAbsent ? const Value.absent() : Value(size),
+      tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
+      blenderVariant: Value(blenderVariant),
       blenderVersion: Value(blenderVersion),
       template: Value(template),
       usingVersionControl: Value(usingVersionControl),
       clearExtentions: Value(clearExtentions),
+      dir: Value(dir),
+      cover:
+          cover == null && nullToAbsent ? const Value.absent() : Value(cover),
+      unlisted: Value(unlisted),
     );
   }
 
@@ -1716,11 +1854,18 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
       id: serializer.fromJson<int?>(json['id']),
       createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
       name: serializer.fromJson<String>(json['name']),
+      description: serializer.fromJson<String?>(json['description']),
+      size: serializer.fromJson<String?>(json['size']),
+      tags: serializer.fromJson<String?>(json['tags']),
+      blenderVariant: serializer.fromJson<String>(json['blenderVariant']),
       blenderVersion: serializer.fromJson<String>(json['blenderVersion']),
       template: serializer.fromJson<String>(json['template']),
       usingVersionControl:
           serializer.fromJson<bool>(json['usingVersionControl']),
       clearExtentions: serializer.fromJson<bool>(json['clearExtentions']),
+      dir: serializer.fromJson<String>(json['dir']),
+      cover: serializer.fromJson<String?>(json['cover']),
+      unlisted: serializer.fromJson<bool>(json['unlisted']),
     );
   }
   @override
@@ -1730,10 +1875,17 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
       'id': serializer.toJson<int?>(id),
       'createdAt': serializer.toJson<DateTime?>(createdAt),
       'name': serializer.toJson<String>(name),
+      'description': serializer.toJson<String?>(description),
+      'size': serializer.toJson<String?>(size),
+      'tags': serializer.toJson<String?>(tags),
+      'blenderVariant': serializer.toJson<String>(blenderVariant),
       'blenderVersion': serializer.toJson<String>(blenderVersion),
       'template': serializer.toJson<String>(template),
       'usingVersionControl': serializer.toJson<bool>(usingVersionControl),
       'clearExtentions': serializer.toJson<bool>(clearExtentions),
+      'dir': serializer.toJson<String>(dir),
+      'cover': serializer.toJson<String?>(cover),
+      'unlisted': serializer.toJson<bool>(unlisted),
     };
   }
 
@@ -1741,24 +1893,45 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
           {Value<int?> id = const Value.absent(),
           Value<DateTime?> createdAt = const Value.absent(),
           String? name,
+          Value<String?> description = const Value.absent(),
+          Value<String?> size = const Value.absent(),
+          Value<String?> tags = const Value.absent(),
+          String? blenderVariant,
           String? blenderVersion,
           String? template,
           bool? usingVersionControl,
-          bool? clearExtentions}) =>
+          bool? clearExtentions,
+          String? dir,
+          Value<String?> cover = const Value.absent(),
+          bool? unlisted}) =>
       BnexProject(
         id: id.present ? id.value : this.id,
         createdAt: createdAt.present ? createdAt.value : this.createdAt,
         name: name ?? this.name,
+        description: description.present ? description.value : this.description,
+        size: size.present ? size.value : this.size,
+        tags: tags.present ? tags.value : this.tags,
+        blenderVariant: blenderVariant ?? this.blenderVariant,
         blenderVersion: blenderVersion ?? this.blenderVersion,
         template: template ?? this.template,
         usingVersionControl: usingVersionControl ?? this.usingVersionControl,
         clearExtentions: clearExtentions ?? this.clearExtentions,
+        dir: dir ?? this.dir,
+        cover: cover.present ? cover.value : this.cover,
+        unlisted: unlisted ?? this.unlisted,
       );
   BnexProject copyWithCompanion(BnexProjectsCompanion data) {
     return BnexProject(
       id: data.id.present ? data.id.value : this.id,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       name: data.name.present ? data.name.value : this.name,
+      description:
+          data.description.present ? data.description.value : this.description,
+      size: data.size.present ? data.size.value : this.size,
+      tags: data.tags.present ? data.tags.value : this.tags,
+      blenderVariant: data.blenderVariant.present
+          ? data.blenderVariant.value
+          : this.blenderVariant,
       blenderVersion: data.blenderVersion.present
           ? data.blenderVersion.value
           : this.blenderVersion,
@@ -1769,6 +1942,9 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
       clearExtentions: data.clearExtentions.present
           ? data.clearExtentions.value
           : this.clearExtentions,
+      dir: data.dir.present ? data.dir.value : this.dir,
+      cover: data.cover.present ? data.cover.value : this.cover,
+      unlisted: data.unlisted.present ? data.unlisted.value : this.unlisted,
     );
   }
 
@@ -1778,17 +1954,37 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('size: $size, ')
+          ..write('tags: $tags, ')
+          ..write('blenderVariant: $blenderVariant, ')
           ..write('blenderVersion: $blenderVersion, ')
           ..write('template: $template, ')
           ..write('usingVersionControl: $usingVersionControl, ')
-          ..write('clearExtentions: $clearExtentions')
+          ..write('clearExtentions: $clearExtentions, ')
+          ..write('dir: $dir, ')
+          ..write('cover: $cover, ')
+          ..write('unlisted: $unlisted')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, createdAt, name, blenderVersion, template,
-      usingVersionControl, clearExtentions);
+  int get hashCode => Object.hash(
+      id,
+      createdAt,
+      name,
+      description,
+      size,
+      tags,
+      blenderVariant,
+      blenderVersion,
+      template,
+      usingVersionControl,
+      clearExtentions,
+      dir,
+      cover,
+      unlisted);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1796,57 +1992,101 @@ class BnexProject extends DataClass implements Insertable<BnexProject> {
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.name == this.name &&
+          other.description == this.description &&
+          other.size == this.size &&
+          other.tags == this.tags &&
+          other.blenderVariant == this.blenderVariant &&
           other.blenderVersion == this.blenderVersion &&
           other.template == this.template &&
           other.usingVersionControl == this.usingVersionControl &&
-          other.clearExtentions == this.clearExtentions);
+          other.clearExtentions == this.clearExtentions &&
+          other.dir == this.dir &&
+          other.cover == this.cover &&
+          other.unlisted == this.unlisted);
 }
 
 class BnexProjectsCompanion extends UpdateCompanion<BnexProject> {
   final Value<int?> id;
   final Value<DateTime?> createdAt;
   final Value<String> name;
+  final Value<String?> description;
+  final Value<String?> size;
+  final Value<String?> tags;
+  final Value<String> blenderVariant;
   final Value<String> blenderVersion;
   final Value<String> template;
   final Value<bool> usingVersionControl;
   final Value<bool> clearExtentions;
+  final Value<String> dir;
+  final Value<String?> cover;
+  final Value<bool> unlisted;
   const BnexProjectsCompanion({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.name = const Value.absent(),
+    this.description = const Value.absent(),
+    this.size = const Value.absent(),
+    this.tags = const Value.absent(),
+    this.blenderVariant = const Value.absent(),
     this.blenderVersion = const Value.absent(),
     this.template = const Value.absent(),
     this.usingVersionControl = const Value.absent(),
     this.clearExtentions = const Value.absent(),
+    this.dir = const Value.absent(),
+    this.cover = const Value.absent(),
+    this.unlisted = const Value.absent(),
   });
   BnexProjectsCompanion.insert({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.name = const Value.absent(),
+    this.description = const Value.absent(),
+    this.size = const Value.absent(),
+    this.tags = const Value.absent(),
+    required String blenderVariant,
     required String blenderVersion,
     required String template,
     this.usingVersionControl = const Value.absent(),
     this.clearExtentions = const Value.absent(),
-  })  : blenderVersion = Value(blenderVersion),
-        template = Value(template);
+    required String dir,
+    this.cover = const Value.absent(),
+    this.unlisted = const Value.absent(),
+  })  : blenderVariant = Value(blenderVariant),
+        blenderVersion = Value(blenderVersion),
+        template = Value(template),
+        dir = Value(dir);
   static Insertable<BnexProject> custom({
     Expression<int>? id,
     Expression<DateTime>? createdAt,
     Expression<String>? name,
+    Expression<String>? description,
+    Expression<String>? size,
+    Expression<String>? tags,
+    Expression<String>? blenderVariant,
     Expression<String>? blenderVersion,
     Expression<String>? template,
     Expression<bool>? usingVersionControl,
     Expression<bool>? clearExtentions,
+    Expression<String>? dir,
+    Expression<String>? cover,
+    Expression<bool>? unlisted,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (createdAt != null) 'created_at': createdAt,
       if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (size != null) 'size': size,
+      if (tags != null) 'tags': tags,
+      if (blenderVariant != null) 'blender_variant': blenderVariant,
       if (blenderVersion != null) 'blender_version': blenderVersion,
       if (template != null) 'template': template,
       if (usingVersionControl != null)
         'using_version_control': usingVersionControl,
       if (clearExtentions != null) 'clear_extentions': clearExtentions,
+      if (dir != null) 'dir': dir,
+      if (cover != null) 'cover': cover,
+      if (unlisted != null) 'unlisted': unlisted,
     });
   }
 
@@ -1854,18 +2094,32 @@ class BnexProjectsCompanion extends UpdateCompanion<BnexProject> {
       {Value<int?>? id,
       Value<DateTime?>? createdAt,
       Value<String>? name,
+      Value<String?>? description,
+      Value<String?>? size,
+      Value<String?>? tags,
+      Value<String>? blenderVariant,
       Value<String>? blenderVersion,
       Value<String>? template,
       Value<bool>? usingVersionControl,
-      Value<bool>? clearExtentions}) {
+      Value<bool>? clearExtentions,
+      Value<String>? dir,
+      Value<String?>? cover,
+      Value<bool>? unlisted}) {
     return BnexProjectsCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       name: name ?? this.name,
+      description: description ?? this.description,
+      size: size ?? this.size,
+      tags: tags ?? this.tags,
+      blenderVariant: blenderVariant ?? this.blenderVariant,
       blenderVersion: blenderVersion ?? this.blenderVersion,
       template: template ?? this.template,
       usingVersionControl: usingVersionControl ?? this.usingVersionControl,
       clearExtentions: clearExtentions ?? this.clearExtentions,
+      dir: dir ?? this.dir,
+      cover: cover ?? this.cover,
+      unlisted: unlisted ?? this.unlisted,
     );
   }
 
@@ -1881,6 +2135,18 @@ class BnexProjectsCompanion extends UpdateCompanion<BnexProject> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (size.present) {
+      map['size'] = Variable<String>(size.value);
+    }
+    if (tags.present) {
+      map['tags'] = Variable<String>(tags.value);
+    }
+    if (blenderVariant.present) {
+      map['blender_variant'] = Variable<String>(blenderVariant.value);
+    }
     if (blenderVersion.present) {
       map['blender_version'] = Variable<String>(blenderVersion.value);
     }
@@ -1893,6 +2159,15 @@ class BnexProjectsCompanion extends UpdateCompanion<BnexProject> {
     if (clearExtentions.present) {
       map['clear_extentions'] = Variable<bool>(clearExtentions.value);
     }
+    if (dir.present) {
+      map['dir'] = Variable<String>(dir.value);
+    }
+    if (cover.present) {
+      map['cover'] = Variable<String>(cover.value);
+    }
+    if (unlisted.present) {
+      map['unlisted'] = Variable<bool>(unlisted.value);
+    }
     return map;
   }
 
@@ -1902,10 +2177,17 @@ class BnexProjectsCompanion extends UpdateCompanion<BnexProject> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('size: $size, ')
+          ..write('tags: $tags, ')
+          ..write('blenderVariant: $blenderVariant, ')
           ..write('blenderVersion: $blenderVersion, ')
           ..write('template: $template, ')
           ..write('usingVersionControl: $usingVersionControl, ')
-          ..write('clearExtentions: $clearExtentions')
+          ..write('clearExtentions: $clearExtentions, ')
+          ..write('dir: $dir, ')
+          ..write('cover: $cover, ')
+          ..write('unlisted: $unlisted')
           ..write(')'))
         .toString();
   }
@@ -3846,20 +4128,34 @@ typedef $$BnexProjectsTableCreateCompanionBuilder = BnexProjectsCompanion
   Value<int?> id,
   Value<DateTime?> createdAt,
   Value<String> name,
+  Value<String?> description,
+  Value<String?> size,
+  Value<String?> tags,
+  required String blenderVariant,
   required String blenderVersion,
   required String template,
   Value<bool> usingVersionControl,
   Value<bool> clearExtentions,
+  required String dir,
+  Value<String?> cover,
+  Value<bool> unlisted,
 });
 typedef $$BnexProjectsTableUpdateCompanionBuilder = BnexProjectsCompanion
     Function({
   Value<int?> id,
   Value<DateTime?> createdAt,
   Value<String> name,
+  Value<String?> description,
+  Value<String?> size,
+  Value<String?> tags,
+  Value<String> blenderVariant,
   Value<String> blenderVersion,
   Value<String> template,
   Value<bool> usingVersionControl,
   Value<bool> clearExtentions,
+  Value<String> dir,
+  Value<String?> cover,
+  Value<bool> unlisted,
 });
 
 final class $$BnexProjectsTableReferences
@@ -3904,6 +4200,19 @@ class $$BnexProjectsTableFilterComposer
   ColumnFilters<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get tags => $composableBuilder(
+      column: $table.tags, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get blenderVariant => $composableBuilder(
+      column: $table.blenderVariant,
+      builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get blenderVersion => $composableBuilder(
       column: $table.blenderVersion,
       builder: (column) => ColumnFilters(column));
@@ -3918,6 +4227,15 @@ class $$BnexProjectsTableFilterComposer
   ColumnFilters<bool> get clearExtentions => $composableBuilder(
       column: $table.clearExtentions,
       builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get dir => $composableBuilder(
+      column: $table.dir, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get cover => $composableBuilder(
+      column: $table.cover, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get unlisted => $composableBuilder(
+      column: $table.unlisted, builder: (column) => ColumnFilters(column));
 
   Expression<bool> bnextProjectExtensionsRefs(
       Expression<bool> Function($$BnextProjectExtensionsTableFilterComposer f)
@@ -3961,6 +4279,19 @@ class $$BnexProjectsTableOrderingComposer
   ColumnOrderings<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tags => $composableBuilder(
+      column: $table.tags, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get blenderVariant => $composableBuilder(
+      column: $table.blenderVariant,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get blenderVersion => $composableBuilder(
       column: $table.blenderVersion,
       builder: (column) => ColumnOrderings(column));
@@ -3975,6 +4306,15 @@ class $$BnexProjectsTableOrderingComposer
   ColumnOrderings<bool> get clearExtentions => $composableBuilder(
       column: $table.clearExtentions,
       builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get dir => $composableBuilder(
+      column: $table.dir, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cover => $composableBuilder(
+      column: $table.cover, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get unlisted => $composableBuilder(
+      column: $table.unlisted, builder: (column) => ColumnOrderings(column));
 }
 
 class $$BnexProjectsTableAnnotationComposer
@@ -3995,6 +4335,18 @@ class $$BnexProjectsTableAnnotationComposer
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
 
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<String> get size =>
+      $composableBuilder(column: $table.size, builder: (column) => column);
+
+  GeneratedColumn<String> get tags =>
+      $composableBuilder(column: $table.tags, builder: (column) => column);
+
+  GeneratedColumn<String> get blenderVariant => $composableBuilder(
+      column: $table.blenderVariant, builder: (column) => column);
+
   GeneratedColumn<String> get blenderVersion => $composableBuilder(
       column: $table.blenderVersion, builder: (column) => column);
 
@@ -4006,6 +4358,15 @@ class $$BnexProjectsTableAnnotationComposer
 
   GeneratedColumn<bool> get clearExtentions => $composableBuilder(
       column: $table.clearExtentions, builder: (column) => column);
+
+  GeneratedColumn<String> get dir =>
+      $composableBuilder(column: $table.dir, builder: (column) => column);
+
+  GeneratedColumn<String> get cover =>
+      $composableBuilder(column: $table.cover, builder: (column) => column);
+
+  GeneratedColumn<bool> get unlisted =>
+      $composableBuilder(column: $table.unlisted, builder: (column) => column);
 
   Expression<T> bnextProjectExtensionsRefs<T extends Object>(
       Expression<T> Function($$BnextProjectExtensionsTableAnnotationComposer a)
@@ -4057,37 +4418,65 @@ class $$BnexProjectsTableTableManager extends RootTableManager<
             Value<int?> id = const Value.absent(),
             Value<DateTime?> createdAt = const Value.absent(),
             Value<String> name = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<String?> size = const Value.absent(),
+            Value<String?> tags = const Value.absent(),
+            Value<String> blenderVariant = const Value.absent(),
             Value<String> blenderVersion = const Value.absent(),
             Value<String> template = const Value.absent(),
             Value<bool> usingVersionControl = const Value.absent(),
             Value<bool> clearExtentions = const Value.absent(),
+            Value<String> dir = const Value.absent(),
+            Value<String?> cover = const Value.absent(),
+            Value<bool> unlisted = const Value.absent(),
           }) =>
               BnexProjectsCompanion(
             id: id,
             createdAt: createdAt,
             name: name,
+            description: description,
+            size: size,
+            tags: tags,
+            blenderVariant: blenderVariant,
             blenderVersion: blenderVersion,
             template: template,
             usingVersionControl: usingVersionControl,
             clearExtentions: clearExtentions,
+            dir: dir,
+            cover: cover,
+            unlisted: unlisted,
           ),
           createCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             Value<DateTime?> createdAt = const Value.absent(),
             Value<String> name = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<String?> size = const Value.absent(),
+            Value<String?> tags = const Value.absent(),
+            required String blenderVariant,
             required String blenderVersion,
             required String template,
             Value<bool> usingVersionControl = const Value.absent(),
             Value<bool> clearExtentions = const Value.absent(),
+            required String dir,
+            Value<String?> cover = const Value.absent(),
+            Value<bool> unlisted = const Value.absent(),
           }) =>
               BnexProjectsCompanion.insert(
             id: id,
             createdAt: createdAt,
             name: name,
+            description: description,
+            size: size,
+            tags: tags,
+            blenderVariant: blenderVariant,
             blenderVersion: blenderVersion,
             template: template,
             usingVersionControl: usingVersionControl,
             clearExtentions: clearExtentions,
+            dir: dir,
+            cover: cover,
+            unlisted: unlisted,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (

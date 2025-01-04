@@ -48,11 +48,17 @@ class BnextInfo extends Table with TableMixin {
 
 class BnexProjects extends Table with TableMixin {
   late final name = text().clientDefault(() => "value")();
+  late final description = text().nullable()();
+  late final size = text().nullable()();
+  late final tags = text().nullable()();
+  late final blenderVariant = text()();
   late final blenderVersion = text()();
   late final template = text()();
   late final usingVersionControl = boolean().clientDefault(() => false)();
   late final clearExtentions = boolean().clientDefault(() => false)();
   late final dir = text()();
+  late final cover = text().nullable()();
+  late final unlisted = boolean().clientDefault(() => false)();
 }
 
 class BnextExtensions extends Table with TableMixin {
@@ -91,7 +97,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration {
@@ -103,6 +109,14 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
     );
+  }
+
+  Future deleteAll() async {
+    final m = createMigrator();
+    // Going through tables in reverse because they are sorted for foreign keys
+    for (final table in allTables.toList().reversed) {
+      await m.deleteTable(table.actualTableName);
+    }
   }
 
   static QueryExecutor _openConnection() {

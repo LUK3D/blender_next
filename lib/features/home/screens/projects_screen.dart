@@ -1,14 +1,32 @@
+import 'dart:io';
+
 import 'package:blender_next/components/bn_sidebar_button.dart';
+import 'package:blender_next/data/database/database.dart';
+import 'package:blender_next/services/project_manager_service.dart';
+import 'package:blender_next/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'create_project_dialog.dart';
 
-class ProjectsScreen extends StatelessWidget {
-  const ProjectsScreen({super.key, required this.isLoading});
+class ProjectsScreen extends StatefulWidget {
+  final List<BnexProject> projects;
+  const ProjectsScreen({
+    super.key,
+    required this.isLoading,
+    required this.projects,
+  });
 
   final bool isLoading;
+
+  @override
+  State<ProjectsScreen> createState() => _ProjectsScreenState();
+}
+
+class _ProjectsScreenState extends State<ProjectsScreen> {
+  File getFile(String filePath) {
+    return File(filePath);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +51,7 @@ class ProjectsScreen extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      "${AppLocalizations.of(context)!.projectManager})",
+                      "${AppLocalizations.of(context)!.projectManager}(${widget.projects.length})",
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -65,11 +83,12 @@ class ProjectsScreen extends StatelessWidget {
             color: Theme.of(context).dividerColor,
           ),
           Expanded(
-            child: (isLoading)
+            child: (widget.isLoading)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : GridView.builder(
+                    itemCount: widget.projects.length,
                     padding: const EdgeInsets.only(
                       left: 20,
                       right: 20,
@@ -83,11 +102,21 @@ class ProjectsScreen extends StatelessWidget {
                             mainAxisSpacing: 20,
                             crossAxisSpacing: 20),
                     itemBuilder: (context, index) {
+                      final project = widget.projects[index];
+                      final cover = project.cover != null
+                          ? getFile(project.cover!)
+                          : null;
                       return Material(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(10),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            useProjectManagerService()
+                                .runProject(project)
+                                .then((res) {
+                              setState(() {});
+                            });
+                          },
                           borderRadius: BorderRadius.circular(10),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -101,18 +130,20 @@ class ProjectsScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(7),
                                     color: Theme.of(context).canvasColor,
                                   ),
-                                  child: Image.network(
-                                    "https://i.pinimg.com/736x/c8/c1/19/c8c1195229120baef9f643b8d25eb345.jpg",
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: (cover != null && cover.existsSync())
+                                      ? Image.memory(
+                                          cover.readAsBytesSync(),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
                                 ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text(
-                                      "Project title goes here",
-                                      style: TextStyle(
+                                    Text(
+                                      project.name,
+                                      style: const TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w900,
                                       ),
@@ -126,17 +157,34 @@ class ProjectsScreen extends StatelessWidget {
                                                 LucideIcons.ellipsis)))
                                   ],
                                 ),
-                                const Expanded(
+                                Expanded(
                                   child: Opacity(
                                     opacity: 0.5,
                                     child: Text(
-                                      "union include pencil sea center than pole cloth hang powerful cook wool crack themselves headed certain putting thick threw composed riding anywhere soldier neck",
-                                      style:
-                                          TextStyle(fontSize: 14, height: 1.1),
+                                      project.description ?? "",
+                                      style: const TextStyle(
+                                          fontSize: 14, height: 1.1),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
                                     ),
                                   ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 3),
+                                  child: Divider(
+                                    height: 1,
+                                    color: Theme.of(context).dividerColor,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Size: ${project.size ?? ''}",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 Row(
                                   mainAxisAlignment:
@@ -154,9 +202,9 @@ class ProjectsScreen extends StatelessWidget {
                                         const SizedBox(
                                           width: 2,
                                         ),
-                                        const Text(
-                                          "2024-12-24",
-                                          style: TextStyle(
+                                        Text(
+                                          getProjectDate(project.createdAt),
+                                          style: const TextStyle(
                                             fontSize: 12,
                                           ),
                                         ),
@@ -172,7 +220,7 @@ class ProjectsScreen extends StatelessWidget {
                                         color: Theme.of(context).primaryColor,
                                       ),
                                       child: Text(
-                                        "Blender 3.4.0-Beta",
+                                        "Blender ${project.blenderVersion}",
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme

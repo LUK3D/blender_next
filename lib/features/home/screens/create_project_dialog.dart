@@ -4,6 +4,8 @@ import 'package:blender_next/components/bn_text_input.dart';
 import 'package:blender_next/components/bn_toggle_button.dart';
 import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/services/blender_service.dart';
+import 'package:blender_next/services/project_manager_service.dart';
+import 'package:blender_next/services/settings_service.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
@@ -19,7 +21,8 @@ class CreateProjectDialog extends StatefulWidget {
 class _CreateProjectDialogState extends State<CreateProjectDialog>
     with SignalsMixin {
   final blenderService = useBlenderService();
-  late Signal<Map<String, dynamic>> project = createSignal({});
+  late Signal<Map<String, dynamic>> project =
+      createSignal({"dir": useSettingsService().getProjectsFolder()});
 
   @override
   Widget build(BuildContext context) {
@@ -87,20 +90,39 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                                       future:
                                           blenderService.db.getLatestBuilds(),
                                       builder: (context, snapshot) {
+                                        final builds = (snapshot.data ?? [])
+                                            .where((b) =>
+                                                b.installationPath
+                                                    ?.isNotEmpty ??
+                                                false)
+                                            .toList();
+
+                                        if (builds.isEmpty) {
+                                          return const Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Text(
+                                                "No Blender Versions Found"),
+                                          );
+                                        }
+
+                                        if (project.value["blender_version"] ==
+                                            null) {
+                                          project.value = {
+                                            ...project.value,
+                                            "blender_version": builds.first
+                                          };
+                                        }
+
                                         return Watch((context) =>
                                             DropdownButton<BlenderVersion>(
                                               borderRadius:
                                                   BorderRadius.circular(10),
-                                              value: project.value[
-                                                      "blender_version"] ??
-                                                  snapshot.data?.firstOrNull,
+                                              value: project
+                                                  .value["blender_version"],
                                               underline: const SizedBox(),
                                               padding: const EdgeInsets.all(0),
-                                              items: (snapshot.data ?? [])
-                                                  .where((b) =>
-                                                      b.installationPath
-                                                          ?.isNotEmpty ??
-                                                      false)
+                                              items: builds
                                                   .map((blender) =>
                                                       DropdownMenuItem(
                                                           value: blender,
@@ -147,6 +169,8 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                               ...project.value,
                               "dir": directoryPath
                             };
+                            useSettingsService()
+                                .setProjectsFolder(directoryPath);
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -313,7 +337,22 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                     backgroundColor: Theme.of(context).primaryColor,
                     borderRadius: 100,
                     foregroundColor: Colors.white,
-                    onPressed: () {},
+                    onPressed: () {
+                      useProjectManagerService().createProject(BnexProject(
+                        name: project.value["name"],
+                        blenderVersion:
+                            project.value['blender_version'].version,
+                        template: project.value['template'],
+                        usingVersionControl:
+                            project.value['using_version_control'],
+                        clearExtentions: project.value['clear_extentions'],
+                        dir: project.value["dir"],
+                        unlisted: false,
+                        blenderVariant:
+                            project.value['blender_version'].variant,
+                      ));
+                      Navigator.pop(context);
+                    },
                   ),
                 )
               ],

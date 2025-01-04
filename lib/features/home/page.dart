@@ -4,6 +4,7 @@ import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/data/local_db_access_layer.dart';
 import 'package:blender_next/data/model/side_menu_item.dart';
 import 'package:blender_next/features/home/screens/projects_screen.dart';
+import 'package:blender_next/services/project_manager_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage>
   late TabController tabController = TabController(length: 4, vsync: this);
   late final selectedMenuItem = createSignal(0);
   late final variantFilterValue = createSignal("");
+  final projectsManagerServce = useProjectManagerService();
   final Map<String, dynamic> blenderDownloadsTracker = {};
 
   @override
@@ -86,10 +88,23 @@ class _HomePageState extends State<HomePage>
                 child: TabBarView(
                   controller: tabController,
                   children: [
-                    const ProjectsScreen(
-                      isLoading: false,
-                    ),
+                    StreamBuilder<List<BnexProject>>(
+                      stream: projectsManagerServce.getProjectsStream(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
+                        }
 
+                        return ProjectsScreen(
+                          projects: snapshot.data ?? [],
+                          isLoading: (snapshot.connectionState ==
+                                  ConnectionState.waiting) &&
+                              (snapshot.data ?? []).isEmpty,
+                        );
+                      },
+                    ),
                     Watch.builder(
                         builder: (context) =>
                             StreamBuilder<List<BlenderVersion>>(
@@ -145,62 +160,6 @@ class _HomePageState extends State<HomePage>
                                     ));
                               },
                             )),
-
-                    // Watch.builder(
-                    //     builder: (context) => FutureBuilder<List<Blender>>(
-                    //           initialData: blenderAccess.registry.blenders,
-                    //           future: blenderAccess.getLatestBuilds(
-                    //               varient: variantFilterValue.value),
-                    //           builder: (context, snapshot) {
-                    //             if (snapshot.hasError) {
-                    //               return Center(
-                    //                 child: Text('Error: ${snapshot.error}'),
-                    //               );
-                    //             }
-                    //             final installers = snapshot.data ?? [];
-
-                    //             return Watch((context) => InstallersSreen(
-                    //                   isLoading: (snapshot.connectionState ==
-                    //                           ConnectionState.waiting) &&
-                    //                       installers.isEmpty,
-                    //                   filterValue: variantFilterValue.value,
-                    //                   onFilterChange: (value) {
-                    //                     variantFilterValue.value = value ?? "";
-                    //                   },
-                    //                   installers: installers,
-                    //                   blenderDownloadsTracker:
-                    //                       blenderDownloadsTracker,
-                    //                   onDownload: (blender) async {
-                    //                     final progresssSignal = signal(0.0);
-
-                    //                     blenderDownloadsTracker[
-                    //                         "${blender.version}-${blender.variant}-${blender.architecture}"] = {
-                    //                       "progress": progresssSignal,
-                    //                       "url": blender.downloadUrl,
-                    //                     };
-
-                    //                     blenderAccess.installBlender(
-                    //                       blender: blender,
-                    //                       onProgress: (progress) {
-                    //                         progresssSignal.value = progress;
-                    //                       },
-                    //                       onDone: (file) {
-                    //                         if (file != null) {
-                    //                           setState(() {});
-                    //                         }
-                    //                       },
-                    //                     );
-
-                    //                     setState(() {});
-                    //                   },
-                    //                   onUninstall: (blender) async {
-                    //                     await blenderAccess
-                    //                         .unInstallBlender(blender);
-                    //                     setState(() {});
-                    //                   },
-                    //                 ));
-                    //           },
-                    //         )),
                     Center(
                       child: Text(
                         AppLocalizations.of(context)!.extensions,
