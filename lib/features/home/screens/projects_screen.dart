@@ -190,8 +190,6 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                                                             (val) {
                                                                           checkedSignal.value =
                                                                               val ?? false;
-                                                                          print(
-                                                                              "Checked");
                                                                         },
                                                                       )),
                                                               const SizedBox(
@@ -210,6 +208,14 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                                     );
                                                   }),
                                                 );
+                                                return;
+                                              }
+
+                                              if (value ==
+                                                  'refresh_thumbnail') {
+                                                useProjectManagerService()
+                                                    .generateThumbnail(project);
+                                                return;
                                               }
                                             },
                                             customButton: Container(
@@ -241,6 +247,24 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                                 ),
                                               ),
                                               DropdownMenuItem<String>(
+                                                value: "refresh_thumbnail",
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      LucideIcons.refresh_ccw,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    const Text(
+                                                        "Refresh Thumbnail"),
+                                                  ],
+                                                ),
+                                              ),
+                                              DropdownMenuItem<String>(
                                                 value: "delete",
                                                 child: Row(
                                                   children: [
@@ -260,7 +284,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                             ],
                                             dropdownStyleData:
                                                 DropdownStyleData(
-                                              width: 160,
+                                              width: 230,
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 6),
