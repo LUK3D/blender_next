@@ -104,8 +104,13 @@ class ProjectManagerService {
     return await db.updateProject(project);
   }
 
-  Future<void> deleteProject(BnexProject project) async {
-    await db.deleteProject(project);
+  Future<void> deleteProject(BnexProject project,
+      {bool deleteAllFiles = false}) async {
+    if (deleteAllFiles == false) {
+      final dir = Directory('${project.dir}/${project.name}');
+      await dir.delete(recursive: true);
+    }
+    await db.deleteProject(project, unlist: !deleteAllFiles);
   }
 
   Stream<List<BnexProject>> getProjectsStream() {
@@ -139,7 +144,8 @@ class ProjectManagerService {
         result.map((s) => "${s.stdout} | ERROR: ${s.stderr}").join("\n");
 
     if (logResult.toLowerCase().contains("saved")) {
-      final size = await getFileSize(thumbNailPath, 2);
+      final size = await getFileSize(
+          "${project.dir}/${project.name}/${project.name}.blend", 2);
       await db.updateProject(
           project.copyWith(cover: Value(thumbNailPath), size: Value(size)));
     }

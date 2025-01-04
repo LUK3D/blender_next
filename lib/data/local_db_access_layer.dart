@@ -176,7 +176,11 @@ class LocalDbAccessLayer extends DataAccess {
 
 //Change this so we only hide the project instead of deleting it
   @override
-  Future<void> deleteProject(BnexProject project) async {
+  Future<void> deleteProject(BnexProject project, {bool unlist = false}) async {
+    if (unlist) {
+      await updateProject(project.copyWith(unlisted: true));
+      return;
+    }
     await database.managers.bnexProjects
         .filter((e) => e.id.equals(project.id))
         .delete();

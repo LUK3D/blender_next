@@ -1,12 +1,16 @@
 import 'dart:io';
 
+import 'package:blender_next/components/bn_confirmation_dialog.dart';
 import 'package:blender_next/components/bn_sidebar_button.dart';
 import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/services/project_manager_service.dart';
 import 'package:blender_next/utils/utils.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:logger/logger.dart';
+import 'package:signals/signals_flutter.dart';
 import 'create_project_dialog.dart';
 
 class ProjectsScreen extends StatefulWidget {
@@ -149,12 +153,136 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                       ),
                                     ),
                                     SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                                LucideIcons.ellipsis)))
+                                      width: 40,
+                                      height: 40,
+                                      child: Material(
+                                        clipBehavior: Clip.antiAlias,
+                                        color: Theme.of(context).canvasColor,
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton2(
+                                            onChanged: (value) {
+                                              final checkedSignal =
+                                                  signal(false);
+                                              if (value == "delete") {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      showConfirmationDialog(
+                                                          context,
+                                                          height: 300,
+                                                          title:
+                                                              "Deleting Project",
+                                                          message:
+                                                              "You ara about to delete ${project.name}. Are you sure?",
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Watch(
+                                                                  (ctx) =>
+                                                                      Checkbox(
+                                                                        value: checkedSignal
+                                                                            .value,
+                                                                        onChanged:
+                                                                            (val) {
+                                                                          checkedSignal.value =
+                                                                              val ?? false;
+                                                                          print(
+                                                                              "Checked");
+                                                                        },
+                                                                      )),
+                                                              const SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              const Text(
+                                                                "Delete all files from disk",
+                                                              ),
+                                                            ],
+                                                          ), onConfirm: () {
+                                                    useProjectManagerService()
+                                                        .deleteProject(
+                                                      project,
+                                                      deleteAllFiles:
+                                                          checkedSignal.value,
+                                                    );
+                                                  }),
+                                                );
+                                              }
+                                            },
+                                            customButton: Container(
+                                              color:
+                                                  Theme.of(context).cardColor,
+                                              child: Icon(
+                                                LucideIcons.ellipsis,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                            ),
+                                            items: [
+                                              DropdownMenuItem<String>(
+                                                value: "edit",
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      LucideIcons.pen,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    const Text("Edit"),
+                                                  ],
+                                                ),
+                                              ),
+                                              DropdownMenuItem<String>(
+                                                value: "delete",
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      LucideIcons.trash,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurface,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    const Text("Delete"),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                            dropdownStyleData:
+                                                DropdownStyleData(
+                                              width: 160,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 6),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                color: Theme.of(context)
+                                                    .canvasColor,
+                                              ),
+                                              offset: const Offset(0, 8),
+                                            ),
+                                            menuItemStyleData:
+                                                const MenuItemStyleData(
+                                              padding: EdgeInsets.only(
+                                                left: 16,
+                                                right: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 ),
                                 Expanded(
