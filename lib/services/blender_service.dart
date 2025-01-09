@@ -22,7 +22,7 @@ class BlenderService {
   String oldVarient = "local";
 
   Future<BlenderService> initializeData() async {
-    // await db.clearDatabase();
+    await db.clearDatabase();
 
     return this;
   }

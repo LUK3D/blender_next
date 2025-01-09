@@ -3,9 +3,14 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  animated_rating_stars
   file_selector_windows
+  irondash_engine_context
+  media_kit_libs_windows_video
+  media_kit_video
   screen_retriever_windows
   sqlite3_flutter_libs
+  super_native_extensions
   window_manager
 )
 

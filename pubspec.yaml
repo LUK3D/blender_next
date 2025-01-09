@@ -7,7 +7,9 @@ environment:
   sdk: ^3.5.3
 
 dependencies:
+  animated_rating_stars: ^1.0.1
   archive: ^4.0.2
+  carousel_slider: ^5.0.0
   debounce_throttle: ^2.0.0
   dio: ^5.7.0
   drift: ^2.23.0
@@ -19,17 +21,40 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_lucide: ^1.6.1
+  flutter_markdown: ^0.7.5
   get_storage: ^2.1.1
   google_fonts: ^6.2.1
   html: ^0.15.5
+  html2md: ^1.3.2
   intl: any
   logger: ^2.5.0
+  media_kit: ^1.1.5
+  media_kit_libs_video: ^1.0.5
+  media_kit_video: ^1.1.6
+  numeral: ^3.0.0
   path_provider: ^2.1.5
   pointer_interceptor: ^0.10.1+2
   process_run: ^1.2.2+1
   signals: ^6.0.2
+  super_drag_and_drop: ^0.8.24
   timeago: ^3.7.0
   window_manager: ^0.4.3
+
+
+dependency_overrides:
+  media_kit: 
+    git:
+      url: https://github.com/media-kit/media-kit
+      path: media_kit
+  media_kit_video: 
+    git:
+      url: https://github.com/media-kit/media-kit
+      path: media_kit_video
+  media_kit_libs_video: 
+    git:
+      url: https://github.com/media-kit/media-kit
+      path: libs/universal/media_kit_libs_video
+
 
 dev_dependencies:
   flutter_test:
