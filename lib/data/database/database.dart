@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:logger/logger.dart';
 
 part 'database.g.dart';
 
@@ -62,19 +63,36 @@ class BnexProjects extends Table with TableMixin {
 }
 
 class BnextExtensions extends Table with TableMixin {
-  late final schemaVersion = text()();
+  late final schemaVersion = text().nullable()();
+  late final cover = text().nullable()();
+  late final icon = text().nullable()();
   late final extId = text().nullable()();
   late final name = text().nullable()();
-  late final version = text()();
+  late final description = text().nullable()();
+  late final mdDescriptio = text().nullable()();
+  late final version = text().nullable()();
   late final tagline = text().nullable()();
   late final maintainer = text().nullable()();
   late final type = text().nullable()();
   late final tags = text().nullable()();
-  late final blenderMinVersion = text()();
+  late final blenderMinVersion = text().nullable()();
   late final licence = text().nullable()();
+  late final licenceUrl = text().nullable()();
   late final website = text().nullable()();
+  late final detailsUrl = text().nullable()();
+  late final downloadUrl = text().nullable()();
+  late final draggableUrl = text().nullable()();
+  late final size = text().nullable()();
   late final copyright = text().nullable()();
   late final permissions = text().nullable()();
+  late final stars = real().nullable()();
+  late final reviewers = integer().nullable()();
+  late final downloads = integer().nullable()();
+  late final mediaUrls = text()
+      .nullable()(); //A json string with the urls of the videos/images showcasing this extension.
+  late final publishedOn = dateTime().nullable()();
+  late final lastUpdateOn = dateTime().nullable()();
+  late final supportUrl = text().nullable()();
 }
 
 class BnextProjectExtensions extends Table with TableMixin {
@@ -119,9 +137,85 @@ class AppDatabase extends _$AppDatabase {
     }
   }
 
+  Future<List<BnextExtension>> get getExtensions =>
+      select(bnextExtensions).get();
+
+  Future insertExtensions(List<BnextExtension> extensions) async {
+    final List<BnextExtension> toBeInserted = [];
+    for (var ext in extensions) {
+      var exists = await (select(bnextExtensions)
+            ..where((o) => o.extId.equals(ext.extId ?? "")))
+          .get();
+
+      if (exists.isEmpty) {
+        Logger().i("ADDING: ${ext.extId}");
+        toBeInserted.add(ext);
+      } else {
+        await updateExtension(exists.first.copyWith(
+          version: Value(ext.version),
+          blenderMinVersion: Value(ext.blenderMinVersion),
+          copyright: Value(ext.copyright),
+          cover: Value(ext.cover),
+          description: Value(ext.description),
+          detailsUrl: Value(ext.detailsUrl),
+          downloadUrl: Value(ext.downloadUrl),
+          downloads: Value(ext.downloads),
+          draggableUrl: Value(ext.draggableUrl),
+          icon: Value(ext.icon),
+          lastUpdateOn: Value(ext.lastUpdateOn),
+          licence: Value(ext.licence),
+          licenceUrl: Value(ext.licenceUrl),
+          maintainer: Value(ext.maintainer),
+          mdDescriptio: Value(ext.mdDescriptio),
+          mediaUrls: Value(ext.mediaUrls),
+          name: Value(ext.name),
+          permissions: Value(ext.permissions),
+          publishedOn: Value(ext.publishedOn),
+          reviewers: Value(ext.reviewers),
+          schemaVersion: Value(ext.schemaVersion),
+          size: Value(ext.size),
+          stars: Value(ext.stars),
+          supportUrl: Value(ext.supportUrl),
+          tagline: Value(ext.tagline),
+          tags: Value(ext.tags),
+          type: Value(ext.type),
+          website: Value(ext.website),
+        ));
+      }
+    }
+
+    await batch((batch) {
+      batch.insertAll(bnextExtensions, toBeInserted);
+    });
+  }
+
+  Future<BnextExtension> updateExtension(BnextExtension ext) async {
+    await managers.bnextExtensions
+        .filter((f) => f.id.equals(ext.id))
+        .update((e) => ext);
+    return ext;
+  }
+
+  Stream<List<BnextExtension>> top5Extensions() {
+    return managers.bnextExtensions
+        .orderBy((o) => o.downloads.asc())
+        .limit(5)
+        .watch();
+  }
+
+  Stream<BnextExtension> getExtensionStreamById(BnextExtension ext) {
+    return managers.bnextExtensions
+        .filter((e) => e.id.equals(ext.id))
+        .watchSingle();
+  }
+
+  Stream<List<BnextExtension>> getExtensionsStream() {
+    return managers.bnextExtensions.orderBy((o) => o.stars.desc()).watch();
+  }
+
   static QueryExecutor _openConnection() {
     // `driftDatabase` from `package:drift_flutter` stores the database in
     // `getApplicationDocumentsDirectory()`.
-    return driftDatabase(name: 'bledner_nex_db');
+    return driftDatabase(name: 'temp_db_1');
   }
 }

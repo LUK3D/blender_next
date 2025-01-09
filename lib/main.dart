@@ -1,7 +1,9 @@
 import 'package:blender_next/services/blender_service.dart';
+import 'package:blender_next/services/exntesions_service.dart';
 import 'package:blender_next/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:signals/signals_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -11,12 +13,15 @@ import 'utils/theme_utils.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  MediaKit.ensureInitialized();
+
   SignalsObserver.instance = null; //Disable Signal logs
   await useSettingsService().init();
   //Initialize database and refresh blender versions
   await useBlenderService()
       .initializeData()
       .then((bac) => bac.getLatestBuilds());
+  useExntesionsService().initializeData();
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
@@ -46,6 +51,7 @@ class MainApp extends StatelessWidget {
       darkTheme: darkTheme,
       themeMode: ThemeMode.dark,
       home: const HomePage(),
+      locale: Locale("en"),
     );
   }
 }

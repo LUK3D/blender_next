@@ -21,4 +21,8 @@ abstract class DataAccess {
   Future<void> deleteProject(BnexProject project);
   Future<BnexProject> unlistProject(BnexProject project);
   Stream<List<BnexProject>> getProjects();
+
+  Future<List<BnextExtension>> getExtensions();
+  Stream<List<BnextExtension>> getExtensionsStream();
+  Future<List<BnextExtension>> saveExtensions(List<BnextExtension> extensions);
 }

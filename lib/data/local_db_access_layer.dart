@@ -135,7 +135,8 @@ class LocalDbAccessLayer extends DataAccess {
   Future<bool> clearDatabase() async {
     // await database.managers.blenderVersions.delete();
     // await database.managers.splashScreens.delete();
-    await database.managers.bnexProjects.delete();
+    // await database.managers.bnexProjects.delete();
+    // await database.managers.bnextExtensions.delete();
 
     // await database.deleteAll();
     // Logger().e("All deleted!!");
@@ -208,6 +209,25 @@ class LocalDbAccessLayer extends DataAccess {
         .update((o) => project);
 
     return project;
+  }
+
+  @override
+  Future<List<BnextExtension>> getExtensions() async {
+    return await database.managers.bnextExtensions.get();
+  }
+
+  @override
+  Stream<List<BnextExtension>> getExtensionsStream() {
+    return database.managers.bnextExtensions.watch();
+  }
+
+  @override
+  Future<List<BnextExtension>> saveExtensions(
+    List<BnextExtension> extensions,
+  ) async {
+    await database.managers.bnextExtensions.bulkCreate((o) => extensions);
+
+    return await getExtensions();
   }
 }
 

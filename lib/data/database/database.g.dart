@@ -2220,8 +2220,18 @@ class $BnextExtensionsTable extends BnextExtensions
       const VerificationMeta('schemaVersion');
   @override
   late final GeneratedColumn<String> schemaVersion = GeneratedColumn<String>(
-      'schema_version', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'schema_version', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _coverMeta = const VerificationMeta('cover');
+  @override
+  late final GeneratedColumn<String> cover = GeneratedColumn<String>(
+      'cover', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _iconMeta = const VerificationMeta('icon');
+  @override
+  late final GeneratedColumn<String> icon = GeneratedColumn<String>(
+      'icon', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _extIdMeta = const VerificationMeta('extId');
   @override
   late final GeneratedColumn<String> extId = GeneratedColumn<String>(
@@ -2232,12 +2242,24 @@ class $BnextExtensionsTable extends BnextExtensions
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _mdDescriptioMeta =
+      const VerificationMeta('mdDescriptio');
+  @override
+  late final GeneratedColumn<String> mdDescriptio = GeneratedColumn<String>(
+      'md_descriptio', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _versionMeta =
       const VerificationMeta('version');
   @override
   late final GeneratedColumn<String> version = GeneratedColumn<String>(
-      'version', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'version', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _taglineMeta =
       const VerificationMeta('tagline');
   @override
@@ -2264,19 +2286,48 @@ class $BnextExtensionsTable extends BnextExtensions
       const VerificationMeta('blenderMinVersion');
   @override
   late final GeneratedColumn<String> blenderMinVersion =
-      GeneratedColumn<String>('blender_min_version', aliasedName, false,
-          type: DriftSqlType.string, requiredDuringInsert: true);
+      GeneratedColumn<String>('blender_min_version', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _licenceMeta =
       const VerificationMeta('licence');
   @override
   late final GeneratedColumn<String> licence = GeneratedColumn<String>(
       'licence', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _licenceUrlMeta =
+      const VerificationMeta('licenceUrl');
+  @override
+  late final GeneratedColumn<String> licenceUrl = GeneratedColumn<String>(
+      'licence_url', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _websiteMeta =
       const VerificationMeta('website');
   @override
   late final GeneratedColumn<String> website = GeneratedColumn<String>(
       'website', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _detailsUrlMeta =
+      const VerificationMeta('detailsUrl');
+  @override
+  late final GeneratedColumn<String> detailsUrl = GeneratedColumn<String>(
+      'details_url', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _downloadUrlMeta =
+      const VerificationMeta('downloadUrl');
+  @override
+  late final GeneratedColumn<String> downloadUrl = GeneratedColumn<String>(
+      'download_url', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _draggableUrlMeta =
+      const VerificationMeta('draggableUrl');
+  @override
+  late final GeneratedColumn<String> draggableUrl = GeneratedColumn<String>(
+      'draggable_url', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _sizeMeta = const VerificationMeta('size');
+  @override
+  late final GeneratedColumn<String> size = GeneratedColumn<String>(
+      'size', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _copyrightMeta =
       const VerificationMeta('copyright');
@@ -2290,13 +2341,58 @@ class $BnextExtensionsTable extends BnextExtensions
   late final GeneratedColumn<String> permissions = GeneratedColumn<String>(
       'permissions', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _starsMeta = const VerificationMeta('stars');
+  @override
+  late final GeneratedColumn<double> stars = GeneratedColumn<double>(
+      'stars', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _reviewersMeta =
+      const VerificationMeta('reviewers');
+  @override
+  late final GeneratedColumn<int> reviewers = GeneratedColumn<int>(
+      'reviewers', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _downloadsMeta =
+      const VerificationMeta('downloads');
+  @override
+  late final GeneratedColumn<int> downloads = GeneratedColumn<int>(
+      'downloads', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _mediaUrlsMeta =
+      const VerificationMeta('mediaUrls');
+  @override
+  late final GeneratedColumn<String> mediaUrls = GeneratedColumn<String>(
+      'media_urls', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _publishedOnMeta =
+      const VerificationMeta('publishedOn');
+  @override
+  late final GeneratedColumn<DateTime> publishedOn = GeneratedColumn<DateTime>(
+      'published_on', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _lastUpdateOnMeta =
+      const VerificationMeta('lastUpdateOn');
+  @override
+  late final GeneratedColumn<DateTime> lastUpdateOn = GeneratedColumn<DateTime>(
+      'last_update_on', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _supportUrlMeta =
+      const VerificationMeta('supportUrl');
+  @override
+  late final GeneratedColumn<String> supportUrl = GeneratedColumn<String>(
+      'support_url', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         id,
         createdAt,
         schemaVersion,
+        cover,
+        icon,
         extId,
         name,
+        description,
+        mdDescriptio,
         version,
         tagline,
         maintainer,
@@ -2304,9 +2400,21 @@ class $BnextExtensionsTable extends BnextExtensions
         tags,
         blenderMinVersion,
         licence,
+        licenceUrl,
         website,
+        detailsUrl,
+        downloadUrl,
+        draggableUrl,
+        size,
         copyright,
-        permissions
+        permissions,
+        stars,
+        reviewers,
+        downloads,
+        mediaUrls,
+        publishedOn,
+        lastUpdateOn,
+        supportUrl
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -2330,8 +2438,14 @@ class $BnextExtensionsTable extends BnextExtensions
           _schemaVersionMeta,
           schemaVersion.isAcceptableOrUnknown(
               data['schema_version']!, _schemaVersionMeta));
-    } else if (isInserting) {
-      context.missing(_schemaVersionMeta);
+    }
+    if (data.containsKey('cover')) {
+      context.handle(
+          _coverMeta, cover.isAcceptableOrUnknown(data['cover']!, _coverMeta));
+    }
+    if (data.containsKey('icon')) {
+      context.handle(
+          _iconMeta, icon.isAcceptableOrUnknown(data['icon']!, _iconMeta));
     }
     if (data.containsKey('ext_id')) {
       context.handle(
@@ -2341,11 +2455,21 @@ class $BnextExtensionsTable extends BnextExtensions
       context.handle(
           _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('md_descriptio')) {
+      context.handle(
+          _mdDescriptioMeta,
+          mdDescriptio.isAcceptableOrUnknown(
+              data['md_descriptio']!, _mdDescriptioMeta));
+    }
     if (data.containsKey('version')) {
       context.handle(_versionMeta,
           version.isAcceptableOrUnknown(data['version']!, _versionMeta));
-    } else if (isInserting) {
-      context.missing(_versionMeta);
     }
     if (data.containsKey('tagline')) {
       context.handle(_taglineMeta,
@@ -2370,16 +2494,42 @@ class $BnextExtensionsTable extends BnextExtensions
           _blenderMinVersionMeta,
           blenderMinVersion.isAcceptableOrUnknown(
               data['blender_min_version']!, _blenderMinVersionMeta));
-    } else if (isInserting) {
-      context.missing(_blenderMinVersionMeta);
     }
     if (data.containsKey('licence')) {
       context.handle(_licenceMeta,
           licence.isAcceptableOrUnknown(data['licence']!, _licenceMeta));
     }
+    if (data.containsKey('licence_url')) {
+      context.handle(
+          _licenceUrlMeta,
+          licenceUrl.isAcceptableOrUnknown(
+              data['licence_url']!, _licenceUrlMeta));
+    }
     if (data.containsKey('website')) {
       context.handle(_websiteMeta,
           website.isAcceptableOrUnknown(data['website']!, _websiteMeta));
+    }
+    if (data.containsKey('details_url')) {
+      context.handle(
+          _detailsUrlMeta,
+          detailsUrl.isAcceptableOrUnknown(
+              data['details_url']!, _detailsUrlMeta));
+    }
+    if (data.containsKey('download_url')) {
+      context.handle(
+          _downloadUrlMeta,
+          downloadUrl.isAcceptableOrUnknown(
+              data['download_url']!, _downloadUrlMeta));
+    }
+    if (data.containsKey('draggable_url')) {
+      context.handle(
+          _draggableUrlMeta,
+          draggableUrl.isAcceptableOrUnknown(
+              data['draggable_url']!, _draggableUrlMeta));
+    }
+    if (data.containsKey('size')) {
+      context.handle(
+          _sizeMeta, size.isAcceptableOrUnknown(data['size']!, _sizeMeta));
     }
     if (data.containsKey('copyright')) {
       context.handle(_copyrightMeta,
@@ -2390,6 +2540,40 @@ class $BnextExtensionsTable extends BnextExtensions
           _permissionsMeta,
           permissions.isAcceptableOrUnknown(
               data['permissions']!, _permissionsMeta));
+    }
+    if (data.containsKey('stars')) {
+      context.handle(
+          _starsMeta, stars.isAcceptableOrUnknown(data['stars']!, _starsMeta));
+    }
+    if (data.containsKey('reviewers')) {
+      context.handle(_reviewersMeta,
+          reviewers.isAcceptableOrUnknown(data['reviewers']!, _reviewersMeta));
+    }
+    if (data.containsKey('downloads')) {
+      context.handle(_downloadsMeta,
+          downloads.isAcceptableOrUnknown(data['downloads']!, _downloadsMeta));
+    }
+    if (data.containsKey('media_urls')) {
+      context.handle(_mediaUrlsMeta,
+          mediaUrls.isAcceptableOrUnknown(data['media_urls']!, _mediaUrlsMeta));
+    }
+    if (data.containsKey('published_on')) {
+      context.handle(
+          _publishedOnMeta,
+          publishedOn.isAcceptableOrUnknown(
+              data['published_on']!, _publishedOnMeta));
+    }
+    if (data.containsKey('last_update_on')) {
+      context.handle(
+          _lastUpdateOnMeta,
+          lastUpdateOn.isAcceptableOrUnknown(
+              data['last_update_on']!, _lastUpdateOnMeta));
+    }
+    if (data.containsKey('support_url')) {
+      context.handle(
+          _supportUrlMeta,
+          supportUrl.isAcceptableOrUnknown(
+              data['support_url']!, _supportUrlMeta));
     }
     return context;
   }
@@ -2405,13 +2589,21 @@ class $BnextExtensionsTable extends BnextExtensions
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
       schemaVersion: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}schema_version'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}schema_version']),
+      cover: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cover']),
+      icon: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon']),
       extId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}ext_id']),
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name']),
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      mdDescriptio: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}md_descriptio']),
       version: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}version'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}version']),
       tagline: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}tagline']),
       maintainer: attachedDatabase.typeMapping
@@ -2421,15 +2613,39 @@ class $BnextExtensionsTable extends BnextExtensions
       tags: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}tags']),
       blenderMinVersion: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}blender_min_version'])!,
+          DriftSqlType.string, data['${effectivePrefix}blender_min_version']),
       licence: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}licence']),
+      licenceUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}licence_url']),
       website: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}website']),
+      detailsUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}details_url']),
+      downloadUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}download_url']),
+      draggableUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}draggable_url']),
+      size: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}size']),
       copyright: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}copyright']),
       permissions: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}permissions']),
+      stars: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}stars']),
+      reviewers: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}reviewers']),
+      downloads: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}downloads']),
+      mediaUrls: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}media_urls']),
+      publishedOn: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}published_on']),
+      lastUpdateOn: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}last_update_on']),
+      supportUrl: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}support_url']),
     );
   }
 
@@ -2442,35 +2658,67 @@ class $BnextExtensionsTable extends BnextExtensions
 class BnextExtension extends DataClass implements Insertable<BnextExtension> {
   final int? id;
   final DateTime? createdAt;
-  final String schemaVersion;
+  final String? schemaVersion;
+  final String? cover;
+  final String? icon;
   final String? extId;
   final String? name;
-  final String version;
+  final String? description;
+  final String? mdDescriptio;
+  final String? version;
   final String? tagline;
   final String? maintainer;
   final String? type;
   final String? tags;
-  final String blenderMinVersion;
+  final String? blenderMinVersion;
   final String? licence;
+  final String? licenceUrl;
   final String? website;
+  final String? detailsUrl;
+  final String? downloadUrl;
+  final String? draggableUrl;
+  final String? size;
   final String? copyright;
   final String? permissions;
+  final double? stars;
+  final int? reviewers;
+  final int? downloads;
+  final String? mediaUrls;
+  final DateTime? publishedOn;
+  final DateTime? lastUpdateOn;
+  final String? supportUrl;
   const BnextExtension(
       {this.id,
       this.createdAt,
-      required this.schemaVersion,
+      this.schemaVersion,
+      this.cover,
+      this.icon,
       this.extId,
       this.name,
-      required this.version,
+      this.description,
+      this.mdDescriptio,
+      this.version,
       this.tagline,
       this.maintainer,
       this.type,
       this.tags,
-      required this.blenderMinVersion,
+      this.blenderMinVersion,
       this.licence,
+      this.licenceUrl,
       this.website,
+      this.detailsUrl,
+      this.downloadUrl,
+      this.draggableUrl,
+      this.size,
       this.copyright,
-      this.permissions});
+      this.permissions,
+      this.stars,
+      this.reviewers,
+      this.downloads,
+      this.mediaUrls,
+      this.publishedOn,
+      this.lastUpdateOn,
+      this.supportUrl});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2480,14 +2728,30 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
     if (!nullToAbsent || createdAt != null) {
       map['created_at'] = Variable<DateTime>(createdAt);
     }
-    map['schema_version'] = Variable<String>(schemaVersion);
+    if (!nullToAbsent || schemaVersion != null) {
+      map['schema_version'] = Variable<String>(schemaVersion);
+    }
+    if (!nullToAbsent || cover != null) {
+      map['cover'] = Variable<String>(cover);
+    }
+    if (!nullToAbsent || icon != null) {
+      map['icon'] = Variable<String>(icon);
+    }
     if (!nullToAbsent || extId != null) {
       map['ext_id'] = Variable<String>(extId);
     }
     if (!nullToAbsent || name != null) {
       map['name'] = Variable<String>(name);
     }
-    map['version'] = Variable<String>(version);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    if (!nullToAbsent || mdDescriptio != null) {
+      map['md_descriptio'] = Variable<String>(mdDescriptio);
+    }
+    if (!nullToAbsent || version != null) {
+      map['version'] = Variable<String>(version);
+    }
     if (!nullToAbsent || tagline != null) {
       map['tagline'] = Variable<String>(tagline);
     }
@@ -2500,18 +2764,56 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
     if (!nullToAbsent || tags != null) {
       map['tags'] = Variable<String>(tags);
     }
-    map['blender_min_version'] = Variable<String>(blenderMinVersion);
+    if (!nullToAbsent || blenderMinVersion != null) {
+      map['blender_min_version'] = Variable<String>(blenderMinVersion);
+    }
     if (!nullToAbsent || licence != null) {
       map['licence'] = Variable<String>(licence);
     }
+    if (!nullToAbsent || licenceUrl != null) {
+      map['licence_url'] = Variable<String>(licenceUrl);
+    }
     if (!nullToAbsent || website != null) {
       map['website'] = Variable<String>(website);
+    }
+    if (!nullToAbsent || detailsUrl != null) {
+      map['details_url'] = Variable<String>(detailsUrl);
+    }
+    if (!nullToAbsent || downloadUrl != null) {
+      map['download_url'] = Variable<String>(downloadUrl);
+    }
+    if (!nullToAbsent || draggableUrl != null) {
+      map['draggable_url'] = Variable<String>(draggableUrl);
+    }
+    if (!nullToAbsent || size != null) {
+      map['size'] = Variable<String>(size);
     }
     if (!nullToAbsent || copyright != null) {
       map['copyright'] = Variable<String>(copyright);
     }
     if (!nullToAbsent || permissions != null) {
       map['permissions'] = Variable<String>(permissions);
+    }
+    if (!nullToAbsent || stars != null) {
+      map['stars'] = Variable<double>(stars);
+    }
+    if (!nullToAbsent || reviewers != null) {
+      map['reviewers'] = Variable<int>(reviewers);
+    }
+    if (!nullToAbsent || downloads != null) {
+      map['downloads'] = Variable<int>(downloads);
+    }
+    if (!nullToAbsent || mediaUrls != null) {
+      map['media_urls'] = Variable<String>(mediaUrls);
+    }
+    if (!nullToAbsent || publishedOn != null) {
+      map['published_on'] = Variable<DateTime>(publishedOn);
+    }
+    if (!nullToAbsent || lastUpdateOn != null) {
+      map['last_update_on'] = Variable<DateTime>(lastUpdateOn);
+    }
+    if (!nullToAbsent || supportUrl != null) {
+      map['support_url'] = Variable<String>(supportUrl);
     }
     return map;
   }
@@ -2522,11 +2824,24 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
       createdAt: createdAt == null && nullToAbsent
           ? const Value.absent()
           : Value(createdAt),
-      schemaVersion: Value(schemaVersion),
+      schemaVersion: schemaVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(schemaVersion),
+      cover:
+          cover == null && nullToAbsent ? const Value.absent() : Value(cover),
+      icon: icon == null && nullToAbsent ? const Value.absent() : Value(icon),
       extId:
           extId == null && nullToAbsent ? const Value.absent() : Value(extId),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      version: Value(version),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      mdDescriptio: mdDescriptio == null && nullToAbsent
+          ? const Value.absent()
+          : Value(mdDescriptio),
+      version: version == null && nullToAbsent
+          ? const Value.absent()
+          : Value(version),
       tagline: tagline == null && nullToAbsent
           ? const Value.absent()
           : Value(tagline),
@@ -2535,19 +2850,54 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
           : Value(maintainer),
       type: type == null && nullToAbsent ? const Value.absent() : Value(type),
       tags: tags == null && nullToAbsent ? const Value.absent() : Value(tags),
-      blenderMinVersion: Value(blenderMinVersion),
+      blenderMinVersion: blenderMinVersion == null && nullToAbsent
+          ? const Value.absent()
+          : Value(blenderMinVersion),
       licence: licence == null && nullToAbsent
           ? const Value.absent()
           : Value(licence),
+      licenceUrl: licenceUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(licenceUrl),
       website: website == null && nullToAbsent
           ? const Value.absent()
           : Value(website),
+      detailsUrl: detailsUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(detailsUrl),
+      downloadUrl: downloadUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downloadUrl),
+      draggableUrl: draggableUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(draggableUrl),
+      size: size == null && nullToAbsent ? const Value.absent() : Value(size),
       copyright: copyright == null && nullToAbsent
           ? const Value.absent()
           : Value(copyright),
       permissions: permissions == null && nullToAbsent
           ? const Value.absent()
           : Value(permissions),
+      stars:
+          stars == null && nullToAbsent ? const Value.absent() : Value(stars),
+      reviewers: reviewers == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reviewers),
+      downloads: downloads == null && nullToAbsent
+          ? const Value.absent()
+          : Value(downloads),
+      mediaUrls: mediaUrls == null && nullToAbsent
+          ? const Value.absent()
+          : Value(mediaUrls),
+      publishedOn: publishedOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(publishedOn),
+      lastUpdateOn: lastUpdateOn == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastUpdateOn),
+      supportUrl: supportUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(supportUrl),
     );
   }
 
@@ -2557,19 +2907,36 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
     return BnextExtension(
       id: serializer.fromJson<int?>(json['id']),
       createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
-      schemaVersion: serializer.fromJson<String>(json['schemaVersion']),
+      schemaVersion: serializer.fromJson<String?>(json['schemaVersion']),
+      cover: serializer.fromJson<String?>(json['cover']),
+      icon: serializer.fromJson<String?>(json['icon']),
       extId: serializer.fromJson<String?>(json['extId']),
       name: serializer.fromJson<String?>(json['name']),
-      version: serializer.fromJson<String>(json['version']),
+      description: serializer.fromJson<String?>(json['description']),
+      mdDescriptio: serializer.fromJson<String?>(json['mdDescriptio']),
+      version: serializer.fromJson<String?>(json['version']),
       tagline: serializer.fromJson<String?>(json['tagline']),
       maintainer: serializer.fromJson<String?>(json['maintainer']),
       type: serializer.fromJson<String?>(json['type']),
       tags: serializer.fromJson<String?>(json['tags']),
-      blenderMinVersion: serializer.fromJson<String>(json['blenderMinVersion']),
+      blenderMinVersion:
+          serializer.fromJson<String?>(json['blenderMinVersion']),
       licence: serializer.fromJson<String?>(json['licence']),
+      licenceUrl: serializer.fromJson<String?>(json['licenceUrl']),
       website: serializer.fromJson<String?>(json['website']),
+      detailsUrl: serializer.fromJson<String?>(json['detailsUrl']),
+      downloadUrl: serializer.fromJson<String?>(json['downloadUrl']),
+      draggableUrl: serializer.fromJson<String?>(json['draggableUrl']),
+      size: serializer.fromJson<String?>(json['size']),
       copyright: serializer.fromJson<String?>(json['copyright']),
       permissions: serializer.fromJson<String?>(json['permissions']),
+      stars: serializer.fromJson<double?>(json['stars']),
+      reviewers: serializer.fromJson<int?>(json['reviewers']),
+      downloads: serializer.fromJson<int?>(json['downloads']),
+      mediaUrls: serializer.fromJson<String?>(json['mediaUrls']),
+      publishedOn: serializer.fromJson<DateTime?>(json['publishedOn']),
+      lastUpdateOn: serializer.fromJson<DateTime?>(json['lastUpdateOn']),
+      supportUrl: serializer.fromJson<String?>(json['supportUrl']),
     );
   }
   @override
@@ -2578,54 +2945,108 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
     return <String, dynamic>{
       'id': serializer.toJson<int?>(id),
       'createdAt': serializer.toJson<DateTime?>(createdAt),
-      'schemaVersion': serializer.toJson<String>(schemaVersion),
+      'schemaVersion': serializer.toJson<String?>(schemaVersion),
+      'cover': serializer.toJson<String?>(cover),
+      'icon': serializer.toJson<String?>(icon),
       'extId': serializer.toJson<String?>(extId),
       'name': serializer.toJson<String?>(name),
-      'version': serializer.toJson<String>(version),
+      'description': serializer.toJson<String?>(description),
+      'mdDescriptio': serializer.toJson<String?>(mdDescriptio),
+      'version': serializer.toJson<String?>(version),
       'tagline': serializer.toJson<String?>(tagline),
       'maintainer': serializer.toJson<String?>(maintainer),
       'type': serializer.toJson<String?>(type),
       'tags': serializer.toJson<String?>(tags),
-      'blenderMinVersion': serializer.toJson<String>(blenderMinVersion),
+      'blenderMinVersion': serializer.toJson<String?>(blenderMinVersion),
       'licence': serializer.toJson<String?>(licence),
+      'licenceUrl': serializer.toJson<String?>(licenceUrl),
       'website': serializer.toJson<String?>(website),
+      'detailsUrl': serializer.toJson<String?>(detailsUrl),
+      'downloadUrl': serializer.toJson<String?>(downloadUrl),
+      'draggableUrl': serializer.toJson<String?>(draggableUrl),
+      'size': serializer.toJson<String?>(size),
       'copyright': serializer.toJson<String?>(copyright),
       'permissions': serializer.toJson<String?>(permissions),
+      'stars': serializer.toJson<double?>(stars),
+      'reviewers': serializer.toJson<int?>(reviewers),
+      'downloads': serializer.toJson<int?>(downloads),
+      'mediaUrls': serializer.toJson<String?>(mediaUrls),
+      'publishedOn': serializer.toJson<DateTime?>(publishedOn),
+      'lastUpdateOn': serializer.toJson<DateTime?>(lastUpdateOn),
+      'supportUrl': serializer.toJson<String?>(supportUrl),
     };
   }
 
   BnextExtension copyWith(
           {Value<int?> id = const Value.absent(),
           Value<DateTime?> createdAt = const Value.absent(),
-          String? schemaVersion,
+          Value<String?> schemaVersion = const Value.absent(),
+          Value<String?> cover = const Value.absent(),
+          Value<String?> icon = const Value.absent(),
           Value<String?> extId = const Value.absent(),
           Value<String?> name = const Value.absent(),
-          String? version,
+          Value<String?> description = const Value.absent(),
+          Value<String?> mdDescriptio = const Value.absent(),
+          Value<String?> version = const Value.absent(),
           Value<String?> tagline = const Value.absent(),
           Value<String?> maintainer = const Value.absent(),
           Value<String?> type = const Value.absent(),
           Value<String?> tags = const Value.absent(),
-          String? blenderMinVersion,
+          Value<String?> blenderMinVersion = const Value.absent(),
           Value<String?> licence = const Value.absent(),
+          Value<String?> licenceUrl = const Value.absent(),
           Value<String?> website = const Value.absent(),
+          Value<String?> detailsUrl = const Value.absent(),
+          Value<String?> downloadUrl = const Value.absent(),
+          Value<String?> draggableUrl = const Value.absent(),
+          Value<String?> size = const Value.absent(),
           Value<String?> copyright = const Value.absent(),
-          Value<String?> permissions = const Value.absent()}) =>
+          Value<String?> permissions = const Value.absent(),
+          Value<double?> stars = const Value.absent(),
+          Value<int?> reviewers = const Value.absent(),
+          Value<int?> downloads = const Value.absent(),
+          Value<String?> mediaUrls = const Value.absent(),
+          Value<DateTime?> publishedOn = const Value.absent(),
+          Value<DateTime?> lastUpdateOn = const Value.absent(),
+          Value<String?> supportUrl = const Value.absent()}) =>
       BnextExtension(
         id: id.present ? id.value : this.id,
         createdAt: createdAt.present ? createdAt.value : this.createdAt,
-        schemaVersion: schemaVersion ?? this.schemaVersion,
+        schemaVersion:
+            schemaVersion.present ? schemaVersion.value : this.schemaVersion,
+        cover: cover.present ? cover.value : this.cover,
+        icon: icon.present ? icon.value : this.icon,
         extId: extId.present ? extId.value : this.extId,
         name: name.present ? name.value : this.name,
-        version: version ?? this.version,
+        description: description.present ? description.value : this.description,
+        mdDescriptio:
+            mdDescriptio.present ? mdDescriptio.value : this.mdDescriptio,
+        version: version.present ? version.value : this.version,
         tagline: tagline.present ? tagline.value : this.tagline,
         maintainer: maintainer.present ? maintainer.value : this.maintainer,
         type: type.present ? type.value : this.type,
         tags: tags.present ? tags.value : this.tags,
-        blenderMinVersion: blenderMinVersion ?? this.blenderMinVersion,
+        blenderMinVersion: blenderMinVersion.present
+            ? blenderMinVersion.value
+            : this.blenderMinVersion,
         licence: licence.present ? licence.value : this.licence,
+        licenceUrl: licenceUrl.present ? licenceUrl.value : this.licenceUrl,
         website: website.present ? website.value : this.website,
+        detailsUrl: detailsUrl.present ? detailsUrl.value : this.detailsUrl,
+        downloadUrl: downloadUrl.present ? downloadUrl.value : this.downloadUrl,
+        draggableUrl:
+            draggableUrl.present ? draggableUrl.value : this.draggableUrl,
+        size: size.present ? size.value : this.size,
         copyright: copyright.present ? copyright.value : this.copyright,
         permissions: permissions.present ? permissions.value : this.permissions,
+        stars: stars.present ? stars.value : this.stars,
+        reviewers: reviewers.present ? reviewers.value : this.reviewers,
+        downloads: downloads.present ? downloads.value : this.downloads,
+        mediaUrls: mediaUrls.present ? mediaUrls.value : this.mediaUrls,
+        publishedOn: publishedOn.present ? publishedOn.value : this.publishedOn,
+        lastUpdateOn:
+            lastUpdateOn.present ? lastUpdateOn.value : this.lastUpdateOn,
+        supportUrl: supportUrl.present ? supportUrl.value : this.supportUrl,
       );
   BnextExtension copyWithCompanion(BnextExtensionsCompanion data) {
     return BnextExtension(
@@ -2634,8 +3055,15 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
       schemaVersion: data.schemaVersion.present
           ? data.schemaVersion.value
           : this.schemaVersion,
+      cover: data.cover.present ? data.cover.value : this.cover,
+      icon: data.icon.present ? data.icon.value : this.icon,
       extId: data.extId.present ? data.extId.value : this.extId,
       name: data.name.present ? data.name.value : this.name,
+      description:
+          data.description.present ? data.description.value : this.description,
+      mdDescriptio: data.mdDescriptio.present
+          ? data.mdDescriptio.value
+          : this.mdDescriptio,
       version: data.version.present ? data.version.value : this.version,
       tagline: data.tagline.present ? data.tagline.value : this.tagline,
       maintainer:
@@ -2646,10 +3074,31 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
           ? data.blenderMinVersion.value
           : this.blenderMinVersion,
       licence: data.licence.present ? data.licence.value : this.licence,
+      licenceUrl:
+          data.licenceUrl.present ? data.licenceUrl.value : this.licenceUrl,
       website: data.website.present ? data.website.value : this.website,
+      detailsUrl:
+          data.detailsUrl.present ? data.detailsUrl.value : this.detailsUrl,
+      downloadUrl:
+          data.downloadUrl.present ? data.downloadUrl.value : this.downloadUrl,
+      draggableUrl: data.draggableUrl.present
+          ? data.draggableUrl.value
+          : this.draggableUrl,
+      size: data.size.present ? data.size.value : this.size,
       copyright: data.copyright.present ? data.copyright.value : this.copyright,
       permissions:
           data.permissions.present ? data.permissions.value : this.permissions,
+      stars: data.stars.present ? data.stars.value : this.stars,
+      reviewers: data.reviewers.present ? data.reviewers.value : this.reviewers,
+      downloads: data.downloads.present ? data.downloads.value : this.downloads,
+      mediaUrls: data.mediaUrls.present ? data.mediaUrls.value : this.mediaUrls,
+      publishedOn:
+          data.publishedOn.present ? data.publishedOn.value : this.publishedOn,
+      lastUpdateOn: data.lastUpdateOn.present
+          ? data.lastUpdateOn.value
+          : this.lastUpdateOn,
+      supportUrl:
+          data.supportUrl.present ? data.supportUrl.value : this.supportUrl,
     );
   }
 
@@ -2659,8 +3108,12 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('schemaVersion: $schemaVersion, ')
+          ..write('cover: $cover, ')
+          ..write('icon: $icon, ')
           ..write('extId: $extId, ')
           ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('mdDescriptio: $mdDescriptio, ')
           ..write('version: $version, ')
           ..write('tagline: $tagline, ')
           ..write('maintainer: $maintainer, ')
@@ -2668,30 +3121,59 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
           ..write('tags: $tags, ')
           ..write('blenderMinVersion: $blenderMinVersion, ')
           ..write('licence: $licence, ')
+          ..write('licenceUrl: $licenceUrl, ')
           ..write('website: $website, ')
+          ..write('detailsUrl: $detailsUrl, ')
+          ..write('downloadUrl: $downloadUrl, ')
+          ..write('draggableUrl: $draggableUrl, ')
+          ..write('size: $size, ')
           ..write('copyright: $copyright, ')
-          ..write('permissions: $permissions')
+          ..write('permissions: $permissions, ')
+          ..write('stars: $stars, ')
+          ..write('reviewers: $reviewers, ')
+          ..write('downloads: $downloads, ')
+          ..write('mediaUrls: $mediaUrls, ')
+          ..write('publishedOn: $publishedOn, ')
+          ..write('lastUpdateOn: $lastUpdateOn, ')
+          ..write('supportUrl: $supportUrl')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id,
-      createdAt,
-      schemaVersion,
-      extId,
-      name,
-      version,
-      tagline,
-      maintainer,
-      type,
-      tags,
-      blenderMinVersion,
-      licence,
-      website,
-      copyright,
-      permissions);
+  int get hashCode => Object.hashAll([
+        id,
+        createdAt,
+        schemaVersion,
+        cover,
+        icon,
+        extId,
+        name,
+        description,
+        mdDescriptio,
+        version,
+        tagline,
+        maintainer,
+        type,
+        tags,
+        blenderMinVersion,
+        licence,
+        licenceUrl,
+        website,
+        detailsUrl,
+        downloadUrl,
+        draggableUrl,
+        size,
+        copyright,
+        permissions,
+        stars,
+        reviewers,
+        downloads,
+        mediaUrls,
+        publishedOn,
+        lastUpdateOn,
+        supportUrl
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2699,8 +3181,12 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
           other.id == this.id &&
           other.createdAt == this.createdAt &&
           other.schemaVersion == this.schemaVersion &&
+          other.cover == this.cover &&
+          other.icon == this.icon &&
           other.extId == this.extId &&
           other.name == this.name &&
+          other.description == this.description &&
+          other.mdDescriptio == this.mdDescriptio &&
           other.version == this.version &&
           other.tagline == this.tagline &&
           other.maintainer == this.maintainer &&
@@ -2708,33 +3194,65 @@ class BnextExtension extends DataClass implements Insertable<BnextExtension> {
           other.tags == this.tags &&
           other.blenderMinVersion == this.blenderMinVersion &&
           other.licence == this.licence &&
+          other.licenceUrl == this.licenceUrl &&
           other.website == this.website &&
+          other.detailsUrl == this.detailsUrl &&
+          other.downloadUrl == this.downloadUrl &&
+          other.draggableUrl == this.draggableUrl &&
+          other.size == this.size &&
           other.copyright == this.copyright &&
-          other.permissions == this.permissions);
+          other.permissions == this.permissions &&
+          other.stars == this.stars &&
+          other.reviewers == this.reviewers &&
+          other.downloads == this.downloads &&
+          other.mediaUrls == this.mediaUrls &&
+          other.publishedOn == this.publishedOn &&
+          other.lastUpdateOn == this.lastUpdateOn &&
+          other.supportUrl == this.supportUrl);
 }
 
 class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
   final Value<int?> id;
   final Value<DateTime?> createdAt;
-  final Value<String> schemaVersion;
+  final Value<String?> schemaVersion;
+  final Value<String?> cover;
+  final Value<String?> icon;
   final Value<String?> extId;
   final Value<String?> name;
-  final Value<String> version;
+  final Value<String?> description;
+  final Value<String?> mdDescriptio;
+  final Value<String?> version;
   final Value<String?> tagline;
   final Value<String?> maintainer;
   final Value<String?> type;
   final Value<String?> tags;
-  final Value<String> blenderMinVersion;
+  final Value<String?> blenderMinVersion;
   final Value<String?> licence;
+  final Value<String?> licenceUrl;
   final Value<String?> website;
+  final Value<String?> detailsUrl;
+  final Value<String?> downloadUrl;
+  final Value<String?> draggableUrl;
+  final Value<String?> size;
   final Value<String?> copyright;
   final Value<String?> permissions;
+  final Value<double?> stars;
+  final Value<int?> reviewers;
+  final Value<int?> downloads;
+  final Value<String?> mediaUrls;
+  final Value<DateTime?> publishedOn;
+  final Value<DateTime?> lastUpdateOn;
+  final Value<String?> supportUrl;
   const BnextExtensionsCompanion({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.schemaVersion = const Value.absent(),
+    this.cover = const Value.absent(),
+    this.icon = const Value.absent(),
     this.extId = const Value.absent(),
     this.name = const Value.absent(),
+    this.description = const Value.absent(),
+    this.mdDescriptio = const Value.absent(),
     this.version = const Value.absent(),
     this.tagline = const Value.absent(),
     this.maintainer = const Value.absent(),
@@ -2742,35 +3260,65 @@ class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
     this.tags = const Value.absent(),
     this.blenderMinVersion = const Value.absent(),
     this.licence = const Value.absent(),
+    this.licenceUrl = const Value.absent(),
     this.website = const Value.absent(),
+    this.detailsUrl = const Value.absent(),
+    this.downloadUrl = const Value.absent(),
+    this.draggableUrl = const Value.absent(),
+    this.size = const Value.absent(),
     this.copyright = const Value.absent(),
     this.permissions = const Value.absent(),
+    this.stars = const Value.absent(),
+    this.reviewers = const Value.absent(),
+    this.downloads = const Value.absent(),
+    this.mediaUrls = const Value.absent(),
+    this.publishedOn = const Value.absent(),
+    this.lastUpdateOn = const Value.absent(),
+    this.supportUrl = const Value.absent(),
   });
   BnextExtensionsCompanion.insert({
     this.id = const Value.absent(),
     this.createdAt = const Value.absent(),
-    required String schemaVersion,
+    this.schemaVersion = const Value.absent(),
+    this.cover = const Value.absent(),
+    this.icon = const Value.absent(),
     this.extId = const Value.absent(),
     this.name = const Value.absent(),
-    required String version,
+    this.description = const Value.absent(),
+    this.mdDescriptio = const Value.absent(),
+    this.version = const Value.absent(),
     this.tagline = const Value.absent(),
     this.maintainer = const Value.absent(),
     this.type = const Value.absent(),
     this.tags = const Value.absent(),
-    required String blenderMinVersion,
+    this.blenderMinVersion = const Value.absent(),
     this.licence = const Value.absent(),
+    this.licenceUrl = const Value.absent(),
     this.website = const Value.absent(),
+    this.detailsUrl = const Value.absent(),
+    this.downloadUrl = const Value.absent(),
+    this.draggableUrl = const Value.absent(),
+    this.size = const Value.absent(),
     this.copyright = const Value.absent(),
     this.permissions = const Value.absent(),
-  })  : schemaVersion = Value(schemaVersion),
-        version = Value(version),
-        blenderMinVersion = Value(blenderMinVersion);
+    this.stars = const Value.absent(),
+    this.reviewers = const Value.absent(),
+    this.downloads = const Value.absent(),
+    this.mediaUrls = const Value.absent(),
+    this.publishedOn = const Value.absent(),
+    this.lastUpdateOn = const Value.absent(),
+    this.supportUrl = const Value.absent(),
+  });
   static Insertable<BnextExtension> custom({
     Expression<int>? id,
     Expression<DateTime>? createdAt,
     Expression<String>? schemaVersion,
+    Expression<String>? cover,
+    Expression<String>? icon,
     Expression<String>? extId,
     Expression<String>? name,
+    Expression<String>? description,
+    Expression<String>? mdDescriptio,
     Expression<String>? version,
     Expression<String>? tagline,
     Expression<String>? maintainer,
@@ -2778,16 +3326,32 @@ class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
     Expression<String>? tags,
     Expression<String>? blenderMinVersion,
     Expression<String>? licence,
+    Expression<String>? licenceUrl,
     Expression<String>? website,
+    Expression<String>? detailsUrl,
+    Expression<String>? downloadUrl,
+    Expression<String>? draggableUrl,
+    Expression<String>? size,
     Expression<String>? copyright,
     Expression<String>? permissions,
+    Expression<double>? stars,
+    Expression<int>? reviewers,
+    Expression<int>? downloads,
+    Expression<String>? mediaUrls,
+    Expression<DateTime>? publishedOn,
+    Expression<DateTime>? lastUpdateOn,
+    Expression<String>? supportUrl,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (createdAt != null) 'created_at': createdAt,
       if (schemaVersion != null) 'schema_version': schemaVersion,
+      if (cover != null) 'cover': cover,
+      if (icon != null) 'icon': icon,
       if (extId != null) 'ext_id': extId,
       if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (mdDescriptio != null) 'md_descriptio': mdDescriptio,
       if (version != null) 'version': version,
       if (tagline != null) 'tagline': tagline,
       if (maintainer != null) 'maintainer': maintainer,
@@ -2795,34 +3359,66 @@ class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
       if (tags != null) 'tags': tags,
       if (blenderMinVersion != null) 'blender_min_version': blenderMinVersion,
       if (licence != null) 'licence': licence,
+      if (licenceUrl != null) 'licence_url': licenceUrl,
       if (website != null) 'website': website,
+      if (detailsUrl != null) 'details_url': detailsUrl,
+      if (downloadUrl != null) 'download_url': downloadUrl,
+      if (draggableUrl != null) 'draggable_url': draggableUrl,
+      if (size != null) 'size': size,
       if (copyright != null) 'copyright': copyright,
       if (permissions != null) 'permissions': permissions,
+      if (stars != null) 'stars': stars,
+      if (reviewers != null) 'reviewers': reviewers,
+      if (downloads != null) 'downloads': downloads,
+      if (mediaUrls != null) 'media_urls': mediaUrls,
+      if (publishedOn != null) 'published_on': publishedOn,
+      if (lastUpdateOn != null) 'last_update_on': lastUpdateOn,
+      if (supportUrl != null) 'support_url': supportUrl,
     });
   }
 
   BnextExtensionsCompanion copyWith(
       {Value<int?>? id,
       Value<DateTime?>? createdAt,
-      Value<String>? schemaVersion,
+      Value<String?>? schemaVersion,
+      Value<String?>? cover,
+      Value<String?>? icon,
       Value<String?>? extId,
       Value<String?>? name,
-      Value<String>? version,
+      Value<String?>? description,
+      Value<String?>? mdDescriptio,
+      Value<String?>? version,
       Value<String?>? tagline,
       Value<String?>? maintainer,
       Value<String?>? type,
       Value<String?>? tags,
-      Value<String>? blenderMinVersion,
+      Value<String?>? blenderMinVersion,
       Value<String?>? licence,
+      Value<String?>? licenceUrl,
       Value<String?>? website,
+      Value<String?>? detailsUrl,
+      Value<String?>? downloadUrl,
+      Value<String?>? draggableUrl,
+      Value<String?>? size,
       Value<String?>? copyright,
-      Value<String?>? permissions}) {
+      Value<String?>? permissions,
+      Value<double?>? stars,
+      Value<int?>? reviewers,
+      Value<int?>? downloads,
+      Value<String?>? mediaUrls,
+      Value<DateTime?>? publishedOn,
+      Value<DateTime?>? lastUpdateOn,
+      Value<String?>? supportUrl}) {
     return BnextExtensionsCompanion(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
       schemaVersion: schemaVersion ?? this.schemaVersion,
+      cover: cover ?? this.cover,
+      icon: icon ?? this.icon,
       extId: extId ?? this.extId,
       name: name ?? this.name,
+      description: description ?? this.description,
+      mdDescriptio: mdDescriptio ?? this.mdDescriptio,
       version: version ?? this.version,
       tagline: tagline ?? this.tagline,
       maintainer: maintainer ?? this.maintainer,
@@ -2830,9 +3426,21 @@ class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
       tags: tags ?? this.tags,
       blenderMinVersion: blenderMinVersion ?? this.blenderMinVersion,
       licence: licence ?? this.licence,
+      licenceUrl: licenceUrl ?? this.licenceUrl,
       website: website ?? this.website,
+      detailsUrl: detailsUrl ?? this.detailsUrl,
+      downloadUrl: downloadUrl ?? this.downloadUrl,
+      draggableUrl: draggableUrl ?? this.draggableUrl,
+      size: size ?? this.size,
       copyright: copyright ?? this.copyright,
       permissions: permissions ?? this.permissions,
+      stars: stars ?? this.stars,
+      reviewers: reviewers ?? this.reviewers,
+      downloads: downloads ?? this.downloads,
+      mediaUrls: mediaUrls ?? this.mediaUrls,
+      publishedOn: publishedOn ?? this.publishedOn,
+      lastUpdateOn: lastUpdateOn ?? this.lastUpdateOn,
+      supportUrl: supportUrl ?? this.supportUrl,
     );
   }
 
@@ -2848,11 +3456,23 @@ class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
     if (schemaVersion.present) {
       map['schema_version'] = Variable<String>(schemaVersion.value);
     }
+    if (cover.present) {
+      map['cover'] = Variable<String>(cover.value);
+    }
+    if (icon.present) {
+      map['icon'] = Variable<String>(icon.value);
+    }
     if (extId.present) {
       map['ext_id'] = Variable<String>(extId.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (mdDescriptio.present) {
+      map['md_descriptio'] = Variable<String>(mdDescriptio.value);
     }
     if (version.present) {
       map['version'] = Variable<String>(version.value);
@@ -2875,14 +3495,50 @@ class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
     if (licence.present) {
       map['licence'] = Variable<String>(licence.value);
     }
+    if (licenceUrl.present) {
+      map['licence_url'] = Variable<String>(licenceUrl.value);
+    }
     if (website.present) {
       map['website'] = Variable<String>(website.value);
+    }
+    if (detailsUrl.present) {
+      map['details_url'] = Variable<String>(detailsUrl.value);
+    }
+    if (downloadUrl.present) {
+      map['download_url'] = Variable<String>(downloadUrl.value);
+    }
+    if (draggableUrl.present) {
+      map['draggable_url'] = Variable<String>(draggableUrl.value);
+    }
+    if (size.present) {
+      map['size'] = Variable<String>(size.value);
     }
     if (copyright.present) {
       map['copyright'] = Variable<String>(copyright.value);
     }
     if (permissions.present) {
       map['permissions'] = Variable<String>(permissions.value);
+    }
+    if (stars.present) {
+      map['stars'] = Variable<double>(stars.value);
+    }
+    if (reviewers.present) {
+      map['reviewers'] = Variable<int>(reviewers.value);
+    }
+    if (downloads.present) {
+      map['downloads'] = Variable<int>(downloads.value);
+    }
+    if (mediaUrls.present) {
+      map['media_urls'] = Variable<String>(mediaUrls.value);
+    }
+    if (publishedOn.present) {
+      map['published_on'] = Variable<DateTime>(publishedOn.value);
+    }
+    if (lastUpdateOn.present) {
+      map['last_update_on'] = Variable<DateTime>(lastUpdateOn.value);
+    }
+    if (supportUrl.present) {
+      map['support_url'] = Variable<String>(supportUrl.value);
     }
     return map;
   }
@@ -2893,8 +3549,12 @@ class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
           ..write('id: $id, ')
           ..write('createdAt: $createdAt, ')
           ..write('schemaVersion: $schemaVersion, ')
+          ..write('cover: $cover, ')
+          ..write('icon: $icon, ')
           ..write('extId: $extId, ')
           ..write('name: $name, ')
+          ..write('description: $description, ')
+          ..write('mdDescriptio: $mdDescriptio, ')
           ..write('version: $version, ')
           ..write('tagline: $tagline, ')
           ..write('maintainer: $maintainer, ')
@@ -2902,9 +3562,21 @@ class BnextExtensionsCompanion extends UpdateCompanion<BnextExtension> {
           ..write('tags: $tags, ')
           ..write('blenderMinVersion: $blenderMinVersion, ')
           ..write('licence: $licence, ')
+          ..write('licenceUrl: $licenceUrl, ')
           ..write('website: $website, ')
+          ..write('detailsUrl: $detailsUrl, ')
+          ..write('downloadUrl: $downloadUrl, ')
+          ..write('draggableUrl: $draggableUrl, ')
+          ..write('size: $size, ')
           ..write('copyright: $copyright, ')
-          ..write('permissions: $permissions')
+          ..write('permissions: $permissions, ')
+          ..write('stars: $stars, ')
+          ..write('reviewers: $reviewers, ')
+          ..write('downloads: $downloads, ')
+          ..write('mediaUrls: $mediaUrls, ')
+          ..write('publishedOn: $publishedOn, ')
+          ..write('lastUpdateOn: $lastUpdateOn, ')
+          ..write('supportUrl: $supportUrl')
           ..write(')'))
         .toString();
   }
@@ -4528,37 +5200,69 @@ typedef $$BnextExtensionsTableCreateCompanionBuilder = BnextExtensionsCompanion
     Function({
   Value<int?> id,
   Value<DateTime?> createdAt,
-  required String schemaVersion,
+  Value<String?> schemaVersion,
+  Value<String?> cover,
+  Value<String?> icon,
   Value<String?> extId,
   Value<String?> name,
-  required String version,
+  Value<String?> description,
+  Value<String?> mdDescriptio,
+  Value<String?> version,
   Value<String?> tagline,
   Value<String?> maintainer,
   Value<String?> type,
   Value<String?> tags,
-  required String blenderMinVersion,
+  Value<String?> blenderMinVersion,
   Value<String?> licence,
+  Value<String?> licenceUrl,
   Value<String?> website,
+  Value<String?> detailsUrl,
+  Value<String?> downloadUrl,
+  Value<String?> draggableUrl,
+  Value<String?> size,
   Value<String?> copyright,
   Value<String?> permissions,
+  Value<double?> stars,
+  Value<int?> reviewers,
+  Value<int?> downloads,
+  Value<String?> mediaUrls,
+  Value<DateTime?> publishedOn,
+  Value<DateTime?> lastUpdateOn,
+  Value<String?> supportUrl,
 });
 typedef $$BnextExtensionsTableUpdateCompanionBuilder = BnextExtensionsCompanion
     Function({
   Value<int?> id,
   Value<DateTime?> createdAt,
-  Value<String> schemaVersion,
+  Value<String?> schemaVersion,
+  Value<String?> cover,
+  Value<String?> icon,
   Value<String?> extId,
   Value<String?> name,
-  Value<String> version,
+  Value<String?> description,
+  Value<String?> mdDescriptio,
+  Value<String?> version,
   Value<String?> tagline,
   Value<String?> maintainer,
   Value<String?> type,
   Value<String?> tags,
-  Value<String> blenderMinVersion,
+  Value<String?> blenderMinVersion,
   Value<String?> licence,
+  Value<String?> licenceUrl,
   Value<String?> website,
+  Value<String?> detailsUrl,
+  Value<String?> downloadUrl,
+  Value<String?> draggableUrl,
+  Value<String?> size,
   Value<String?> copyright,
   Value<String?> permissions,
+  Value<double?> stars,
+  Value<int?> reviewers,
+  Value<int?> downloads,
+  Value<String?> mediaUrls,
+  Value<DateTime?> publishedOn,
+  Value<DateTime?> lastUpdateOn,
+  Value<String?> supportUrl,
 });
 
 final class $$BnextExtensionsTableReferences extends BaseReferences<
@@ -4604,11 +5308,23 @@ class $$BnextExtensionsTableFilterComposer
   ColumnFilters<String> get schemaVersion => $composableBuilder(
       column: $table.schemaVersion, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get cover => $composableBuilder(
+      column: $table.cover, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get extId => $composableBuilder(
       column: $table.extId, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get mdDescriptio => $composableBuilder(
+      column: $table.mdDescriptio, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get version => $composableBuilder(
       column: $table.version, builder: (column) => ColumnFilters(column));
@@ -4632,14 +5348,50 @@ class $$BnextExtensionsTableFilterComposer
   ColumnFilters<String> get licence => $composableBuilder(
       column: $table.licence, builder: (column) => ColumnFilters(column));
 
+  ColumnFilters<String> get licenceUrl => $composableBuilder(
+      column: $table.licenceUrl, builder: (column) => ColumnFilters(column));
+
   ColumnFilters<String> get website => $composableBuilder(
       column: $table.website, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get detailsUrl => $composableBuilder(
+      column: $table.detailsUrl, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get downloadUrl => $composableBuilder(
+      column: $table.downloadUrl, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get draggableUrl => $composableBuilder(
+      column: $table.draggableUrl, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get copyright => $composableBuilder(
       column: $table.copyright, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get permissions => $composableBuilder(
       column: $table.permissions, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get stars => $composableBuilder(
+      column: $table.stars, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get reviewers => $composableBuilder(
+      column: $table.reviewers, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get downloads => $composableBuilder(
+      column: $table.downloads, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get mediaUrls => $composableBuilder(
+      column: $table.mediaUrls, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get publishedOn => $composableBuilder(
+      column: $table.publishedOn, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get lastUpdateOn => $composableBuilder(
+      column: $table.lastUpdateOn, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get supportUrl => $composableBuilder(
+      column: $table.supportUrl, builder: (column) => ColumnFilters(column));
 
   Expression<bool> bnextProjectExtensionsRefs(
       Expression<bool> Function($$BnextProjectExtensionsTableFilterComposer f)
@@ -4684,11 +5436,24 @@ class $$BnextExtensionsTableOrderingComposer
       column: $table.schemaVersion,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get cover => $composableBuilder(
+      column: $table.cover, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get icon => $composableBuilder(
+      column: $table.icon, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get extId => $composableBuilder(
       column: $table.extId, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get name => $composableBuilder(
       column: $table.name, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get mdDescriptio => $composableBuilder(
+      column: $table.mdDescriptio,
+      builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get version => $composableBuilder(
       column: $table.version, builder: (column) => ColumnOrderings(column));
@@ -4712,14 +5477,52 @@ class $$BnextExtensionsTableOrderingComposer
   ColumnOrderings<String> get licence => $composableBuilder(
       column: $table.licence, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get licenceUrl => $composableBuilder(
+      column: $table.licenceUrl, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get website => $composableBuilder(
       column: $table.website, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get detailsUrl => $composableBuilder(
+      column: $table.detailsUrl, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get downloadUrl => $composableBuilder(
+      column: $table.downloadUrl, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get draggableUrl => $composableBuilder(
+      column: $table.draggableUrl,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get size => $composableBuilder(
+      column: $table.size, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get copyright => $composableBuilder(
       column: $table.copyright, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get permissions => $composableBuilder(
       column: $table.permissions, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get stars => $composableBuilder(
+      column: $table.stars, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get reviewers => $composableBuilder(
+      column: $table.reviewers, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get downloads => $composableBuilder(
+      column: $table.downloads, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get mediaUrls => $composableBuilder(
+      column: $table.mediaUrls, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get publishedOn => $composableBuilder(
+      column: $table.publishedOn, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get lastUpdateOn => $composableBuilder(
+      column: $table.lastUpdateOn,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get supportUrl => $composableBuilder(
+      column: $table.supportUrl, builder: (column) => ColumnOrderings(column));
 }
 
 class $$BnextExtensionsTableAnnotationComposer
@@ -4740,11 +5543,23 @@ class $$BnextExtensionsTableAnnotationComposer
   GeneratedColumn<String> get schemaVersion => $composableBuilder(
       column: $table.schemaVersion, builder: (column) => column);
 
+  GeneratedColumn<String> get cover =>
+      $composableBuilder(column: $table.cover, builder: (column) => column);
+
+  GeneratedColumn<String> get icon =>
+      $composableBuilder(column: $table.icon, builder: (column) => column);
+
   GeneratedColumn<String> get extId =>
       $composableBuilder(column: $table.extId, builder: (column) => column);
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<String> get mdDescriptio => $composableBuilder(
+      column: $table.mdDescriptio, builder: (column) => column);
 
   GeneratedColumn<String> get version =>
       $composableBuilder(column: $table.version, builder: (column) => column);
@@ -4767,14 +5582,50 @@ class $$BnextExtensionsTableAnnotationComposer
   GeneratedColumn<String> get licence =>
       $composableBuilder(column: $table.licence, builder: (column) => column);
 
+  GeneratedColumn<String> get licenceUrl => $composableBuilder(
+      column: $table.licenceUrl, builder: (column) => column);
+
   GeneratedColumn<String> get website =>
       $composableBuilder(column: $table.website, builder: (column) => column);
+
+  GeneratedColumn<String> get detailsUrl => $composableBuilder(
+      column: $table.detailsUrl, builder: (column) => column);
+
+  GeneratedColumn<String> get downloadUrl => $composableBuilder(
+      column: $table.downloadUrl, builder: (column) => column);
+
+  GeneratedColumn<String> get draggableUrl => $composableBuilder(
+      column: $table.draggableUrl, builder: (column) => column);
+
+  GeneratedColumn<String> get size =>
+      $composableBuilder(column: $table.size, builder: (column) => column);
 
   GeneratedColumn<String> get copyright =>
       $composableBuilder(column: $table.copyright, builder: (column) => column);
 
   GeneratedColumn<String> get permissions => $composableBuilder(
       column: $table.permissions, builder: (column) => column);
+
+  GeneratedColumn<double> get stars =>
+      $composableBuilder(column: $table.stars, builder: (column) => column);
+
+  GeneratedColumn<int> get reviewers =>
+      $composableBuilder(column: $table.reviewers, builder: (column) => column);
+
+  GeneratedColumn<int> get downloads =>
+      $composableBuilder(column: $table.downloads, builder: (column) => column);
+
+  GeneratedColumn<String> get mediaUrls =>
+      $composableBuilder(column: $table.mediaUrls, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get publishedOn => $composableBuilder(
+      column: $table.publishedOn, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get lastUpdateOn => $composableBuilder(
+      column: $table.lastUpdateOn, builder: (column) => column);
+
+  GeneratedColumn<String> get supportUrl => $composableBuilder(
+      column: $table.supportUrl, builder: (column) => column);
 
   Expression<T> bnextProjectExtensionsRefs<T extends Object>(
       Expression<T> Function($$BnextProjectExtensionsTableAnnotationComposer a)
@@ -4826,26 +5677,46 @@ class $$BnextExtensionsTableTableManager extends RootTableManager<
           updateCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             Value<DateTime?> createdAt = const Value.absent(),
-            Value<String> schemaVersion = const Value.absent(),
+            Value<String?> schemaVersion = const Value.absent(),
+            Value<String?> cover = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
             Value<String?> extId = const Value.absent(),
             Value<String?> name = const Value.absent(),
-            Value<String> version = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<String?> mdDescriptio = const Value.absent(),
+            Value<String?> version = const Value.absent(),
             Value<String?> tagline = const Value.absent(),
             Value<String?> maintainer = const Value.absent(),
             Value<String?> type = const Value.absent(),
             Value<String?> tags = const Value.absent(),
-            Value<String> blenderMinVersion = const Value.absent(),
+            Value<String?> blenderMinVersion = const Value.absent(),
             Value<String?> licence = const Value.absent(),
+            Value<String?> licenceUrl = const Value.absent(),
             Value<String?> website = const Value.absent(),
+            Value<String?> detailsUrl = const Value.absent(),
+            Value<String?> downloadUrl = const Value.absent(),
+            Value<String?> draggableUrl = const Value.absent(),
+            Value<String?> size = const Value.absent(),
             Value<String?> copyright = const Value.absent(),
             Value<String?> permissions = const Value.absent(),
+            Value<double?> stars = const Value.absent(),
+            Value<int?> reviewers = const Value.absent(),
+            Value<int?> downloads = const Value.absent(),
+            Value<String?> mediaUrls = const Value.absent(),
+            Value<DateTime?> publishedOn = const Value.absent(),
+            Value<DateTime?> lastUpdateOn = const Value.absent(),
+            Value<String?> supportUrl = const Value.absent(),
           }) =>
               BnextExtensionsCompanion(
             id: id,
             createdAt: createdAt,
             schemaVersion: schemaVersion,
+            cover: cover,
+            icon: icon,
             extId: extId,
             name: name,
+            description: description,
+            mdDescriptio: mdDescriptio,
             version: version,
             tagline: tagline,
             maintainer: maintainer,
@@ -4853,33 +5724,65 @@ class $$BnextExtensionsTableTableManager extends RootTableManager<
             tags: tags,
             blenderMinVersion: blenderMinVersion,
             licence: licence,
+            licenceUrl: licenceUrl,
             website: website,
+            detailsUrl: detailsUrl,
+            downloadUrl: downloadUrl,
+            draggableUrl: draggableUrl,
+            size: size,
             copyright: copyright,
             permissions: permissions,
+            stars: stars,
+            reviewers: reviewers,
+            downloads: downloads,
+            mediaUrls: mediaUrls,
+            publishedOn: publishedOn,
+            lastUpdateOn: lastUpdateOn,
+            supportUrl: supportUrl,
           ),
           createCompanionCallback: ({
             Value<int?> id = const Value.absent(),
             Value<DateTime?> createdAt = const Value.absent(),
-            required String schemaVersion,
+            Value<String?> schemaVersion = const Value.absent(),
+            Value<String?> cover = const Value.absent(),
+            Value<String?> icon = const Value.absent(),
             Value<String?> extId = const Value.absent(),
             Value<String?> name = const Value.absent(),
-            required String version,
+            Value<String?> description = const Value.absent(),
+            Value<String?> mdDescriptio = const Value.absent(),
+            Value<String?> version = const Value.absent(),
             Value<String?> tagline = const Value.absent(),
             Value<String?> maintainer = const Value.absent(),
             Value<String?> type = const Value.absent(),
             Value<String?> tags = const Value.absent(),
-            required String blenderMinVersion,
+            Value<String?> blenderMinVersion = const Value.absent(),
             Value<String?> licence = const Value.absent(),
+            Value<String?> licenceUrl = const Value.absent(),
             Value<String?> website = const Value.absent(),
+            Value<String?> detailsUrl = const Value.absent(),
+            Value<String?> downloadUrl = const Value.absent(),
+            Value<String?> draggableUrl = const Value.absent(),
+            Value<String?> size = const Value.absent(),
             Value<String?> copyright = const Value.absent(),
             Value<String?> permissions = const Value.absent(),
+            Value<double?> stars = const Value.absent(),
+            Value<int?> reviewers = const Value.absent(),
+            Value<int?> downloads = const Value.absent(),
+            Value<String?> mediaUrls = const Value.absent(),
+            Value<DateTime?> publishedOn = const Value.absent(),
+            Value<DateTime?> lastUpdateOn = const Value.absent(),
+            Value<String?> supportUrl = const Value.absent(),
           }) =>
               BnextExtensionsCompanion.insert(
             id: id,
             createdAt: createdAt,
             schemaVersion: schemaVersion,
+            cover: cover,
+            icon: icon,
             extId: extId,
             name: name,
+            description: description,
+            mdDescriptio: mdDescriptio,
             version: version,
             tagline: tagline,
             maintainer: maintainer,
@@ -4887,9 +5790,21 @@ class $$BnextExtensionsTableTableManager extends RootTableManager<
             tags: tags,
             blenderMinVersion: blenderMinVersion,
             licence: licence,
+            licenceUrl: licenceUrl,
             website: website,
+            detailsUrl: detailsUrl,
+            downloadUrl: downloadUrl,
+            draggableUrl: draggableUrl,
+            size: size,
             copyright: copyright,
             permissions: permissions,
+            stars: stars,
+            reviewers: reviewers,
+            downloads: downloads,
+            mediaUrls: mediaUrls,
+            publishedOn: publishedOn,
+            lastUpdateOn: lastUpdateOn,
+            supportUrl: supportUrl,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (

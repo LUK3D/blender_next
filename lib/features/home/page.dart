@@ -1,4 +1,5 @@
 import 'package:blender_next/components/bn_sidebar.dart';
+import 'package:blender_next/features/home/screens/extensions/main_screen.dart';
 import 'package:blender_next/services/blender_service.dart';
 import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/data/local_db_access_layer.dart';
@@ -160,11 +161,7 @@ class _HomePageState extends State<HomePage>
                                     ));
                               },
                             )),
-                    Center(
-                      child: Text(
-                        AppLocalizations.of(context)!.extensions,
-                      ),
-                    ),
+                    const ExtensionsMainScreen(),
                     Center(
                       child: Text(
                         AppLocalizations.of(context)!.workflows,

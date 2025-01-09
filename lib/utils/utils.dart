@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 String formatBytes(int bytes, int decimals) {
@@ -27,4 +28,34 @@ String getProjectDate(DateTime? date) {
     return timeago.format(date);
   }
   return date.toString().split(" ").first;
+}
+
+DateTime? formatNaturalDate(String input) {
+  if (input.trim().isEmpty) {
+    return null;
+  }
+  try {
+    //I will replace this with a proper Regex
+    String processedInput = input
+        .split("st,")
+        .join(",")
+        .split("nd,")
+        .join(",")
+        .split("rd,")
+        .join(',')
+        .split('th,')
+        .join(',');
+    DateFormat dateFormat = DateFormat("EEEE d, MMMM yyyy - HH:mm");
+    DateTime dateTime = dateFormat.parse(processedInput);
+    return dateTime;
+  } catch (e) {
+    return null;
+  }
+}
+
+String ellipseString(String text, {int maxLength = 20}) {
+  if (text.length <= maxLength) {
+    return text; // No truncation needed
+  }
+  return '${text.substring(0, maxLength - 3)}...';
 }
