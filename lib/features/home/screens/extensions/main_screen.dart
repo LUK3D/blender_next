@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:logger/logger.dart';
 import 'package:numeral/numeral.dart';
 
 class ExtensionsMainScreen extends StatefulWidget {
@@ -230,8 +229,6 @@ class _ExtensionsMainScreenState extends State<ExtensionsMainScreen> {
                         stream:
                             extensionsService.db.database.getExtensionsStream(),
                         builder: (context, snapshot) {
-                          print(snapshot.data?.length);
-
                           return GridView.builder(
                             controller: _scrollController,
                             gridDelegate:
@@ -382,11 +379,11 @@ class _ExtensionsMainScreenState extends State<ExtensionsMainScreen> {
               ],
             ),
             floatingActionButton: !isLoading
-                ? SizedBox()
+                ? const SizedBox()
                 : CircleAvatar(
                     backgroundColor: Theme.of(context).canvasColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: CircularProgressIndicator(),
                     ),
                   ),

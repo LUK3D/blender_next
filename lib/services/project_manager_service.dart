@@ -95,8 +95,7 @@ class ProjectManagerService {
     final args = saveNewFile
         ? '--python-expr "${bscript.toString()}"'
         : ' "${project.dir}/${project.name}/${project.name}.blend"';
-    final result = await process!.shell!
-        .run('${blender.installationPath}/blender.exe $args');
+    await process!.shell!.run('${blender.installationPath}/blender.exe $args');
     await generateThumbnail(project);
   }
 

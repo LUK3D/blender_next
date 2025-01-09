@@ -1,6 +1,5 @@
 import 'package:blender_next/data/data_access.dart';
 import 'package:drift/drift.dart';
-import 'package:logger/logger.dart';
 
 import 'database/database.dart';
 

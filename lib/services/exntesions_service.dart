@@ -6,7 +6,6 @@ import 'package:blender_next/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:html/parser.dart';
-import 'package:logger/logger.dart';
 import 'package:html2md/html2md.dart' as html2md;
 
 class ExntesionsService {

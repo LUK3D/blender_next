@@ -51,7 +51,7 @@ class MainApp extends StatelessWidget {
       darkTheme: darkTheme,
       themeMode: ThemeMode.dark,
       home: const HomePage(),
-      locale: Locale("en"),
+      locale: const Locale("en"),
     );
   }
 }

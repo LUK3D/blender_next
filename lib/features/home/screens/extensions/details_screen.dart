@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:numeral/numeral.dart';
-import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 
 class ExtensionDetailsScreen extends StatefulWidget {
   final BnextExtension bnextExtension;
@@ -30,7 +29,6 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
   final carouselController = CarouselSliderController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     extService.getExtensionDetails(widget.bnextExtension);
   }
@@ -113,7 +111,7 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
                                               width: 5,
                                             ),
                                             Text(ext.maintainer ?? ""),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             SizedBox(
@@ -121,7 +119,7 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
                                               height: 30,
                                               child: IconButton.filled(
                                                 onPressed: () {},
-                                                icon: Icon(
+                                                icon: const Icon(
                                                   LucideIcons.external_link,
                                                   size: 15,
                                                 ),
@@ -142,8 +140,9 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
                                   padding: const EdgeInsets.only(right: 80.0),
                                   child: TextButton.icon(
                                     onPressed: () {},
-                                    label: Text("Download"),
-                                    icon: Icon(LucideIcons.cloud_download),
+                                    label: const Text("Download"),
+                                    icon:
+                                        const Icon(LucideIcons.cloud_download),
                                     style: TextButton.styleFrom(
                                       foregroundColor: Colors.white,
                                       backgroundColor:
@@ -175,7 +174,7 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
                                     items: carouselItems.map<Widget>((item) {
                                       return Builder(
                                         builder: (BuildContext context) {
-                                          return Container(
+                                          return SizedBox(
                                               width: MediaQuery.of(context)
                                                   .size
                                                   .width,
