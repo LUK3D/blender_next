@@ -3,6 +3,7 @@ import 'package:blender_next/data/model/side_menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'bn_sidebar_button.dart';
 
@@ -80,7 +81,7 @@ class BnSidebar<T> extends StatelessWidget {
                     child: BnSidebarButton(
                       isSelected: false,
                       onPressed: onSettingsClick,
-                      label: "Settings",
+                      label: AppLocalizations.of(context)!.settings,
                       icon: const Icon(LucideIcons.settings),
                     ),
                   ),

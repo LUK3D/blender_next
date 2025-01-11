@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'general_settings_screen.dart';
 
@@ -25,14 +26,14 @@ class SettingsScreen extends StatelessWidget {
               ),
               child: TabBar(
                 dividerColor: Theme.of(context).dividerColor,
-                tabs: const [
+                tabs: [
                   Tab(
-                    icon: Icon(LucideIcons.settings),
-                    child: Text("General"),
+                    icon: const Icon(LucideIcons.settings),
+                    child: Text(AppLocalizations.of(context)!.general),
                   ),
                   Tab(
-                    icon: Icon(LucideIcons.database),
-                    child: Text("Local Storage"),
+                    icon: const Icon(LucideIcons.database),
+                    child: Text(AppLocalizations.of(context)!.localStorage),
                   ),
                 ],
               ),

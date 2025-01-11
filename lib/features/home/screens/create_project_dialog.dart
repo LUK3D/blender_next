@@ -10,6 +10,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:signals/signals_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateProjectDialog extends StatefulWidget {
   const CreateProjectDialog({super.key});
@@ -34,7 +35,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
           LucideIcons.box,
           color: Theme.of(context).primaryColor,
         ),
-        title: const Text("New Project"),
+        title: Text(AppLocalizations.of(context)!.newProject),
       ),
       body: Column(
         children: [
@@ -55,7 +56,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                             backgroundColor:
                                 Theme.of(context).scaffoldBackgroundColor,
                             icon: const Icon(LucideIcons.text_cursor_input),
-                            hintText: "Project Name",
+                            hintText: AppLocalizations.of(context)!.projectName,
                             onChanged: (val) {
                               project.value = {...project.value, "name": val};
                             },
@@ -98,11 +99,12 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                                             .toList();
 
                                         if (builds.isEmpty) {
-                                          return const Padding(
+                                          return Padding(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 8),
                                             child: Text(
-                                                "No Blender Versions Found"),
+                                                AppLocalizations.of(context)!
+                                                    .noBlenderFound),
                                           );
                                         }
 
@@ -185,7 +187,8 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                                       horizontal: 8,
                                       vertical: 2,
                                     ),
-                                    child: const Text("Project Dir:")),
+                                    child: Text(
+                                        "${AppLocalizations.of(context)!.projectDir}:")),
                                 Watch((ctx) =>
                                     Text(project.value["dir"] ?? "...")),
                               ],
@@ -197,7 +200,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text("Template"),
+                    Text(AppLocalizations.of(context)!.template),
                     const SizedBox(
                       height: 20,
                     ),
@@ -205,7 +208,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                         child: Watch(
                       (ctx) => Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: getTemplates()
+                          children: getTemplates(context)
                               .map((e) => BnToggleButton(
                                     icon: Icon(
                                       e.icon,
@@ -263,7 +266,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text("Use version control")
+                        Text(AppLocalizations.of(context)!.useVersionControl)
                       ],
                     ),
                     const SizedBox(
@@ -292,14 +295,14 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text("Clear extensions")
+                        Text(AppLocalizations.of(context)!.clearExtensions)
                       ],
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Text(
-                        "Include Extensions: (${project.value['extensions']?.length ?? 0})"),
+                        "${AppLocalizations.of(context)!.includeExtensions}: (${project.value['extensions']?.length ?? 0})"),
                     const SizedBox(
                       height: 10,
                     ),
@@ -333,7 +336,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                   width: 130,
                   child: BnSidebarButton(
                     icon: const Icon(LucideIcons.plus),
-                    label: "Create",
+                    label: AppLocalizations.of(context)!.create,
                     backgroundColor: Theme.of(context).primaryColor,
                     borderRadius: 100,
                     foregroundColor: Colors.white,
@@ -393,26 +396,26 @@ Dialog showCreateProjectDialog(BuildContext context) {
   );
 }
 
-List<BlenderNextTemplate> getTemplates() {
+List<BlenderNextTemplate> getTemplates(BuildContext context) {
   return [
     BlenderNextTemplate(
-      label: "Modeling",
+      label: AppLocalizations.of(context)!.modeling,
       icon: LucideIcons.box,
     ),
     BlenderNextTemplate(
-      label: "3D Animation",
+      label: "3D - ${AppLocalizations.of(context)!.animation}",
       icon: LucideIcons.file_video,
     ),
     BlenderNextTemplate(
-      label: "2D Animation",
+      label: "2D - ${AppLocalizations.of(context)!.animation}",
       icon: LucideIcons.file_video,
     ),
     BlenderNextTemplate(
-      label: "Riging",
+      label: AppLocalizations.of(context)!.riging,
       icon: LucideIcons.bone,
     ),
     BlenderNextTemplate(
-      label: "Texturing",
+      label: AppLocalizations.of(context)!.texturing,
       icon: LucideIcons.brush,
     ),
   ];

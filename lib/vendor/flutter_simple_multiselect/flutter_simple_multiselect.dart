@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'dart:developer' as developer;
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'flutter_multiselect_layout_delegate.dart';
 import 'flutter_multiselect_layout.dart';
 
@@ -444,7 +444,7 @@ class FlutterMultiselectState<T> extends State<FlutterMultiselect<T>> {
                 color: Colors.transparent,
                 width: 0,
               )),
-          hintText: "Type to search",
+          hintText: AppLocalizations.of(context)!.typeToSearch,
         );
     final decoration = widget.isLoading
         ? customDec.copyWith(

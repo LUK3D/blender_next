@@ -66,7 +66,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                 SizedBox(
                   width: 180,
                   child: BnSidebarButton(
-                    label: "New Project",
+                    label: AppLocalizations.of(context)!.newProject,
                     backgroundColor: Theme.of(context).primaryColor,
                     foregroundColor: Colors.white,
                     borderRadius: 100,
@@ -241,7 +241,9 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                                     const SizedBox(
                                                       width: 10,
                                                     ),
-                                                    const Text("Edit"),
+                                                    Text(AppLocalizations.of(
+                                                            context)!
+                                                        .edit),
                                                   ],
                                                 ),
                                               ),
@@ -258,8 +260,9 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                                     const SizedBox(
                                                       width: 10,
                                                     ),
-                                                    const Text(
-                                                        "Refresh Thumbnail"),
+                                                    Text(AppLocalizations.of(
+                                                            context)!
+                                                        .refreshThumbnail),
                                                   ],
                                                 ),
                                               ),
@@ -276,7 +279,9 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                                     const SizedBox(
                                                       width: 10,
                                                     ),
-                                                    const Text("Delete"),
+                                                    Text(AppLocalizations.of(
+                                                            context)!
+                                                        .delete),
                                                   ],
                                                 ),
                                               ),
@@ -330,7 +335,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                 Row(
                                   children: [
                                     Text(
-                                      "Size: ${project.size ?? ''}",
+                                      "${AppLocalizations.of(context)!.size}: ${project.size ?? ''}",
                                       style: const TextStyle(
                                         fontSize: 12,
                                       ),

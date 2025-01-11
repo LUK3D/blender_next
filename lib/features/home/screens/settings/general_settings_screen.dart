@@ -4,7 +4,7 @@ import 'package:blender_next/utils/blender_scripts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:signals/signals_flutter.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'Components/bn_file_dialog_input.dart';
 import 'Components/bn_select.dart';
 import 'Components/btn_row.dart';
@@ -15,7 +15,7 @@ class GeneralSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsService = useSettingsService();
-    const inputWidth = 200.0;
+    const inputWidth = 250.0;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
@@ -33,9 +33,9 @@ class GeneralSettings extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "General Settings",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.generalSettings,
+                    style: const TextStyle(
                       fontSize: 25,
                     ),
                   )
@@ -47,17 +47,17 @@ class GeneralSettings extends StatelessWidget {
               BnRow(
                 labelWith: inputWidth,
                 inputWidth: 300,
-                label: const Text("Language:"),
+                label: Text("${AppLocalizations.of(context)!.language}:"),
                 input: Watch((ctx) {
                   return BnSelect(
                     selectedValue: settingsService.locale.value,
                     items: [
                       BnSelectItem(
-                        label: "English",
+                        label: AppLocalizations.of(context)!.english,
                         value: "en",
                       ),
                       BnSelectItem(
-                        label: "Portuguese",
+                        label: AppLocalizations.of(context)!.portuguese,
                         value: "pt",
                       ),
                     ],
@@ -73,18 +73,18 @@ class GeneralSettings extends StatelessWidget {
               BnRow(
                 labelWith: inputWidth,
                 inputWidth: 300,
-                label: const Text("Theme Mode:"),
+                label: Text("${AppLocalizations.of(context)!.themeMode}:"),
                 input: Watch((ctx) {
                   return BnSelect(
                     disabled: true,
                     selectedValue: "dark",
                     items: [
                       BnSelectItem(
-                        label: "Dark mode",
+                        label: AppLocalizations.of(context)!.datkMode,
                         value: "dark",
                       ),
                       BnSelectItem(
-                        label: "Light mode",
+                        label: AppLocalizations.of(context)!.lightMode,
                         value: "light",
                       ),
                     ],
@@ -98,7 +98,8 @@ class GeneralSettings extends StatelessWidget {
               BnRow(
                 labelWith: inputWidth,
                 inputWidth: 300,
-                label: const Text("Default installation dir:"),
+                label: Text(
+                    "${AppLocalizations.of(context)!.defaultInstallationDir}:"),
                 input: Watch(
                   (ctx) => BnFileDialogInput<String?>(
                     inputStringValue:
@@ -124,9 +125,9 @@ class GeneralSettings extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Thumbnail Rendering",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.thumbnailRendering,
+                    style: const TextStyle(
                       fontSize: 25,
                     ),
                   ),
@@ -138,7 +139,8 @@ class GeneralSettings extends StatelessWidget {
               BnRow(
                 labelWith: inputWidth,
                 inputWidth: 300,
-                label: const Text("Rendering Engine"),
+                label:
+                    Text("${AppLocalizations.of(context)!.renderingEngine}:"),
                 input: Watch((ctx) => BnSelect(
                         items: [
                           BnSelectItem(
@@ -167,7 +169,7 @@ class GeneralSettings extends StatelessWidget {
                 (ctx) => BnRow(
                   labelWith: inputWidth,
                   inputWidth: 300,
-                  label: const Text("Size:"),
+                  label: Text("${AppLocalizations.of(context)!.size}:"),
                   input: Row(
                     children: [
                       Expanded(
@@ -234,7 +236,7 @@ class GeneralSettings extends StatelessWidget {
               BnRow(
                 labelWith: inputWidth,
                 inputWidth: 300,
-                label: const Text("samples:"),
+                label: Text("${AppLocalizations.of(context)!.samples}:"),
                 input: Watch(
                   (ctx) => BnTextInput(
                     isNumeric: true,
@@ -258,7 +260,7 @@ class GeneralSettings extends StatelessWidget {
               BnRow(
                 labelWith: inputWidth,
                 inputWidth: 300,
-                label: const Text("Frame:"),
+                label: Text("${AppLocalizations.of(context)!.frame}:"),
                 input: Watch(
                   (ctx) => BnTextInput(
                     isNumeric: true,
