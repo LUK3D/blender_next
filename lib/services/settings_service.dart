@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:blender_next/utils/blender_scripts.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:signals/signals.dart';
 
 class SettingsService {
   static final SettingsService _singleton = SettingsService._internal();
@@ -11,9 +14,25 @@ class SettingsService {
   SettingsService._internal();
   late GetStorage box;
 
+  late final showSettings = signal(false);
+  late final locale = signal("en");
+  late final defaultInstallationDir = signal("");
+  late final thumbnailRenderingEngine = signal("");
+  late final thumbnailSize = signal<Size>(const Size(250, 250));
+  late final thumbnailSamples = signal(0.0);
+  late final thumbnailFrame = signal(1);
+
   Future init() async {
     await GetStorage.init();
     box = GetStorage();
+
+    locale.value = getLocale() ?? "en";
+    thumbnailRenderingEngine.value = getDefaultRenderingEngine();
+
+    defaultInstallationDir.value = getInstallersFolder();
+    thumbnailSize.value = getThumbnailSize();
+    thumbnailSamples.value = getThumbnailSamples();
+    thumbnailFrame.value = getThumbnailFrame();
   }
 
   String getContentPath() {
@@ -28,7 +47,16 @@ class SettingsService {
   }
 
   String getInstallersFolder() {
-    return "${getContentPath()}/installs";
+    return box.read("insllations_dir") ?? "${getContentPath()}/installs";
+  }
+
+  void setInstallersFolder(String? val) {
+    if (val == null || val.isEmpty) {
+      return;
+    }
+
+    box.write("insllations_dir", val);
+    defaultInstallationDir.value = val;
   }
 
   Future<void> setProjectsFolder(String path) async {
@@ -43,11 +71,71 @@ class SettingsService {
   }
 
   Future<void> setDefaultRenderingEngine(String engine) async {
+    thumbnailRenderingEngine.value = engine;
     await box.write("default_rendering_engine", engine);
   }
 
-  String? getDefaultRenderingEngine() {
+  String getDefaultRenderingEngine() {
     return box.read<String>("default_rendering_engine") ?? BlenderEngines.eevee;
+  }
+
+  setThumbnailSize({double? width, double? height}) async {
+    thumbnailSize.value = Size(width ?? thumbnailSize.value.width,
+        height ?? thumbnailSize.value.height);
+    await box.write(
+        "thumbnail_size",
+        json.encode({
+          "width": thumbnailSize.value.width,
+          "height": thumbnailSize.value.height
+        }));
+  }
+
+  getThumbnailSize() {
+    final data = json.decode(
+        "${box.read("thumbnail_size") ?? '{"width": 250, "height": 250}'}");
+    return Size(double.parse(data["width"].toString()),
+        double.parse(data["height"].toString()));
+  }
+
+  setThumbnailSamples(double? samples) async {
+    if (samples == null) {
+      return;
+    }
+    thumbnailSamples.value = samples;
+    await box.write("thumbnail_samples", samples);
+  }
+
+  double getThumbnailSamples() {
+    return box.read("thumbnail_samples") ?? 100.0;
+  }
+
+  setThumbnailFrame(int? frame) async {
+    if (frame == null) {
+      return;
+    }
+    thumbnailFrame.value = frame;
+
+    await box.write("thumbnail_frame", frame);
+  }
+
+  int getThumbnailFrame() {
+    return box.read("thumbnail_frame") ?? 1;
+  }
+
+  void toggleSettingsPage({bool? value}) {
+    showSettings.value = value ?? !showSettings.value;
+  }
+
+  void setLocale(BuildContext ctx, String _locale) async {
+    if (_locale.trim().isEmpty) {
+      return;
+    }
+    locale.value = _locale;
+    await box.write("locale", locale);
+  }
+
+  String? getLocale() {
+    return box.read<String?>("locale");
   }
 }
 

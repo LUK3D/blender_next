@@ -38,8 +38,11 @@ dependencies:
   signals: ^6.0.2
   super_drag_and_drop: ^0.8.24
   timeago: ^3.7.0
+  tray_manager: ^0.3.1
   window_manager: ^0.4.3
-
+  app_links_workspace:
+    git:
+      url: https://github.com/lijy91/app_links.git
 
 dependency_overrides:
   media_kit: 

@@ -126,7 +126,10 @@ class ProjectManagerService {
     final script = await getRenderBlenderFileScript(
       filePath: project.dir,
       outPath: thumbNailPath,
-      engine: settings.getDefaultRenderingEngine(),
+      width: settings.thumbnailSize.value.width.toInt(),
+      height: settings.thumbnailSize.value.height.toInt(),
+      samples: settings.thumbnailSamples.value.toInt(),
+      engine: settings.thumbnailRenderingEngine.value,
     );
 
     final blender = await getInstalledBledner(project);

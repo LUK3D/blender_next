@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class BnTextInput extends StatelessWidget {
   final Widget? icon;
@@ -10,6 +11,7 @@ class BnTextInput extends StatelessWidget {
   final Color? backgroundColor;
   final Color? textColor;
   final String? initialValue;
+  final bool isNumeric;
 
   const BnTextInput({
     super.key,
@@ -22,6 +24,7 @@ class BnTextInput extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.initialValue,
+    this.isNumeric = false,
   });
 
   @override
@@ -37,6 +40,8 @@ class BnTextInput extends StatelessWidget {
       width: width,
       height: height,
       child: TextFormField(
+        inputFormatters:
+            isNumeric ? [FilteringTextInputFormatter.digitsOnly] : null,
         controller: controller,
         onChanged: onChanged,
         initialValue: initialValue,

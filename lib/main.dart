@@ -8,12 +8,15 @@ import 'package:signals/signals_flutter.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'features/home/page.dart';
+import 'services/system_try_service.dart';
 import 'utils/theme_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   MediaKit.ensureInitialized();
+
+  await SystemTrayService.init();
 
   SignalsObserver.instance = null; //Disable Signal logs
   await useSettingsService().init();
@@ -49,13 +52,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.dark,
-      home: const HomePage(),
-      locale: const Locale("en"),
-    );
+    final settingsService = useSettingsService();
+    return Watch((context) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.dark,
+        home: const HomePage(),
+        locale: Locale(settingsService.locale.value),
+      );
+    });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:blender_next/components/bn_logo.dart';
 import 'package:blender_next/data/model/side_menu_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'bn_sidebar_button.dart';
@@ -10,7 +11,8 @@ class BnSidebar<T> extends StatelessWidget {
   final double gap;
   final Widget child;
   final Function(T)? onItemSelected;
-  final T selectedItem;
+  final Function()? onSettingsClick;
+  final T? selectedItem;
   const BnSidebar({
     super.key,
     required this.child,
@@ -18,6 +20,7 @@ class BnSidebar<T> extends StatelessWidget {
     this.gap = 10.0,
     this.onItemSelected,
     required this.selectedItem,
+    this.onSettingsClick,
   });
 
   @override
@@ -29,6 +32,7 @@ class BnSidebar<T> extends StatelessWidget {
           children: [
             Container(
               width: 300,
+              height: MediaQuery.of(context).size.height,
               color: Theme.of(context).colorScheme.surface,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +69,21 @@ class BnSidebar<T> extends StatelessWidget {
                           ),
                       ],
                     ),
-                  )
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: gap,
+                      left: 8,
+                      right: 8,
+                    ),
+                    child: BnSidebarButton(
+                      isSelected: false,
+                      onPressed: onSettingsClick,
+                      label: "Settings",
+                      icon: const Icon(LucideIcons.settings),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -127,7 +127,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                                                       DropdownMenuItem(
                                                           value: blender,
                                                           child: Text(
-                                                              "Blender Version: ${blender.version}")))
+                                                              "Blender Version: ${blender.version}-${blender.variant.split(" ").map((e) => e[0]).join("").toLowerCase()}")))
                                                   .toList(),
                                               onChanged: (val) {
                                                 project.value = {

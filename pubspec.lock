@@ -30,6 +30,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  app_links_workspace:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "521931baf14085a4bb63e441dc03d136ab6c86bf"
+      url: "https://github.com/lijy91/app_links.git"
+    source: git
+    version: "0.0.0"
   archive:
     dependency: "direct main"
     description:
@@ -741,6 +750,14 @@ packages:
       url: "https://github.com/media-kit/media-kit"
     source: git
     version: "1.2.5"
+  menu_base:
+    dependency: transitive
+    description:
+      name: menu_base
+      sha256: "820368014a171bd1241030278e6c2617354f492f5c703d7b7d4570a6b8b84405"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   meta:
     dependency: transitive
     description:
@@ -1045,6 +1062,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  shortid:
+    dependency: transitive
+    description:
+      name: shortid
+      sha256: d0b40e3dbb50497dad107e19c54ca7de0d1a274eb9b4404991e443dadb9ebedb
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
   signals:
     dependency: "direct main"
     description:
@@ -1226,6 +1251,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  tray_manager:
+    dependency: "direct main"
+    description:
+      name: tray_manager
+      sha256: f231031c5c0eb4ad514e18ddaab27a912ddbe50335c594bc28fb0f9972ab6a84
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.1"
   typed_data:
     dependency: transitive
     description:
