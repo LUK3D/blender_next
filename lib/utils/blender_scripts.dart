@@ -55,6 +55,5 @@ Future<String> getRenderBlenderFileScript({
       .join(samples.toString())
       .replaceAll(RegExp(r'\r?\n'), ';');
 
-  print(val);
   return val.split("\n").join("; ").replaceAll("\n;", '');
 }

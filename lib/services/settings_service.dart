@@ -126,11 +126,11 @@ class SettingsService {
     showSettings.value = value ?? !showSettings.value;
   }
 
-  void setLocale(BuildContext ctx, String _locale) async {
-    if (_locale.trim().isEmpty) {
+  void setLocale(String localeValue) async {
+    if (localeValue.trim().isEmpty) {
       return;
     }
-    locale.value = _locale;
+    locale.value = localeValue;
     await box.write("locale", locale);
   }
 

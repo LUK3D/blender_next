@@ -1,5 +1,4 @@
 import 'package:blender_next/components/bn_text_input.dart';
-import 'package:blender_next/main.dart';
 import 'package:blender_next/services/settings_service.dart';
 import 'package:blender_next/utils/blender_scripts.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class GeneralSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settingsService = useSettingsService();
-    final inputWidth = 200.0;
+    const inputWidth = 200.0;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
@@ -63,7 +62,7 @@ class GeneralSettings extends StatelessWidget {
                       ),
                     ],
                     onChanged: (val) {
-                      settingsService.setLocale(ctx, val);
+                      settingsService.setLocale(val);
                     },
                   );
                 }),

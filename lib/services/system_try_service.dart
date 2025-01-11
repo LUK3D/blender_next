@@ -1,5 +1,6 @@
 import 'dart:io';
 
+// ignore: undefined_hidden_name, unused_import
 import 'package:flutter/material.dart' hide MenuItem;
 import 'package:tray_manager/tray_manager.dart';
 
@@ -19,7 +20,6 @@ class SystemTrayService {
   );
 
   static Future<void> init() async {
-    print('${Directory.current.path}/resources/app_icon.ico');
     await trayManager.setIcon(
       Platform.isWindows
           ? '${Directory.current.path}/resources/app_icon.ico'

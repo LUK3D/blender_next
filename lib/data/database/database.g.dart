@@ -5878,7 +5878,7 @@ final class $$BnextProjectExtensionsTableReferences extends BaseReferences<
 
   $$BnexProjectsTableProcessedTableManager get project {
     final manager = $$BnexProjectsTableTableManager($_db, $_db.bnexProjects)
-        .filter((f) => f.id($_item.project!));
+        .filter((f) => f.id($_item.project));
     final item = $_typedResult.readTableOrNull(_projectTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -5892,7 +5892,7 @@ final class $$BnextProjectExtensionsTableReferences extends BaseReferences<
   $$BnextExtensionsTableProcessedTableManager get bnextExtension {
     final manager =
         $$BnextExtensionsTableTableManager($_db, $_db.bnextExtensions)
-            .filter((f) => f.id($_item.bnextExtension!));
+            .filter((f) => f.id($_item.bnextExtension));
     final item = $_typedResult.readTableOrNull(_bnextExtensionTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
