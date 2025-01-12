@@ -200,6 +200,14 @@ class _HomePageState extends State<HomePage>
                                                 },
                                                 onDone: (file) {
                                                   if (file != null) {
+                                                    //Dispose the signal and clear the progress object
+                                                    blenderDownloadsTracker[
+                                                                "${blender.version}-${blender.variant}-${blender.architecture}"]
+                                                            ["progress"]
+                                                        .dispose();
+                                                    blenderDownloadsTracker[
+                                                            "${blender.version}-${blender.variant}-${blender.architecture}"] =
+                                                        null;
                                                     setState(() {});
                                                   }
                                                 },

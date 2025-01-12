@@ -32,21 +32,33 @@ class BlenderService {
     required Function(double progress) onProgress,
     required Function(File? file) onDone,
   }) async {
-    String tmpInstalationPath = '';
+    String tmpInstalationPath =
+        "${useSettingsService().getInstallersFolder()}/${blender.downloadUrl.split("/").last}";
+    File file = File(tmpInstalationPath);
+    final instalationPath =
+        "${file.parent.path}/${blender.version}-${blender.variant.split(" ").join('-').toLowerCase()}";
+
+    File blenderExe = File("$instalationPath/blender.exe");
+
+    //If there is an existing blender in this directory, return it instead of downloading a new one.
+    if (blenderExe.existsSync()) {
+      await updateBlenderState(blender.copyWith(
+          installationPath: Value(instalationPath), installed: true));
+      onDone(blenderExe);
+      return;
+    }
+
     await DownloaderService.downloadFileWithProgress(
       blender.downloadUrl,
-      "${useSettingsService().getInstallersFolder()}/${blender.downloadUrl.split("/").last}",
+      tmpInstalationPath,
       onProgress,
       onDone: (file) {
         if (file != null) {
-          tmpInstalationPath = file.path;
+          file = file;
         }
       },
     );
 
-    File file = File(tmpInstalationPath);
-    final instalationPath =
-        "${file.parent.path}/${blender.version}-${blender.variant.split(" ").join('-').toLowerCase()}";
     await extractFileToDisk(tmpInstalationPath, file.parent.path);
     final dir = Directory(file.path.split(".zip").join(""));
     await Future.delayed(const Duration(seconds: 2));
@@ -57,7 +69,7 @@ class BlenderService {
     await file.delete();
     await updateBlenderState(blender.copyWith(
         installationPath: Value(instalationPath), installed: true));
-    final blenderExe = File("$instalationPath/blender.exe");
+    blenderExe = File("$instalationPath/blender.exe");
     onDone(blenderExe);
   }
 
@@ -66,10 +78,14 @@ class BlenderService {
       return;
     }
     final dir = Directory(blender.installationPath!);
-    await dir.delete(recursive: true);
+    if (dir.existsSync()) {
+      await dir.delete(recursive: true);
+    }
 
-    updateBlenderState(
-        blender.copyWith(installed: false, installationPath: const Value("")));
+    updateBlenderState(blender.copyWith(
+      installed: false,
+      installationPath: const Value(""),
+    ));
   }
 
   Future updateBlenderState(BlenderVersion blender) async {
