@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:blender_next/components/video_player.dart';
 import 'package:blender_next/data/database/database.dart';
+import 'package:blender_next/features/home/screens/settings/Components/btn_row.dart';
 import 'package:blender_next/services/exntesions_service.dart';
 import 'package:blender_next/utils/utils.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:numeral/numeral.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ExtensionDetailsScreen extends StatefulWidget {
   final BnextExtension bnextExtension;
@@ -140,7 +142,8 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
                                   padding: const EdgeInsets.only(right: 80.0),
                                   child: TextButton.icon(
                                     onPressed: () {},
-                                    label: const Text("Download"),
+                                    label: Text(
+                                        AppLocalizations.of(context)!.download),
                                     icon:
                                         const Icon(LucideIcons.cloud_download),
                                     style: TextButton.styleFrom(
@@ -401,205 +404,174 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Developer:")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.developer}:"),
+                                        input: Text(
+                                          ext.maintainer ?? "",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            ext.maintainer ?? "",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Version:")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.version}:"),
+                                        input: Text(
+                                          ext.version ?? "",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            ext.version ?? "",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Last Updated at:")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.lastUpdatedAt}:"),
+                                        input: Text(
+                                          ext.lastUpdateOn
+                                                  .toString()
+                                                  .split(" ")
+                                                  .firstOrNull ??
+                                              "",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            ext.lastUpdateOn
-                                                    .toString()
-                                                    .split(" ")
-                                                    .firstOrNull ??
-                                                "",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Published on:")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.publishedOn}:"),
+                                        input: Text(
+                                          ext.publishedOn
+                                                  .toString()
+                                                  .split(" ")
+                                                  .firstOrNull ??
+                                              "",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            ext.publishedOn
-                                                    .toString()
-                                                    .split(" ")
-                                                    .firstOrNull ??
-                                                "",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Downloads")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.downloads}:"),
+                                        input: Text(
+                                          ext.downloads?.toString() ?? "",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            ext.downloads?.toString() ?? "",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150, child: Text("Size")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.size}:"),
+                                        input: Text(
+                                          ext.size?.toString() ?? "",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            ext.size?.toString() ?? "",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Compatibility:")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.compatibility}:"),
+                                        input: Text(
+                                          "Blender ${ext.blenderMinVersion?.toString() ?? ''} and newer",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            "Blender ${ext.blenderMinVersion?.toString() ?? ''} and newer",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Licence:")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.licence}:"),
+                                        input: Text(
+                                          ext.licence ?? "",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            ext.licence ?? "",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Report issue:")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.reportIssue}:"),
+                                        input: Text(
+                                          ellipseString(ext.supportUrl ?? "",
+                                              maxLength: 40),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            ellipseString(ext.supportUrl ?? "",
-                                                maxLength: 45),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            softWrap: true,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Row(
-                                        children: [
-                                          const SizedBox(
-                                              width: 150,
-                                              child: Text("Website:")),
-                                          const SizedBox(
-                                            width: 10,
+                                      BnRow(
+                                        height: 20,
+                                        labelWith: 150,
+                                        backgroundColor: Colors.transparent,
+                                        label: Text(
+                                            "${AppLocalizations.of(context)!.website}:"),
+                                        input: Text(
+                                          ellipseString(
+                                            ext.website ?? "",
+                                            maxLength: 40,
                                           ),
-                                          Text(
-                                            ellipseString(ext.website ?? "",
-                                                maxLength: 45),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),

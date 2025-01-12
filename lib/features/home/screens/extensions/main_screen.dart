@@ -365,7 +365,9 @@ class _ExtensionsMainScreenState extends State<ExtensionsMainScreen> {
                                                   .colorScheme
                                                   .onSurface,
                                             ),
-                                            label: const Text("Download"),
+                                            label: Text(
+                                                AppLocalizations.of(context)!
+                                                    .download),
                                           ),
                                         )
                                       ],

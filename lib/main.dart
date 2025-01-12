@@ -30,7 +30,7 @@ void main() async {
   WindowOptions windowOptions = const WindowOptions(
     size: Size(1200, 800),
     minimumSize: Size(1200, 800),
-    maximumSize: Size(1200, 800),
+    // maximumSize: Size(1200, 800),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
@@ -41,7 +41,7 @@ void main() async {
     await windowManager.show();
     await windowManager.focus();
     await windowManager.setResizable(false);
-    await windowManager.setMaximizable(false);
+    // await windowManager.setMaximizable(false);
   });
 
   runApp(const MainApp());

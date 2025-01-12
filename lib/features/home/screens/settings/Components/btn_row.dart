@@ -6,6 +6,8 @@ class BnRow extends StatelessWidget {
   final double? labelWith;
   final double? inputWidth;
   final double? inputMaxWidth;
+  final Color? backgroundColor;
+  final double? height;
 
   const BnRow({
     super.key,
@@ -14,18 +16,23 @@ class BnRow extends StatelessWidget {
     this.labelWith,
     this.inputWidth,
     this.inputMaxWidth,
+    this.backgroundColor,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: height ?? 40,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             width: labelWith,
+            height: height ?? 40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 label,
               ],
@@ -36,9 +43,10 @@ class BnRow extends StatelessWidget {
           ),
           Container(
             width: inputWidth,
-            height: 40,
+            height: height ?? 40,
             decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
+              color:
+                  backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child: input,

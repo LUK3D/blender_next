@@ -100,7 +100,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
 
                                         if (builds.isEmpty) {
                                           return Padding(
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 vertical: 8),
                                             child: Text(
                                                 AppLocalizations.of(context)!
