@@ -4,6 +4,12 @@
 
 > This project is still under development
 
+Checkout our youtube cahnnel and discord for more updates and download link
+
+| Discrod                                       | Youtube                                                 |
+| --------------------------------------------- | ------------------------------------------------------- |
+| [Discord Server](https://discord.gg/JUrSyXD7) | [Youtube channel](https://www.youtube.com/@blendernext) |
+
 Blender Next is a free and open-source desktop application built with Flutter,
 focusing on Windows users. It streamlines Blender workflows by integrating
 project management, command-line execution for automated tasks, and version
