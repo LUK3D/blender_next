@@ -171,10 +171,20 @@ class _ExtensionsMainScreenState extends State<ExtensionsMainScreen> {
                                                           .size
                                                           .width *
                                                       0.4,
-                                                  child: Image.network(
-                                                    ext.cover ?? "",
-                                                    fit: BoxFit.cover,
-                                                  ),
+                                                  child: (ext.cover != null &&
+                                                          !(ext.cover?.contains(
+                                                                  "orgnull") ==
+                                                              true))
+                                                      ? Image.network(
+                                                          (ext.cover?.contains(
+                                                                      "orgnull") ==
+                                                                  true
+                                                              ? ""
+                                                              : ext.cover ??
+                                                                  ""),
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : const SizedBox(),
                                                 ),
                                               ),
                                             ),

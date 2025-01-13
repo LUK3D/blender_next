@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:animated_rating_stars/animated_rating_stars.dart';
+import 'package:blender_next/components/bn_sidebar_button.dart';
 import 'package:blender_next/components/video_player.dart';
 import 'package:blender_next/data/database/database.dart';
+import 'package:blender_next/features/home/screens/settings/Components/bn_select.dart';
 import 'package:blender_next/features/home/screens/settings/Components/btn_row.dart';
 import 'package:blender_next/services/exntesions_service.dart';
 import 'package:blender_next/utils/utils.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:numeral/numeral.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:signals/signals_flutter.dart';
 
 class ExtensionDetailsScreen extends StatefulWidget {
   final BnextExtension bnextExtension;
@@ -26,9 +29,12 @@ class ExtensionDetailsScreen extends StatefulWidget {
   State<ExtensionDetailsScreen> createState() => _ExtensionDetailsScreenState();
 }
 
-class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
+class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
+    with SignalsMixin {
   final extService = useExntesionsService();
   final carouselController = CarouselSliderController();
+  late final selectedTab = createSignal(0);
+  late final versionsSignals = createSignal({});
   @override
   void initState() {
     super.initState();
@@ -138,21 +144,63 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
                                     )
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 80.0),
-                                  child: TextButton.icon(
-                                    onPressed: () {},
-                                    label: Text(
-                                        AppLocalizations.of(context)!.download),
-                                    icon:
-                                        const Icon(LucideIcons.cloud_download),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: Colors.white,
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    StreamBuilder(
+                                      stream: extService.db.database
+                                          .getExtensionVersionByExtensionIdSteam(
+                                              ext.id!),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const SizedBox();
+                                        }
+
+                                        final data = snapshot.data!;
+                                        return Container(
+                                          width: 130,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Theme.of(context).canvasColor,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: BnSelect(
+                                            selectedValue: data.first.version,
+                                            onChanged: (val) {},
+                                            items: data.map((extVersion) {
+                                              return BnSelectItem(
+                                                  label:
+                                                      "Version ${extVersion.version}",
+                                                  value: extVersion.version);
+                                            }).toList(),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  ),
-                                ),
+                                    const SizedBox(
+                                      width: 40,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 80.0),
+                                      child: TextButton.icon(
+                                        onPressed: () {},
+                                        label: Text(
+                                            AppLocalizations.of(context)!
+                                                .download),
+                                        icon: const Icon(
+                                            LucideIcons.cloud_download),
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.white,
+                                          backgroundColor:
+                                              Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             )
                           ],
@@ -583,30 +631,155 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        const Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                "About",
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                        DefaultTabController(
+                          length: 2,
+                          child: Column(
+                            children: [
+                              TabBar(
+                                dividerColor: Colors.transparent,
+                                tabAlignment: TabAlignment.start,
+                                isScrollable: true,
+                                labelPadding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
                                 ),
+                                tabs: const [
+                                  Tab(
+                                    child: Text(
+                                      "About",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25,
+                                      ),
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: Text(
+                                      "AllVersions",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                onTap: (value) {
+                                  selectedTab.value = value;
+                                },
                               ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).cardColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Markdown(
-                            shrinkWrap: true,
-                            selectable: true,
-                            data: ext.mdDescriptio ?? "",
+                              if (selectedTab.value == 0)
+                                Container(
+                                  margin: const EdgeInsets.only(top: 10),
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).cardColor,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Markdown(
+                                    shrinkWrap: true,
+                                    selectable: true,
+                                    data: ext.mdDescriptio ?? "",
+                                  ),
+                                )
+                              else
+                                Container(
+                                  margin: const EdgeInsets.only(top: 10),
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      minHeight: 300,
+                                    ),
+                                    child: StreamBuilder(
+                                      stream: extService.db.database
+                                          .getExtensionVersionByExtensionIdSteam(
+                                              ext.id!),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const Center(
+                                            child: Text("No versions found"),
+                                          );
+                                        }
+                                        final data = snapshot.data!;
+
+                                        return Watch((ctx) =>
+                                            ExpansionPanelList(
+                                              dividerColor: Theme.of(context)
+                                                  .dividerColor,
+                                              materialGapSize: 4,
+                                              expansionCallback:
+                                                  (panelIndex, isExpanded) {
+                                                versionsSignals.value = {
+                                                  ...versionsSignals.value,
+                                                  data[panelIndex].version:
+                                                      isExpanded
+                                                };
+                                              },
+                                              children: data.map((version) {
+                                                if (versionsSignals.value[
+                                                        version.version] ==
+                                                    null) {
+                                                  versionsSignals.value[
+                                                      version.version] = true;
+                                                }
+                                                return ExpansionPanel(
+                                                  canTapOnHeader: true,
+                                                  isExpanded: versionsSignals
+                                                      .value[version.version],
+                                                  headerBuilder:
+                                                      (BuildContext context,
+                                                          bool isExpanded) {
+                                                    return ListTile(
+                                                      trailing: SizedBox(
+                                                        width: 150,
+                                                        child: BnSidebarButton(
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .canvasColor,
+                                                          label: "Download",
+                                                          icon: const Icon(
+                                                              LucideIcons
+                                                                  .cloud_download),
+                                                          onPressed: () {},
+                                                        ),
+                                                      ),
+                                                      title: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(version.version),
+                                                          const SizedBox(
+                                                            width: 20,
+                                                          ),
+                                                          Opacity(
+                                                            opacity: 0.5,
+                                                            child: Text(
+                                                              "for Blender ${version.blenderMinVersion}",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                  body: ListTile(
+                                                    subtitle: Markdown(
+                                                      data: version
+                                                              .releaseNotes ??
+                                                          "",
+                                                      shrinkWrap: true,
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            ));
+                                      },
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       ],

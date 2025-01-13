@@ -21,6 +21,7 @@ class SettingsService {
   late final thumbnailSize = signal<Size>(const Size(250, 250));
   late final thumbnailSamples = signal(0.0);
   late final thumbnailFrame = signal(1);
+  late final extentionsDir = signal("");
 
   Future init() async {
     await GetStorage.init();
@@ -33,6 +34,7 @@ class SettingsService {
     thumbnailSize.value = getThumbnailSize();
     thumbnailSamples.value = getThumbnailSamples();
     thumbnailFrame.value = getThumbnailFrame();
+    extentionsDir.value = getExtensionsDir();
   }
 
   String getContentPath() {
@@ -77,6 +79,18 @@ class SettingsService {
 
   String getDefaultRenderingEngine() {
     return box.read<String>("default_rendering_engine") ?? BlenderEngines.eevee;
+  }
+
+  Future<void> setExtensionsDir(String? path) async {
+    if (path == null || path.isEmpty) {
+      return;
+    }
+    extentionsDir.value = path;
+    await box.write("extensions_dir", path);
+  }
+
+  String getExtensionsDir() {
+    return box.read("extensions_dir") ?? "${getContentPath()}/extensions";
   }
 
   setThumbnailSize({double? width, double? height}) async {

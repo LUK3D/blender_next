@@ -100,13 +100,24 @@ class BnextProjectExtensions extends Table with TableMixin {
   late final bnextExtension = integer().references(BnextExtensions, #id)();
 }
 
+class BnextExtensionVersions extends Table with TableMixin {
+  late final ext = integer().references(BnextExtensions, #id)();
+  late final version = text()();
+  late final blenderMinVersion = text().nullable()();
+  late final downloadUrl = text().nullable()();
+  late final instalationPath = text().nullable()();
+  late final releaseNotes = text().nullable()();
+  late final metaData = text().nullable()();
+}
+
 @DriftDatabase(tables: [
   BlenderVersions,
   SplashScreens,
   BnextInfo,
   BnexProjects,
   BnextExtensions,
-  BnextProjectExtensions
+  BnextProjectExtensions,
+  BnextExtensionVersions,
 ])
 class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter
@@ -140,7 +151,8 @@ class AppDatabase extends _$AppDatabase {
   Future<List<BnextExtension>> get getExtensions =>
       select(bnextExtensions).get();
 
-  Future insertExtensions(List<BnextExtension> extensions) async {
+  Future<List<BnextExtension>> insertExtensions(
+      List<BnextExtension> extensions) async {
     final List<BnextExtension> toBeInserted = [];
     for (var ext in extensions) {
       var exists = await (select(bnextExtensions)
@@ -187,6 +199,9 @@ class AppDatabase extends _$AppDatabase {
     await batch((batch) {
       batch.insertAll(bnextExtensions, toBeInserted);
     });
+    return managers.bnextExtensions
+        .filter((f) => f.extId.isIn(extensions.map((e) => e.extId!)))
+        .get();
   }
 
   Future<BnextExtension> updateExtension(BnextExtension ext) async {
@@ -211,6 +226,49 @@ class AppDatabase extends _$AppDatabase {
 
   Stream<List<BnextExtension>> getExtensionsStream() {
     return managers.bnextExtensions.orderBy((o) => o.stars.desc()).watch();
+  }
+
+  Future createExtensionVersions(
+    List<BnextExtensionVersion> extVersions,
+  ) async {
+    final List<BnextExtensionVersion> toBeInserted = [];
+
+    for (var ext in extVersions) {
+      if ((await managers.bnextExtensionVersions
+              .filter((f) => f.version.equals(ext.version))
+              .get())
+          .isEmpty) {
+        toBeInserted.add(ext);
+      }
+    }
+
+    await batch((batch) {
+      batch.insertAll(bnextExtensionVersions, toBeInserted);
+    });
+
+    return await getExtensionVersionByExtensionId(extVersions.first.ext);
+  }
+
+  Future<BnextExtensionVersion> updateExtensionVersion(
+      BnextExtensionVersion extVersion) async {
+    await managers.bnextExtensionVersions
+        .filter((f) => f.id.equals(extVersion.id))
+        .update((f) => extVersion);
+    return extVersion;
+  }
+
+  Future<List<BnextExtensionVersion>> getExtensionVersionByExtensionId(
+      int id) async {
+    return await managers.bnextExtensionVersions
+        .filter((f) => f.ext.id.equals(id))
+        .get();
+  }
+
+  Stream<List<BnextExtensionVersion>> getExtensionVersionByExtensionIdSteam(
+      int id) {
+    return managers.bnextExtensionVersions
+        .filter((f) => f.ext.id.equals(id))
+        .watch();
   }
 
   static QueryExecutor _openConnection() {
