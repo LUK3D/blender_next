@@ -284,8 +284,11 @@ class ExntesionsService {
             "",
         releaseNotes: mdDescription,
         downloadUrl: downloadUrl,
-        blenderMinVersion:
-            downloadUrl?.split("blender_version_min=").lastOrNull,
+        blenderMinVersion: downloadUrl
+            ?.split("blender_version_min=")
+            .lastOrNull
+            ?.split("-")
+            .firstOrNull,
         metaData: jsonEncode({
           "downloads": extDetailInfo
               .elementAtOrNull(1)

@@ -152,7 +152,8 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
                                           .getExtensionVersionByExtensionIdSteam(
                                               ext.id!),
                                       builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
+                                        if (!snapshot.hasData ||
+                                            snapshot.data?.isEmpty == true) {
                                           return const SizedBox();
                                         }
 
@@ -693,7 +694,8 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
                                           .getExtensionVersionByExtensionIdSteam(
                                               ext.id!),
                                       builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
+                                        if (!snapshot.hasData ||
+                                            snapshot.data?.isEmpty == true) {
                                           return const Center(
                                             child: Text("No versions found"),
                                           );
