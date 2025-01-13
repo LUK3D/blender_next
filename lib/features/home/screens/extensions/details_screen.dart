@@ -655,7 +655,7 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
                                   ),
                                   Tab(
                                     child: Text(
-                                      "AllVersions",
+                                      "All Versions",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25,
