@@ -11,7 +11,6 @@ import 'package:drift/drift.dart';
 import 'package:html/parser.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:logger/logger.dart';
-import 'package:signals/signals.dart';
 
 class ExntesionsService {
   static final ExntesionsService _singleton = ExntesionsService._internal();

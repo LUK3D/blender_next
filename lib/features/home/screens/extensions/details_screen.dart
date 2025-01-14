@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:animated_rating_stars/animated_rating_stars.dart';
-import 'package:blender_next/components/bn_sidebar_button.dart';
 import 'package:blender_next/components/video_player.dart';
 import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/features/home/screens/settings/Components/bn_select.dart';
