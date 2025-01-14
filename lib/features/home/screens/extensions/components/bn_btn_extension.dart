@@ -21,7 +21,10 @@ class BnBtnExtension extends StatelessWidget {
     return SizedBox(
       width: 150,
       child: BnSidebarButton(
-        backgroundColor: Theme.of(context).canvasColor,
+        backgroundColor: downloaded && !downloading
+            ? Theme.of(context).canvasColor
+            : Theme.of(context).primaryColor,
+        foregroundColor: downloaded && !downloading ? null : Colors.white,
         label: downloaded && !downloading ? "Remove" : "Download",
         icon: downloading
             ? Padding(
