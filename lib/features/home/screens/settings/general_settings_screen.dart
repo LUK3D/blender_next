@@ -111,6 +111,23 @@ class GeneralSettings extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              BnRow(
+                labelWith: inputWidth,
+                inputWidth: 300,
+                label: const Text("Extension installation dir:"),
+                input: Watch(
+                  (ctx) => BnFileDialogInput<String?>(
+                    inputStringValue: settingsService.extentionsDir.value,
+                    dialogType: BnDialogType.dialog,
+                    onSelected: (val) {
+                      settingsService.setExtensionsDir(val);
+                    },
+                  ),
+                ),
+              ),
               Divider(
                 height: 40,
                 color: Theme.of(context).dividerColor,

@@ -16,6 +16,8 @@ import 'package:numeral/numeral.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:signals/signals_flutter.dart';
 
+import 'components/bn_btn_extension.dart';
+
 class ExtensionDetailsScreen extends StatefulWidget {
   final BnextExtension bnextExtension;
   final Function onDismiss;
@@ -35,6 +37,8 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
   final carouselController = CarouselSliderController();
   late final selectedTab = createSignal(0);
   late final versionsSignals = createSignal({});
+  late final seelctedVersion = createSignal("");
+  BnextExtensionVersion? selectedVersionObj;
   @override
   void initState() {
     super.initState();
@@ -59,7 +63,16 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
                   }
                   final ext = snapshot.data!;
                   final carouselItems = List<Map<String, dynamic>>.from(
-                      jsonDecode(ext.mediaUrls ?? "[]"));
+                    jsonDecode(ext.mediaUrls ?? "[]"),
+                  );
+
+                  extService.extensionsDownloadQueue[
+                      '${ext.extId}-${seelctedVersion.value}'] ??= {};
+
+                  final downloading = extService.extensionsDownloadQueue[
+                              '${ext.extId}-${seelctedVersion.value}']
+                          ["downloading"] ??
+                      false;
 
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -72,136 +85,213 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 90,
-                                      height: 90,
-                                      clipBehavior: Clip.antiAlias,
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context).canvasColor,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: (ext.icon == null)
-                                          ? null
-                                          : Image.network(
-                                              ext.icon!,
-                                              fit: BoxFit.cover,
-                                            ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          ext.name ?? "",
-                                          style: const TextStyle(
-                                            fontSize: 30,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                SizedBox(
+                                  height: 110,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.67,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 90,
+                                        height: 90,
+                                        clipBehavior: Clip.antiAlias,
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).canvasColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
-                                        Text(ext.description ?? ''),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              LucideIcons.user_round,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(ext.maintainer ?? ""),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                              width: 30,
-                                              height: 30,
-                                              child: IconButton.filled(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  LucideIcons.external_link,
-                                                  size: 15,
-                                                ),
-                                                style: IconButton.styleFrom(
-                                                  backgroundColor:
-                                                      Theme.of(context)
-                                                          .cardColor,
-                                                ),
+                                        child: (ext.icon == null)
+                                            ? null
+                                            : Image.network(
+                                                ext.icon!,
+                                                fit: BoxFit.cover,
                                               ),
-                                            )
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  ext.name ?? "",
+                                                  style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                const Spacer(),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    StreamBuilder(
+                                                      stream: extService
+                                                          .db.database
+                                                          .getExtensionVersionByExtensionIdSteam(
+                                                              ext.id!),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (!snapshot.hasData ||
+                                                            snapshot.data
+                                                                    ?.isEmpty ==
+                                                                true) {
+                                                          return const SizedBox();
+                                                        }
+
+                                                        if (seelctedVersion
+                                                                .value ==
+                                                            '') {
+                                                          seelctedVersion
+                                                                  .value =
+                                                              snapshot
+                                                                  .data!
+                                                                  .first
+                                                                  .version;
+                                                        }
+
+                                                        final version = snapshot
+                                                            .data!
+                                                            .where((v) =>
+                                                                v.version ==
+                                                                seelctedVersion
+                                                                    .value)
+                                                            .firstOrNull;
+
+                                                        final data =
+                                                            snapshot.data!;
+                                                        return Row(
+                                                          children: [
+                                                            Container(
+                                                              height: 40,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .canvasColor,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                              ),
+                                                              child: BnSelect(
+                                                                selectedValue:
+                                                                    seelctedVersion
+                                                                        .value,
+                                                                onChanged:
+                                                                    (val) {
+                                                                  seelctedVersion
+                                                                          .value =
+                                                                      val;
+                                                                },
+                                                                items: data.map(
+                                                                    (extVersion) {
+                                                                  return BnSelectItem(
+                                                                      label:
+                                                                          "Version ${extVersion.version.split('-').firstOrNull}",
+                                                                      value: extVersion
+                                                                          .version);
+                                                                }).toList(),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 30,
+                                                            ),
+                                                            (version == null)
+                                                                ? const SizedBox()
+                                                                : BnBtnExtension(
+                                                                    downloaded: version.instalationPath !=
+                                                                            null &&
+                                                                        (version.instalationPath?.isNotEmpty ==
+                                                                            true),
+                                                                    downloading:
+                                                                        downloading,
+                                                                    onDownload:
+                                                                        () {
+                                                                      extService
+                                                                          .downloadExtention(
+                                                                        ext,
+                                                                        version,
+                                                                        onDone:
+                                                                            (_) {
+                                                                          setState(
+                                                                              () {});
+                                                                        },
+                                                                      );
+                                                                      setState(
+                                                                          () {});
+                                                                    },
+                                                                    onRemove:
+                                                                        () {
+                                                                      extService
+                                                                          .uninstallExtension(
+                                                                        version,
+                                                                      )
+                                                                          .then(
+                                                                              (_) {
+                                                                        setState(
+                                                                            () {});
+                                                                      });
+                                                                    },
+                                                                  ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            Text(ext.description ?? ''),
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  LucideIcons.user_round,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(ext.maintainer ?? ""),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                SizedBox(
+                                                  width: 30,
+                                                  height: 30,
+                                                  child: IconButton.filled(
+                                                    onPressed: () {},
+                                                    icon: const Icon(
+                                                      LucideIcons.external_link,
+                                                      size: 15,
+                                                    ),
+                                                    style: IconButton.styleFrom(
+                                                      backgroundColor:
+                                                          Theme.of(context)
+                                                              .cardColor,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ],
                                         ),
-                                      ],
-                                    )
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    StreamBuilder(
-                                      stream: extService.db.database
-                                          .getExtensionVersionByExtensionIdSteam(
-                                              ext.id!),
-                                      builder: (context, snapshot) {
-                                        if (!snapshot.hasData ||
-                                            snapshot.data?.isEmpty == true) {
-                                          return const SizedBox();
-                                        }
-
-                                        final data = snapshot.data!;
-                                        return Container(
-                                          width: 130,
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            color:
-                                                Theme.of(context).canvasColor,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: BnSelect(
-                                            selectedValue: data.first.version,
-                                            onChanged: (val) {},
-                                            items: data.map((extVersion) {
-                                              return BnSelectItem(
-                                                  label:
-                                                      "Version ${extVersion.version}",
-                                                  value: extVersion.version);
-                                            }).toList(),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      width: 40,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 80.0),
-                                      child: TextButton.icon(
-                                        onPressed: () {},
-                                        label: Text(
-                                            AppLocalizations.of(context)!
-                                                .download),
-                                        icon: const Icon(
-                                            LucideIcons.cloud_download),
-                                        style: TextButton.styleFrom(
-                                          foregroundColor: Colors.white,
-                                          backgroundColor:
-                                              Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
                               ],
                             )
                           ],
@@ -722,6 +812,16 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
                                                   versionsSignals.value[
                                                       version.version] = true;
                                                 }
+
+                                                final downloadIng = extService
+                                                    .extensionsDownloadQueue;
+
+                                                if (downloadIng[
+                                                        '${ext.extId}-${version.version}'] ==
+                                                    null) {
+                                                  downloadIng[
+                                                      '${ext.extId}-${version.version}'] = {};
+                                                }
                                                 return ExpansionPanel(
                                                   canTapOnHeader: true,
                                                   isExpanded: versionsSignals
@@ -729,19 +829,40 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
                                                   headerBuilder:
                                                       (BuildContext context,
                                                           bool isExpanded) {
+                                                    final downloading = (downloadIng[
+                                                                '${ext.extId}-${version.version}']
+                                                            ["downloading"] ==
+                                                        true);
                                                     return ListTile(
-                                                      trailing: SizedBox(
-                                                        width: 150,
-                                                        child: BnSidebarButton(
-                                                          backgroundColor:
-                                                              Theme.of(context)
-                                                                  .canvasColor,
-                                                          label: "Download",
-                                                          icon: const Icon(
-                                                              LucideIcons
-                                                                  .cloud_download),
-                                                          onPressed: () {},
-                                                        ),
+                                                      trailing: BnBtnExtension(
+                                                        downloaded: version
+                                                                    .instalationPath !=
+                                                                null &&
+                                                            (version.instalationPath
+                                                                    ?.isNotEmpty ==
+                                                                true),
+                                                        downloading:
+                                                            downloading,
+                                                        onDownload: () {
+                                                          extService
+                                                              .downloadExtention(
+                                                            ext,
+                                                            version,
+                                                            onDone: (_) {
+                                                              setState(() {});
+                                                            },
+                                                          );
+                                                          setState(() {});
+                                                        },
+                                                        onRemove: () {
+                                                          extService
+                                                              .uninstallExtension(
+                                                            version,
+                                                          )
+                                                              .then((_) {
+                                                            setState(() {});
+                                                          });
+                                                        },
                                                       ),
                                                       title: Row(
                                                         crossAxisAlignment:
@@ -792,6 +913,7 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
         ),
         Positioned(
             right: 16,
+            top: 17,
             child: IconButton.filled(
               onPressed: () {
                 widget.onDismiss();

@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:html/parser.dart';
 import 'package:html2md/html2md.dart' as html2md;
+import 'package:logger/logger.dart';
 import 'package:signals/signals.dart';
 
 class ExntesionsService {
@@ -26,7 +27,7 @@ class ExntesionsService {
   int lastPage = 1;
   int currentPage = 5;
 
-  final extensionsSignal = signal({});
+  Map<String, dynamic> extensionsDownloadQueue = <String, dynamic>{};
 
   Future<ExntesionsService> initializeData() async {
     getExtensions();
@@ -324,40 +325,69 @@ class ExntesionsService {
   }
 
   Future<File?> downloadExtention(
-      BnextExtension ext, BnextExtensionVersion extversion) async {
+      BnextExtension ext, BnextExtensionVersion extversion,
+      {Function(File? file)? onDone}) async {
     if (extversion.downloadUrl == null) {
       return null;
     }
-    extensionsSignal.value["${ext.extId}-${extversion.version}"] = signal({
+
+    extensionsDownloadQueue["${ext.extId}-${extversion.version}"] = {
       "progress": 0.0,
-    });
+      "downloading": true,
+    };
     Directory dir = Directory(extensionsService.getExtensionsDir());
     final finalExtPath = "${dir.path}/${ext.extId}-${extversion.version}.zip";
 
     File? extFile = File(finalExtPath);
 
-    await DownloaderService.downloadFileWithProgress(
-      extversion.downloadUrl!,
-      dir.path,
-      (progress) {
-        extensionsSignal.value["${ext.extId}-${extversion.version}"] = {
-          "progress": progress
-        };
-      },
-      onDone: (file) {
-        extFile = file;
-        extensionsSignal.value["${ext.extId}-${extversion.version}"] = {
-          "done": true,
-        };
-      },
-    );
+    if (!extFile.existsSync()) {
+      await DownloaderService.downloadFileWithProgress(
+        "https://extensions.blender.org${extversion.downloadUrl!}",
+        extFile.path,
+        (progress) {
+          Logger().i(progress);
+          extensionsDownloadQueue["${ext.extId}-${extversion.version}"]
+              ["progress"] = progress;
+        },
+        onDone: (file) {
+          extFile = file;
+        },
+      );
+    }
+    extensionsDownloadQueue["${ext.extId}-${extversion.version}"]["done"] =
+        true;
+    extensionsDownloadQueue["${ext.extId}-${extversion.version}"]
+        ["downloading"] = false;
+    onDone?.call(extFile);
+
+    extFile = File(finalExtPath);
 
     if (extFile == null || !extFile!.existsSync()) {
       return null;
     }
+
+    await db.database.updateExtensionVersion(extversion.copyWith(
+      instalationPath: Value(extFile!.path),
+    ));
     await extFile!.rename(finalExtPath);
 
     return extFile;
+  }
+
+  Future uninstallExtension(BnextExtensionVersion extVersion) async {
+    if (extVersion.instalationPath == null) {
+      return;
+    }
+    File file = File(extVersion.instalationPath!);
+
+    if (await file.exists()) {
+      await file.delete(recursive: true);
+    }
+    await db.database.updateExtensionVersion(
+      extVersion.copyWith(
+        instalationPath: const Value(''),
+      ),
+    );
   }
 }
 

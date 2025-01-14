@@ -16,6 +16,10 @@ class DownloaderService {
       {Function(File? file)? onDone}) async {
     Dio dio = Dio();
 
+    final file = File(savePath);
+
+    Directory(file.parent.path);
+
     try {
       await dio.download(
         url,
@@ -29,9 +33,9 @@ class DownloaderService {
         },
       );
       Logger().i(savePath);
-      final file = File(savePath);
+      final finalFile = File(savePath);
 
-      final result = await file.exists() ? file : null;
+      final result = await finalFile.exists() ? finalFile : null;
       onDone?.call(result);
       return result;
     } catch (e) {
