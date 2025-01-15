@@ -8,6 +8,7 @@ import 'package:blender_next/services/settings_service.dart';
 import 'package:blender_next/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/widgets.dart';
 import 'package:html/parser.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:logger/logger.dart';
@@ -371,6 +372,37 @@ class ExntesionsService {
     await extFile!.rename(finalExtPath);
 
     return extFile;
+  }
+
+  BnextExtensionVersion makeVersion(BnextExtension ext) {
+    return BnextExtensionVersion(
+      ext: ext.id!,
+      version: ext.version ?? "",
+      blenderMinVersion: ext.blenderMinVersion,
+      downloadUrl: "/${ext.downloadUrl?.split(".org/").lastOrNull}",
+      releaseNotes: ext.mdDescriptio,
+    );
+  }
+
+  Future<File?> downloadExtentionWithoutVesion(BnextExtension ext,
+      {Function(File? file)? onDone}) async {
+    extensionsDownloadQueue["${ext.extId}-${ext.version}"] = {
+      "progress": 0.0,
+      "downloading": true,
+    };
+    final tmpExtversion = makeVersion(ext);
+
+    final result = await db.database.createExtensionVersions([tmpExtversion]);
+    final extversion = result.firstOrNull;
+    if (extversion == null || extversion.downloadUrl == null) {
+      return null;
+    }
+
+    return await downloadExtention(
+      ext,
+      extversion,
+      onDone: onDone,
+    );
   }
 
   Future uninstallExtension(BnextExtensionVersion extVersion) async {

@@ -228,16 +228,17 @@ class AppDatabase extends _$AppDatabase {
     return managers.bnextExtensions.orderBy((o) => o.stars.desc()).watch();
   }
 
-  Future createExtensionVersions(
+  Future<List<BnextExtensionVersion>> createExtensionVersions(
     List<BnextExtensionVersion> extVersions,
   ) async {
     final List<BnextExtensionVersion> toBeInserted = [];
 
     for (var ext in extVersions) {
-      if ((await managers.bnextExtensionVersions
-              .filter((f) => f.version.equals(ext.version))
-              .get())
-          .isEmpty) {
+      final result = (await managers.bnextExtensionVersions
+          .filter(
+              (f) => f.version.equals(ext.version) & f.ext.id.equals(ext.ext))
+          .get());
+      if (result.isEmpty) {
         toBeInserted.add(ext);
       }
     }
@@ -275,5 +276,15 @@ class AppDatabase extends _$AppDatabase {
     // `driftDatabase` from `package:drift_flutter` stores the database in
     // `getApplicationDocumentsDirectory()`.
     return driftDatabase(name: 'temp_db_1');
+  }
+
+  Future<List<BnextExtensionVersion>> installedExtensions(
+      BnextExtension ext) async {
+    return await managers.bnextExtensionVersions
+        .filter((f) =>
+            f.instalationPath.not.equals(null) &
+            f.instalationPath.not.equals("") &
+            f.ext.id.equals(ext.id))
+        .get();
   }
 }

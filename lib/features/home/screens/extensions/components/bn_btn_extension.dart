@@ -1,31 +1,48 @@
 import 'package:blender_next/components/bn_sidebar_button.dart';
+import 'package:blender_next/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 
 class BnBtnExtension extends StatelessWidget {
   final bool downloading;
   final bool downloaded;
-  final Function onDownload;
-  final Function onRemove;
+  final Function? onDownload;
+  final Function? onRemove;
+  final double? borderRadius;
+  final double? width;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final AlignmentGeometry? alignment;
+  final String? label;
 
   const BnBtnExtension({
     super.key,
     required this.downloading,
     required this.downloaded,
-    required this.onDownload,
-    required this.onRemove,
+    this.onDownload,
+    this.onRemove,
+    this.borderRadius,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.width,
+    this.alignment,
+    this.label,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 150,
+      width: width ?? 150,
       child: BnSidebarButton(
-        backgroundColor: downloaded && !downloading
+        alignment: alignment,
+        borderRadius: borderRadius ?? 10,
+        backgroundColor: downloaded || downloading
             ? Theme.of(context).canvasColor
-            : Theme.of(context).primaryColor,
-        foregroundColor: downloaded && !downloading ? null : Colors.white,
-        label: downloaded && !downloading ? "Remove" : "Download",
+            : (backgroundColor ?? Theme.of(context).primaryColor),
+        foregroundColor: downloaded || downloading
+            ? null
+            : (foregroundColor ?? Colors.white),
+        label: downloaded && !downloading ? "Remove" : (label ?? "Download"),
         icon: downloading
             ? Padding(
                 padding: const EdgeInsets.all(7.0),
@@ -44,10 +61,10 @@ class BnBtnExtension extends StatelessWidget {
             ? null
             : (downloaded && !downloading
                 ? () {
-                    onRemove();
+                    onRemove?.call();
                   }
                 : () {
-                    onDownload();
+                    onDownload?.call();
                   }),
       ),
     );

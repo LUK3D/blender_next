@@ -121,12 +121,22 @@ class _ExtensionDetailsScreenState extends State<ExtensionDetailsScreen>
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(
-                                                  ext.name ?? "",
-                                                  style: const TextStyle(
-                                                    fontSize: 30,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
+                                                Tooltip(
+                                                  message:
+                                                      (ext.name?.length ?? 0) <
+                                                              25
+                                                          ? ""
+                                                          : ext.name,
+                                                  child: Text(
+                                                    ellipseString(
+                                                        ext.name ?? "",
+                                                        maxLength: 25),
+                                                    style: const TextStyle(
+                                                      fontSize: 30,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                                 const Spacer(),

@@ -1,4 +1,3 @@
-import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/features/home/screens/extensions/details_screen.dart';
 import 'package:blender_next/services/exntesions_service.dart';
@@ -6,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:numeral/numeral.dart';
+
+import 'components/bn_extension_card.dart';
 
 class ExtensionsMainScreen extends StatefulWidget {
   const ExtensionsMainScreen({super.key});
@@ -252,138 +252,13 @@ class _ExtensionsMainScreenState extends State<ExtensionsMainScreen> {
                             itemBuilder: (context, index) {
                               final ext = snapshot.data![index];
 
-                              return Material(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Theme.of(context).cardColor,
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(10),
-                                  onTap: () {
-                                    setState(() {
-                                      selectedExtension = ext;
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          height: 140,
-                                          width: double.infinity,
-                                          clipBehavior: Clip.antiAlias,
-                                          decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .scaffoldBackgroundColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: ext.cover == null ||
-                                                  ext.cover!
-                                                      .contains(".orgnull")
-                                              ? const SizedBox()
-                                              : Image.network(
-                                                  ext.cover ?? "",
-                                                  fit: BoxFit.cover,
-                                                ),
-                                        ),
-                                        Text(
-                                          ext.name ?? "",
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(ext.description ?? ""),
-                                        const Spacer(),
-                                        Divider(
-                                          color: Theme.of(context).dividerColor,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Icon(
-                                                  LucideIcons.cloud_download,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurface,
-                                                ),
-                                                const SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                    "${ext.downloads?.numeral(digits: 1) ?? 0}"),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                AnimatedRatingStars(
-                                                  initialRating: ext.stars ?? 0,
-                                                  minRating: 0.0,
-                                                  maxRating: 5.0,
-                                                  filledColor: Colors.orange,
-                                                  emptyColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurface,
-                                                  filledIcon: Icons.star,
-                                                  halfFilledIcon:
-                                                      Icons.star_half,
-                                                  emptyIcon: Icons.star_border,
-                                                  onChanged: (double rating) {},
-                                                  displayRatingValue: false,
-                                                  interactiveTooltips: false,
-                                                  customFilledIcon: Icons.star,
-                                                  customHalfFilledIcon:
-                                                      Icons.star_half,
-                                                  customEmptyIcon:
-                                                      Icons.star_border,
-                                                  starSize: 10.0,
-                                                  animationDuration:
-                                                      const Duration(
-                                                          milliseconds: 300),
-                                                  animationCurve:
-                                                      Curves.easeInOut,
-                                                  readOnly: true,
-                                                ),
-                                                const SizedBox(
-                                                  width: 4,
-                                                ),
-                                                Text(
-                                                  "(${ext.reviewers?.numeral(digits: 1) ?? 0})",
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        SizedBox(
-                                          width: double.infinity,
-                                          height: 40,
-                                          child: TextButton.icon(
-                                            onPressed: () {},
-                                            style: TextButton.styleFrom(
-                                              backgroundColor:
-                                                  Theme.of(context).canvasColor,
-                                              foregroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurface,
-                                            ),
-                                            label: Text(
-                                                AppLocalizations.of(context)!
-                                                    .download),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                              return BnExtensionCard(
+                                ext: ext,
+                                onSelect: (e) {
+                                  setState(() {
+                                    selectedExtension = e;
+                                  });
+                                },
                               );
                             },
                           );

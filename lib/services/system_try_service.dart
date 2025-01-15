@@ -22,7 +22,7 @@ class SystemTrayService {
   static Future<void> init() async {
     await trayManager.setIcon(
       Platform.isWindows
-          ? '${Directory.current.path}/resources/app_icon.ico'
+          ? '${Directory.current.path}/app_icon.ico'
           : 'images/tray_icon.png',
     );
 

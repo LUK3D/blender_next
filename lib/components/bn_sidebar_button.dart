@@ -8,6 +8,7 @@ class BnSidebarButton extends StatelessWidget {
   final double borderRadius;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final AlignmentGeometry? alignment;
   const BnSidebarButton({
     super.key,
     this.icon,
@@ -17,6 +18,7 @@ class BnSidebarButton extends StatelessWidget {
     this.borderRadius = 10,
     this.backgroundColor,
     this.foregroundColor,
+    this.alignment,
   });
 
   @override
@@ -29,7 +31,7 @@ class BnSidebarButton extends StatelessWidget {
         label: Text(label),
         icon: icon,
         style: TextButton.styleFrom(
-          alignment: Alignment.centerLeft,
+          alignment: alignment ?? Alignment.centerLeft,
           foregroundColor:
               foregroundColor ?? Theme.of(context).colorScheme.onSurface,
           backgroundColor: isSelected
