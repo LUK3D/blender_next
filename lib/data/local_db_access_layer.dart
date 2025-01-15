@@ -178,7 +178,7 @@ class LocalDbAccessLayer extends DataAccess {
   @override
   Future<void> deleteProject(BnexProject project, {bool unlist = false}) async {
     if (unlist) {
-      await updateProject(project.copyWith(unlisted: true));
+      await updateProject(project.copyWith(unlisted: const Value(true)));
       return;
     }
     await database.managers.bnexProjects

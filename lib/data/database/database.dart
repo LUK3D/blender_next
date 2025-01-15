@@ -54,12 +54,14 @@ class BnexProjects extends Table with TableMixin {
   late final tags = text().nullable()();
   late final blenderVariant = text()();
   late final blenderVersion = text()();
-  late final template = text()();
-  late final usingVersionControl = boolean().clientDefault(() => false)();
-  late final clearExtentions = boolean().clientDefault(() => false)();
+  late final template = text().nullable()();
+  late final usingVersionControl =
+      boolean().nullable().clientDefault(() => false)();
+  late final clearExtentions =
+      boolean().nullable().clientDefault(() => false)();
   late final dir = text()();
   late final cover = text().nullable()();
-  late final unlisted = boolean().clientDefault(() => false)();
+  late final unlisted = boolean().nullable().clientDefault(() => false)();
 }
 
 class BnextExtensions extends Table with TableMixin {
