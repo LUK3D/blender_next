@@ -121,6 +121,14 @@ class _HomePageState extends State<HomePage>
                           )),
                           IconButton.filled(
                             onPressed: () {
+                              switch (
+                                  settingsService.getCloseButtonBehaviour()) {
+                                case 1:
+                                  windowManager.minimize();
+                                  break;
+                                default:
+                                  windowManager.close();
+                              }
                               windowManager.hide();
                             },
                             icon: const Icon(

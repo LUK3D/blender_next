@@ -66,5 +66,11 @@
     "lightMode": "Light mode",
     "localStorage": "Local Storage",
     "noBlenderFound": "No Blender version found ",
-    "dir": "Dir"
+    "dir": "Dir",
+    "closeButtonBehaviour": "Close button behaviour",
+    "close": "Close",
+    "exitApp": "Exit application",
+    "hide": "Hide",
+    "minimize": "Minimize",
+    "minimizeToSystemtry": "Minimize to system tray"
 }

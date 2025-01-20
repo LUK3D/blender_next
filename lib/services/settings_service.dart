@@ -23,6 +23,10 @@ class SettingsService {
   late final thumbnailFrame = signal(1);
   late final extentionsDir = signal("");
 
+  //0 - Close the app
+  //1 - Hide the app on systems tray menu
+  late final closeButtonBehaviour = signal(0);
+
   Future init() async {
     await GetStorage.init();
     box = GetStorage();
@@ -35,6 +39,7 @@ class SettingsService {
     thumbnailSamples.value = getThumbnailSamples();
     thumbnailFrame.value = getThumbnailFrame();
     extentionsDir.value = getExtensionsDir();
+    closeButtonBehaviour.value = getCloseButtonBehaviour();
   }
 
   String getContentPath() {
@@ -42,6 +47,15 @@ class SettingsService {
     //Otherwise, use the default path
     return box.read<String>("content_path") ??
         "${Directory.current.path}/content";
+  }
+
+  Future<void> setCloseButtonBehaviour(int value) async {
+    closeButtonBehaviour.value = value;
+    await box.write("close-button-behaviour", value);
+  }
+
+  int getCloseButtonBehaviour() {
+    return box.read("close-button-behaviour") ?? 0;
   }
 
   Future<void> setContentPath(String path) async {

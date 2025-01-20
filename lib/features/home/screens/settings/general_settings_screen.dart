@@ -47,6 +47,35 @@ class GeneralSettings extends StatelessWidget {
               BnRow(
                 labelWith: inputWidth,
                 inputWidth: 300,
+                label: Text(
+                    "${AppLocalizations.of(context)!.closeButtonBehaviour}:"),
+                input: Watch((ctx) {
+                  return BnSelect(
+                    selectedValue:
+                        "${settingsService.closeButtonBehaviour.value}",
+                    items: [
+                      BnSelectItem(
+                        label: AppLocalizations.of(context)!.exitApp,
+                        value: "0",
+                      ),
+                      BnSelectItem(
+                        label:
+                            AppLocalizations.of(context)!.minimizeToSystemtry,
+                        value: "1",
+                      ),
+                    ],
+                    onChanged: (val) {
+                      settingsService.setCloseButtonBehaviour(int.parse(val));
+                    },
+                  );
+                }),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              BnRow(
+                labelWith: inputWidth,
+                inputWidth: 300,
                 label: Text("${AppLocalizations.of(context)!.language}:"),
                 input: Watch((ctx) {
                   return BnSelect(

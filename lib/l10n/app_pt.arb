@@ -63,5 +63,11 @@
     "lightMode": "Tema claro",
     "localStorage": "Armazenamento local",
     "noBlenderFound": "Nenhuma versão de blender instalado",
-    "dir": "Diretório"
+    "dir": "Diretório",
+    "closeButtonBehaviour": "Comportamento do botão \"fechar\"",
+    "close": "Fechar",
+    "exitApp": "Sair da aplicação",
+    "hide": "Ocultar",
+    "minimize": "Minimizar",
+    "minimizeToSystemtry": "Minimizar para a bandeja do sistema"
 }
