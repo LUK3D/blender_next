@@ -15,7 +15,7 @@ import 'package:signals/signals_flutter.dart';
 import 'package:tray_manager/tray_manager.dart';
 import 'package:window_manager/window_manager.dart';
 import '../../components/bn_text_input.dart';
-import 'screens/installers_screen.dart';
+import 'screens/installers/installers_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
