@@ -78,7 +78,8 @@ class SettingsService {
   }
 
   String getDefaultRenderingEngine() {
-    return box.read<String>("default_rendering_engine") ?? BlenderEngines.eevee;
+    return box.read<String>("default_rendering_engine") ??
+        BlenderEngines.workbench;
   }
 
   Future<void> setExtensionsDir(String? path) async {
