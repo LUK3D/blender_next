@@ -267,6 +267,22 @@ class BlenderService {
 
     return db.cachedSplashscreens;
   }
+
+  Future isInstalled(BlenderVersion b) async {
+    if (b.installed) {
+      final f = File("${b.installationPath!}/blender.exe");
+      if (!(await f.exists())) {
+        updateBlenderState(
+          b.copyWith(
+            installed: false,
+            installationPath: const Value(
+              null,
+            ),
+          ),
+        );
+      }
+    }
+  }
 }
 
 BlenderService useBlenderService() => BlenderService();

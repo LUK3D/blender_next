@@ -2,6 +2,7 @@ import 'package:blender_next/components/bn_sidebar_button.dart';
 import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/data/local_db_access_layer.dart';
 import 'package:blender_next/features/home/screens/blender_info_dialog.dart';
+import 'package:blender_next/services/blender_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:signals/signals_flutter.dart';
@@ -150,6 +151,8 @@ class InstallersSreen extends StatelessWidget {
                           double>? progressSignal = blenderDownloadsTracker[
                               "${installer.version}-${installer.variant}-${installer.architecture}"]
                           ?["progress"];
+
+                      useBlenderService().isInstalled(installer);
 
                       final splashScreen = localDbAccess
                           .getSplashScreenById(installer.splashScreen);

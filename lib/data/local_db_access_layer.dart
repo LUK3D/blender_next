@@ -60,6 +60,7 @@ class LocalDbAccessLayer extends DataAccess {
     }
     try {
       final blendersToSave = <BlenderVersion>[];
+      final toUpdate = <BlenderVersion>[];
 
       for (final blender in blenderBuilds) {
         final existing = localBlenderVersions
@@ -71,6 +72,16 @@ class LocalDbAccessLayer extends DataAccess {
             .firstOrNull;
         if (existing == null) {
           blendersToSave.add(blender);
+        } else {
+          toUpdate.add(existing.copyWith(
+            downloadUrl: blender.downloadUrl,
+            sha: blender.sha,
+            date: blender.date,
+            reference: blender.reference,
+            referenceUrl: blender.referenceUrl,
+            shaUrl: blender.shaUrl,
+            description: blender.description,
+          ));
         }
       }
 
@@ -78,6 +89,11 @@ class LocalDbAccessLayer extends DataAccess {
         (o) => blendersToSave,
         mode: InsertMode.insertOrReplace,
       );
+      for (var b in toUpdate) {
+        await database.managers.blenderVersions
+            .filter((f) => f.id.equals(b.id))
+            .update((o) => b);
+      }
       //Update the cache when we save something new
       await getLatestBuilds();
       return true;
