@@ -8,7 +8,6 @@ import 'package:blender_next/services/settings_service.dart';
 import 'package:blender_next/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter/widgets.dart';
 import 'package:html/parser.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:logger/logger.dart';
@@ -340,7 +339,7 @@ class ExntesionsService {
 
     File? extFile = File(finalExtPath);
 
-    if (!extFile.existsSync()) {
+    if (!(await extFile.exists())) {
       await DownloaderService.downloadFileWithProgress(
         "https://extensions.blender.org${extversion.downloadUrl!}",
         extFile.path,
@@ -362,7 +361,7 @@ class ExntesionsService {
 
     extFile = File(finalExtPath);
 
-    if (extFile == null || !extFile!.existsSync()) {
+    if (extFile == null || !(await extFile!.exists())) {
       return null;
     }
 

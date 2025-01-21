@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:numeral/numeral.dart';
 import 'package:animated_rating_stars/animated_rating_stars.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BnExtensionCard extends StatefulWidget {
   final BnextExtension ext;

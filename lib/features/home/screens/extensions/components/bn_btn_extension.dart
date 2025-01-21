@@ -1,5 +1,4 @@
 import 'package:blender_next/components/bn_sidebar_button.dart';
-import 'package:blender_next/services/settings_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 

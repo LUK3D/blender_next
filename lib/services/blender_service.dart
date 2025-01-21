@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
@@ -9,6 +10,7 @@ import 'package:blender_next/utils/date_parser.dart';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:html/parser.dart';
+import 'package:html2md/html2md.dart' as html2md;
 
 class BlenderService {
   static final BlenderService _singleton = BlenderService._internal();
@@ -41,7 +43,7 @@ class BlenderService {
     File blenderExe = File("$instalationPath/blender.exe");
 
     //If there is an existing blender in this directory, return it instead of downloading a new one.
-    if (blenderExe.existsSync()) {
+    if (await blenderExe.exists()) {
       await updateBlenderState(blender.copyWith(
           installationPath: Value(instalationPath), installed: true));
       onDone(blenderExe);
@@ -78,7 +80,7 @@ class BlenderService {
       return;
     }
     final dir = Directory(blender.installationPath!);
-    if (dir.existsSync()) {
+    if (await dir.exists()) {
       await dir.delete(recursive: true);
     }
 
@@ -88,9 +90,11 @@ class BlenderService {
     ));
   }
 
-  Future updateBlenderState(BlenderVersion blender) async {
-    await db.updateBuild(blender);
+  Future<BlenderVersion> updateBlenderState(BlenderVersion blender) async {
+    final result = await db.updateBuild(blender);
     await db.getLatestBuilds();
+
+    return result;
   }
 
 //TODO Update this function to cache the data on the first request of each varient
@@ -282,6 +286,77 @@ class BlenderService {
         );
       }
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getReleaseNotes(BlenderVersion b) async {
+    if (b.description.isNotEmpty) {
+      return List<Map<String, dynamic>>.from(jsonDecode(b.description));
+    }
+    final result = <Map<String, dynamic>>[];
+    final getResult =
+        await dio.get('https://developer.blender.org/docs/release_notes');
+
+    if (getResult.statusCode == 200) {
+      final data = getResult.data;
+      var document = parse(data);
+      final links = document
+          .querySelectorAll('.md-nav a[href*="${b.version.substring(0, 3)}/"]');
+
+      for (var element in links) {
+        final url = element.attributes["href"] ?? "";
+        final tmpV = url.trim();
+
+        final vv = "${b.version.substring(0, 3)}/";
+        if (tmpV.endsWith(vv)) {
+          continue;
+        }
+        final content = await getSectionDetails(url);
+        result.add({
+          "title": element.text.trim(),
+          "description": html2md.convert(content,
+              // imageBaseUrl:
+              //     "https://developer.blender.org/docs/release_notes/${b.version.substring(0, 3)}",
+              rules: [
+                html2md.Rule("video", filters: ['video'],
+                    replacement: (content, node) {
+                  final url = node.getAttribute("src").toString();
+
+                  return '[video_url]($url)';
+                }),
+                html2md.Rule("img", filters: ['img'],
+                    replacement: (content, node) {
+                  final url = node.getAttribute("src").toString();
+
+                  return url;
+                })
+              ])
+        });
+
+        //Updating the database so we can stream the results to the UI instead of waiting for the whole process to finish
+        final d = jsonEncode(result);
+        final finalBlender = b.copyWith(description: d);
+        await updateBlenderState(finalBlender);
+      }
+      return result;
+    }
+
+    return result;
+  }
+
+  Future<String> getSectionDetails(String url) async {
+    if (url.isEmpty) {
+      return "";
+    }
+    final getResult =
+        await dio.get('https://developer.blender.org/docs/release_notes/$url');
+
+    if (getResult.statusCode == 200) {
+      final data = getResult.data;
+      var document = parse(data);
+      return document.querySelector(".md-content")?.innerHtml ?? "";
+    }
+
+    return "";
   }
 }
 

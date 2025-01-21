@@ -150,6 +150,12 @@ class AppDatabase extends _$AppDatabase {
     }
   }
 
+  Stream<BlenderVersion> getBlenderVersionStreamById(BlenderVersion bv) {
+    return managers.blenderVersions
+        .filter((e) => e.id.equals(bv.id))
+        .watchSingle();
+  }
+
   Future<List<BnextExtension>> get getExtensions =>
       select(bnextExtensions).get();
 

@@ -59,3 +59,15 @@ String ellipseString(String text, {int maxLength = 20}) {
   }
   return '${text.substring(0, maxLength - 3)}...';
 }
+
+bool isImage(String path) {
+  final imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
+  final extension = path.split('.').last.toLowerCase();
+  return imageExtensions.contains(extension);
+}
+
+bool isVideo(String path) {
+  final videoExtensions = ['mp4', 'mov', 'wmv', 'avi', 'mkv', 'flv', 'webm'];
+  final extension = path.split('.').last.toLowerCase();
+  return videoExtensions.contains(extension);
+}
