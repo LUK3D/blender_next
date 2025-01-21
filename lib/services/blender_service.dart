@@ -334,8 +334,7 @@ class BlenderService {
 
         //Updating the database so we can stream the results to the UI instead of waiting for the whole process to finish
         final d = jsonEncode(result);
-        final finalBlender = b.copyWith(description: d);
-        await updateBlenderState(finalBlender);
+        await db.updateBlenderDescriptions(b.version.substring(0, 3), d);
       }
       return result;
     }

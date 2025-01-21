@@ -5,16 +5,25 @@ import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/services/blender_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:logger/logger.dart';
+import 'package:signals/signals_flutter.dart';
 
-class BlenderVersionDetail extends StatelessWidget {
+class BlenderVersionDetail extends StatefulWidget {
   final BlenderVersion bVersion;
   const BlenderVersionDetail({super.key, required this.bVersion});
 
   @override
+  State<BlenderVersionDetail> createState() => _BlenderVersionDetailState();
+}
+
+class _BlenderVersionDetailState extends State<BlenderVersionDetail>
+    with SignalsMixin {
+  final signals = <String, FlutterSignal>{};
+  final blenderServices = useBlenderService();
+  @override
   Widget build(BuildContext context) {
-    final blenderServices = useBlenderService();
     final splashScreenshot =
-        blenderServices.db.getSplashScreenById(bVersion.splashScreen);
+        blenderServices.db.getSplashScreenById(widget.bVersion.splashScreen);
     return Scaffold(
       body: Stack(
         children: [
@@ -52,7 +61,7 @@ class BlenderVersionDetail extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         child: Text(
-                          "Blender ${bVersion.version} \n${bVersion.variant}",
+                          "Blender ${widget.bVersion.version} \n${widget.bVersion.variant}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -65,7 +74,7 @@ class BlenderVersionDetail extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(bVersion.date),
+                      Text(widget.bVersion.date),
                       const SizedBox(
                         height: 20,
                       ),
@@ -126,7 +135,8 @@ class BlenderVersionDetail extends StatelessWidget {
                               ),
                               StreamBuilder(
                                 stream: blenderServices.db.database
-                                    .getBlenderVersionStreamById(bVersion),
+                                    .getBlenderVersionStreamById(
+                                        widget.bVersion),
                                 builder: (context, snapshot) {
                                   if (snapshot.data == null ||
                                       (snapshot.data?.description
@@ -139,45 +149,63 @@ class BlenderVersionDetail extends StatelessWidget {
                                   final data = List<Map<String, dynamic>>.from(
                                       jsonDecode(snapshot.data!.description));
 
-                                  return ExpansionPanelList(
-                                    dividerColor:
-                                        Theme.of(context).dividerColor,
-                                    materialGapSize: 4,
-                                    expansionCallback:
-                                        (panelIndex, isExpanded) {},
-                                    children: data.map((e) {
-                                      return ExpansionPanel(
-                                          headerBuilder: (BuildContext context,
-                                              bool isExpanded) {
-                                            return ListTile(
-                                              title: Text(e["title"]!),
-                                            );
-                                          },
-                                          isExpanded: true,
-                                          body: ListTile(
-                                            subtitle: Markdown(
-                                              data: e['description'],
-                                              shrinkWrap: true,
-                                              builders: {
-                                                'a': BnMarkdownVideoElementBuilder(
-                                                    "https://developer.blender.org/docs/release_notes/${bVersion.version.substring(0, 3)}/"), // Add the custom builder for video
+                                  for (var element in data) {
+                                    if (signals[element["title"]] == null) {
+                                      signals[element["title"]] = signal(true);
+                                    }
+                                  }
+
+                                  return Watch((ctx) => ExpansionPanelList(
+                                        animationDuration: Duration.zero,
+                                        dividerColor:
+                                            Theme.of(context).dividerColor,
+                                        materialGapSize: 4,
+                                        expansionCallback:
+                                            (panelIndex, isExpanded) {
+                                          final e = data[panelIndex];
+                                          signals[e["title"]]!.value =
+                                              !signals[e["title"]]?.value;
+                                        },
+                                        children: data.map((e) {
+                                          return ExpansionPanel(
+                                              headerBuilder:
+                                                  (BuildContext context,
+                                                      bool isExpanded) {
+                                                return ListTile(
+                                                  title: Text(
+                                                    e["title"]!,
+                                                  ),
+                                                );
                                               },
-                                              imageBuilder: (uri, title, alt) {
-                                                if (uri
-                                                        .toString()
-                                                        .split(".")
-                                                        .last ==
-                                                    "svg") {
-                                                  return const SizedBox();
-                                                }
-                                                final imageUrl =
-                                                    "https://developer.blender.org/docs/release_notes/${bVersion.version.substring(0, 3)}/${uri.toString().split("..").last.split('//').join('/')}";
-                                                return Image.network(imageUrl);
-                                              },
-                                            ),
-                                          ));
-                                    }).toList(),
-                                  );
+                                              canTapOnHeader: true,
+                                              isExpanded:
+                                                  signals[e["title"]]!.value,
+                                              body: ListTile(
+                                                subtitle: Markdown(
+                                                  data: e['description'],
+                                                  shrinkWrap: true,
+                                                  builders: {
+                                                    'a': BnMarkdownVideoElementBuilder(
+                                                        "https://developer.blender.org/docs/release_notes/${widget.bVersion.version.substring(0, 3)}/"), // Add the custom builder for video
+                                                  },
+                                                  imageBuilder:
+                                                      (uri, title, alt) {
+                                                    if (uri
+                                                            .toString()
+                                                            .split(".")
+                                                            .last ==
+                                                        "svg") {
+                                                      return const SizedBox();
+                                                    }
+                                                    final imageUrl =
+                                                        "https://developer.blender.org/docs/release_notes/${widget.bVersion.version.substring(0, 3)}/${uri.toString().split("..").last.split('//').join('/')}";
+                                                    return Image.network(
+                                                        imageUrl);
+                                                  },
+                                                ),
+                                              ));
+                                        }).toList(),
+                                      ));
                                 },
                               ),
                             ],

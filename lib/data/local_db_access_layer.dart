@@ -113,6 +113,16 @@ class LocalDbAccessLayer extends DataAccess {
   }
 
   @override
+  Future updateBlenderDescriptions(
+      String majorVersion, String description) async {
+    await database.managers.blenderVersions
+        .filter((f) => f.version.startsWith(majorVersion))
+        .update((o) => o(description: Value(description)));
+    //Update the cache when we change something
+    await getLatestBuilds();
+  }
+
+  @override
   Future<List<SplashScreen>> getSplashScreens() async {
     final result = await database.managers.splashScreens.get();
     cachedSplashscreens = result;

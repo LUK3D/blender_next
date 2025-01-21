@@ -3,6 +3,7 @@ import 'database/database.dart';
 abstract class DataAccess {
   Future<bool> saveBuilds({required List<BlenderVersion> blenderBuilds});
   Future<BlenderVersion> updateBuild(BlenderVersion blender);
+  Future updateBlenderDescriptions(String majorVersion, String description);
   Future<bool> saveSplashCreens(List<SplashScreen> splashScreens);
   Future<List<SplashScreen>> getSplashScreens();
   SplashScreen? getSplashScreenById(int id);
