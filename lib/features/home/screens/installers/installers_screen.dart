@@ -159,9 +159,10 @@ class _InstallersSreenState extends State<InstallersSreen> {
                               ),
                               itemCount: widget.installers.length,
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      childAspectRatio: 5 / 5,
-                                      crossAxisCount: 3,
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                      maxCrossAxisExtent: 300,
+                                      mainAxisExtent: 290,
+                                      // childAspectRatio: 5 / 5,
                                       mainAxisSpacing: 20,
                                       crossAxisSpacing: 20),
                               itemBuilder: (context, index) {

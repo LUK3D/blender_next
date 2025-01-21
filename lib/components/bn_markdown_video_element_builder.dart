@@ -42,8 +42,8 @@ class BnMarkdownVideoElementBuilder extends MarkdownElementBuilder {
     }
 
     if (isVideo(href)) {
-      return SizedBox(
-        height: 300,
+      return AspectRatio(
+        aspectRatio: 16 / 9,
         child: BnVideoPlayer(
           videoUrl: href.startsWith("https:")
               ? href

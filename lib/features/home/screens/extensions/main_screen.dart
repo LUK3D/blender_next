@@ -242,8 +242,9 @@ class _ExtensionsMainScreenState extends State<ExtensionsMainScreen> {
                           return GridView.builder(
                             controller: _scrollController,
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 330,
+                                    mainAxisExtent: 330,
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10,
                                     childAspectRatio: 2 / 2.4),

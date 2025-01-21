@@ -91,76 +91,98 @@ class BlenderVersionDetail extends StatelessWidget {
                         height: 1,
                         color: Theme.of(context).dividerColor,
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 40,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).canvasColor.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(
-                            8,
+                      Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            maxWidth: 1200,
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 40,
+                                clipBehavior: Clip.antiAlias,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .canvasColor
+                                      .withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(
+                                    8,
+                                  ),
+                                ),
+                                child: TabBar(
+                                    dividerColor:
+                                        Theme.of(context).dividerColor,
+                                    splashBorderRadius:
+                                        BorderRadius.circular(10),
+                                    tabs: const [
+                                      Tab(
+                                        text: "Release notes",
+                                      ),
+                                      Tab(
+                                        text: "Extensions",
+                                      ),
+                                    ]),
+                              ),
+                              StreamBuilder(
+                                stream: blenderServices.db.database
+                                    .getBlenderVersionStreamById(bVersion),
+                                builder: (context, snapshot) {
+                                  if (snapshot.data == null ||
+                                      (snapshot.data?.description
+                                              .trim()
+                                              .isEmpty ??
+                                          true)) {
+                                    return const Text("Loading...");
+                                  }
+
+                                  final data = List<Map<String, dynamic>>.from(
+                                      jsonDecode(snapshot.data!.description));
+
+                                  return ExpansionPanelList(
+                                    dividerColor:
+                                        Theme.of(context).dividerColor,
+                                    materialGapSize: 4,
+                                    expansionCallback:
+                                        (panelIndex, isExpanded) {},
+                                    children: data.map((e) {
+                                      return ExpansionPanel(
+                                          headerBuilder: (BuildContext context,
+                                              bool isExpanded) {
+                                            return ListTile(
+                                              title: Text(e["title"]!),
+                                            );
+                                          },
+                                          isExpanded: true,
+                                          body: ListTile(
+                                            subtitle: Markdown(
+                                              data: e['description'],
+                                              shrinkWrap: true,
+                                              builders: {
+                                                'a': BnMarkdownVideoElementBuilder(
+                                                    "https://developer.blender.org/docs/release_notes/${bVersion.version.substring(0, 3)}/"), // Add the custom builder for video
+                                              },
+                                              imageBuilder: (uri, title, alt) {
+                                                if (uri
+                                                        .toString()
+                                                        .split(".")
+                                                        .last ==
+                                                    "svg") {
+                                                  return const SizedBox();
+                                                }
+                                                final imageUrl =
+                                                    "https://developer.blender.org/docs/release_notes/${bVersion.version.substring(0, 3)}/${uri.toString().split("..").last.split('//').join('/')}";
+                                                return Image.network(imageUrl);
+                                              },
+                                            ),
+                                          ));
+                                    }).toList(),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        child: TabBar(
-                            dividerColor: Theme.of(context).dividerColor,
-                            splashBorderRadius: BorderRadius.circular(10),
-                            tabs: const [
-                              Tab(
-                                text: "Release notes",
-                              ),
-                              Tab(
-                                text: "Extensions",
-                              ),
-                            ]),
-                      ),
-                      StreamBuilder(
-                        stream: blenderServices.db.database
-                            .getBlenderVersionStreamById(bVersion),
-                        builder: (context, snapshot) {
-                          if (snapshot.data == null ||
-                              (snapshot.data?.description.trim().isEmpty ??
-                                  true)) {
-                            return const Text("Loading...");
-                          }
-
-                          final data = List<Map<String, dynamic>>.from(
-                              jsonDecode(snapshot.data!.description));
-
-                          return ExpansionPanelList(
-                            dividerColor: Theme.of(context).dividerColor,
-                            materialGapSize: 4,
-                            expansionCallback: (panelIndex, isExpanded) {},
-                            children: data.map((e) {
-                              return ExpansionPanel(
-                                  headerBuilder:
-                                      (BuildContext context, bool isExpanded) {
-                                    return ListTile(
-                                      title: Text(e["title"]!),
-                                    );
-                                  },
-                                  isExpanded: true,
-                                  body: ListTile(
-                                    subtitle: Markdown(
-                                      data: e['description'],
-                                      shrinkWrap: true,
-                                      builders: {
-                                        'a': BnMarkdownVideoElementBuilder(
-                                            "https://developer.blender.org/docs/release_notes/${bVersion.version.substring(0, 3)}/"), // Add the custom builder for video
-                                      },
-                                      imageBuilder: (uri, title, alt) {
-                                        if (uri.toString().split(".").last ==
-                                            "svg") {
-                                          return const SizedBox();
-                                        }
-                                        final imageUrl =
-                                            "https://developer.blender.org/docs/release_notes/${bVersion.version.substring(0, 3)}/${uri.toString().split("..").last.split('//').join('/')}";
-                                        return Image.network(imageUrl);
-                                      },
-                                    ),
-                                  ));
-                            }).toList(),
-                          );
-                        },
                       )
                     ],
                   ),

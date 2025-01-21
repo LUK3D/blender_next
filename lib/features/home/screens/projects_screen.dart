@@ -99,9 +99,10 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                       bottom: 20,
                     ),
                     gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 300,
+                            mainAxisExtent: 290,
                             childAspectRatio: 5 / 5,
-                            crossAxisCount: 3,
                             mainAxisSpacing: 20,
                             crossAxisSpacing: 20),
                     itemBuilder: (context, index) {
