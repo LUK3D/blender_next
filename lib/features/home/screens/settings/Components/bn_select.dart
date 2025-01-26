@@ -28,9 +28,16 @@ class BnSelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final values = items.map((e) => e.value).toList();
+    String value = selectedValue;
+
+    if (!values.contains(value)) {
+      value = values.first;
+    }
+
     return DropdownButton<String>(
       borderRadius: BorderRadius.circular(10),
-      value: selectedValue,
+      value: value,
       underline: const SizedBox(),
       padding: const EdgeInsets.symmetric(horizontal: 10),
       icon: const SizedBox(),
@@ -45,7 +52,9 @@ class BnSelect extends StatelessWidget {
       onChanged: disabled
           ? null
           : (val) {
-              onChanged(val!);
+              if (val != null) {
+                onChanged(val);
+              }
             },
     );
   }

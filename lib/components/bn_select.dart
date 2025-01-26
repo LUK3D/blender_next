@@ -5,15 +5,30 @@ import 'package:flutter_lucide/flutter_lucide.dart';
 class BnSelectItem {
   final int id;
   final String name;
+  final String? searchTerms;
+  final Widget? nameWidget;
+  final Widget? icon;
 
-  BnSelectItem({required this.id, required this.name});
+  BnSelectItem(
+      {required this.id,
+      required this.name,
+      this.icon,
+      this.nameWidget,
+      this.searchTerms});
 }
 
 class BnSelect extends StatefulWidget {
   final List<BnSelectItem> items;
+  final List<BnSelectItem> initialitems;
   final Function(List<int> ids) onChange;
+  final Function(List<int> ids) onRemove;
 
-  const BnSelect({super.key, required this.onChange, required this.items});
+  const BnSelect(
+      {super.key,
+      required this.onChange,
+      required this.onRemove,
+      required this.items,
+      this.initialitems = const []});
 
   @override
   State<BnSelect> createState() => _BnSelectState();
@@ -28,16 +43,28 @@ class _BnSelectState extends State<BnSelect> {
 
   Future<List<BnSelectItem>> searchFunction(query) async {
     return widget.items.where((element) {
-      return element.name.toLowerCase().contains(query.toLowerCase());
+      return element.name.toLowerCase().contains(query.toLowerCase()) ||
+          (element.searchTerms?.toLowerCase().contains(query.toLowerCase()) ??
+              false);
     }).toList();
   }
 
   Future<List<BnSelectItem>> searchFunctionAsync(query) async {
     return Future.delayed(const Duration(seconds: 1), () {
       return widget.items.where((element) {
-        return element.name.toLowerCase().contains(query.toLowerCase());
+        return element.name.toLowerCase().contains(query.toLowerCase()) ||
+            (element.searchTerms?.toLowerCase().contains(query.toLowerCase()) ??
+                false);
       }).toList();
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedItems = widget.initialitems;
+    selectedItemsAsync = widget.initialitems;
   }
 
   @override
@@ -66,16 +93,24 @@ class _BnSelectState extends State<BnSelect> {
         minTextFieldWidth: 300,
         suggestionsBoxMaxHeight: 300,
         length: selectedItems.length,
-        tagBuilder: (context, index) => SelectTag(
-              index: index,
-              label: selectedItems[index].name,
-              onDeleted: (value) {
-                selectedItems.removeAt(index);
-                widget.onChange(
-                    List<int>.from(selectedItems.map((e) => e.id).toList()));
-                setState(() {});
-              },
-            ),
+        tagBuilder: (context, index) {
+          final item = selectedItems[index];
+          return SelectTag(
+            index: index,
+            label: item.name,
+            icon: item.icon,
+            nameWidget: item.nameWidget,
+            searchTerms: item.searchTerms,
+            onDeleted: (value) {
+              selectedItems.removeAt(index);
+              widget.onRemove(
+                  List<int>.from(selectedItems.map((e) => e.id).toList()));
+              widget.onChange(
+                  List<int>.from(selectedItems.map((e) => e.id).toList()));
+              setState(() {});
+            },
+          );
+        },
         suggestionBuilder: (context, state, data) {
           var existingIndex =
               selectedItems.indexWhere((element) => element.id == data.id);
@@ -85,6 +120,7 @@ class _BnSelectState extends State<BnSelect> {
           return Material(
             elevation: 0,
             child: GestureDetector(
+              //HERE
               behavior: HitTestBehavior.translucent,
               onPanDown: (_) {
                 if (existingIndex >= 0) {
@@ -99,12 +135,15 @@ class _BnSelectState extends State<BnSelect> {
                 setState(() {});
               },
               child: ListTile(
+                leading: selectedData.icon,
                 dense: false,
                 selected: existingIndex >= 0,
                 trailing: existingIndex >= 0 ? const Icon(Icons.check) : null,
                 selectedColor: Colors.white,
-                selectedTileColor: Theme.of(context).colorScheme.secondary,
-                title: Text(selectedData.name.toString()),
+                selectedTileColor:
+                    Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                title: selectedData.nameWidget ??
+                    Text(selectedData.name.toString()),
               ),
             ),
           );
@@ -130,7 +169,14 @@ class SelectTag extends StatelessWidget {
     required this.label,
     required this.onDeleted,
     required this.index,
+    this.searchTerms,
+    this.nameWidget,
+    this.icon,
   });
+
+  final String? searchTerms;
+  final Widget? nameWidget;
+  final Widget? icon;
 
   final String label;
   final ValueChanged<int> onDeleted;
@@ -147,16 +193,17 @@ class SelectTag extends StatelessWidget {
             color: Theme.of(context).canvasColor,
           )),
       labelPadding: const EdgeInsets.only(left: 8.0),
-      label: Row(
-        children: [
+      avatar: icon ??
           Icon(
             LucideIcons.blocks,
             color: Theme.of(context).colorScheme.onSurface,
           ),
+      label: Row(
+        children: [
           const SizedBox(
             width: 10,
           ),
-          Text(label),
+          nameWidget ?? Text(label),
         ],
       ),
       deleteIcon: const Icon(

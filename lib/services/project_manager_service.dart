@@ -10,12 +10,7 @@ import 'package:drift/drift.dart';
 import 'package:logger/logger.dart';
 import 'package:process_run/process_run.dart';
 
-class BnexProcess {
-  final Shell? shell;
-  final BlenderVersion? blender;
-
-  BnexProcess({required this.shell, required this.blender});
-}
+import 'system_process_service.dart';
 
 class ProjectManagerService {
   static final ProjectManagerService _singleton =

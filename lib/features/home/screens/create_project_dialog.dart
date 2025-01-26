@@ -320,6 +320,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                       onChange: (ids) {
                         project.value = {...project.value, "extensions": ids};
                       },
+                      onRemove: (ids) {},
                     ),
                   ],
                 ),

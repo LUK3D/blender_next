@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:logger/logger.dart';
@@ -106,10 +108,18 @@ class BnextExtensionVersions extends Table with TableMixin {
   late final ext = integer().references(BnextExtensions, #id)();
   late final version = text()();
   late final blenderMinVersion = text().nullable()();
+  late final blenderMinVersionint = integer().nullable()();
   late final downloadUrl = text().nullable()();
   late final instalationPath = text().nullable()();
   late final releaseNotes = text().nullable()();
   late final metaData = text().nullable()();
+}
+
+class BnextBlenderInstalledExtensions extends Table with TableMixin {
+  late final extId = text()();
+  late final extVersionNumber = text()();
+  late final blenderVersionNumber = text()();
+  late final instalationFolderPath = text()();
 }
 
 @DriftDatabase(tables: [
@@ -120,6 +130,7 @@ class BnextExtensionVersions extends Table with TableMixin {
   BnextExtensions,
   BnextProjectExtensions,
   BnextExtensionVersions,
+  BnextBlenderInstalledExtensions,
 ])
 class AppDatabase extends _$AppDatabase {
   // After generating code, this class needs to define a `schemaVersion` getter
@@ -226,6 +237,10 @@ class AppDatabase extends _$AppDatabase {
         .watch();
   }
 
+  Future<List<BnextExtension>> getExtensionById(int id) {
+    return managers.bnextExtensions.filter((e) => e.id.equals(id)).get();
+  }
+
   Stream<BnextExtension> getExtensionStreamById(BnextExtension ext) {
     return managers.bnextExtensions
         .filter((e) => e.id.equals(ext.id))
@@ -266,10 +281,45 @@ class AppDatabase extends _$AppDatabase {
     return extVersion;
   }
 
+  Future<List<BnextExtensionVersion>> getExtensionVersionById(int id) async {
+    return await managers.bnextExtensionVersions
+        .filter((f) => f.id.equals(id))
+        .get();
+  }
+
+  Future<List<BnextExtensionVersion>>
+      getExtensionVersionByExtensionIdAndVersion(
+          int extensionId, String version) async {
+    return await managers.bnextExtensionVersions
+        .filter((f) => f.ext.id.equals(extensionId) & f.version.equals(version))
+        .get();
+  }
+
   Future<List<BnextExtensionVersion>> getExtensionVersionByExtensionId(
       int id) async {
     return await managers.bnextExtensionVersions
         .filter((f) => f.ext.id.equals(id))
+        .get();
+  }
+
+  Future<List<BnextExtension>> getExtensionSteamsByBlenderMajorVersion(
+      String version) async {
+    final List<int> extensionIds = [];
+
+    for (var extVersion in (await managers.bnextExtensionVersions
+        .filter((f) =>
+            f.blenderMinVersionint.isSmallerOrEqualTo(
+                int.tryParse(version.substring(0, 3).split(".").join("")) ??
+                    0) &
+            f.blenderMinVersionint.not.equals(0))
+        .get())) {
+      if (!extensionIds.contains(extVersion.ext)) {
+        extensionIds.add(extVersion.ext);
+      }
+    }
+
+    return await managers.bnextExtensions
+        .filter((f) => f.id.isIn(extensionIds))
         .get();
   }
 
@@ -283,7 +333,87 @@ class AppDatabase extends _$AppDatabase {
   static QueryExecutor _openConnection() {
     // `driftDatabase` from `package:drift_flutter` stores the database in
     // `getApplicationDocumentsDirectory()`.
-    return driftDatabase(name: 'temp_db_1');
+    return driftDatabase(
+        name: 'temp_db_1',
+        native: DriftNativeOptions(
+          databasePath: () {
+            return Future.value(
+                '${Directory.current.path}/blender_next_database.sqlite');
+          },
+        ));
+  }
+
+  Future<List<BnextBlenderInstalledExtension>> insertBlenderInstalledExtensions(
+      List<BnextBlenderInstalledExtension> ext, String blenderVersion) async {
+    await managers.bnextBlenderInstalledExtensions
+        .filter((f) => f.extId.isIn(ext.map((e) => e.extId)))
+        .delete();
+
+    await batch((batch) {
+      batch.insertAll(bnextBlenderInstalledExtensions, ext);
+    });
+
+    return await getBlenderInstalledExtensions(blenderVersion);
+  }
+
+  Future<List<BnextBlenderInstalledExtension>> getBlenderInstalledExtensions(
+      String blenderVersion) async {
+    return await managers.bnextBlenderInstalledExtensions
+        .filter((f) => f.blenderVersionNumber.equals(blenderVersion))
+        .get();
+  }
+
+  Future<List<Map<BnextExtension, BnextExtensionVersion>>>
+      getBlenderInstalledExtensionsWithVersions(String blenderVersion) async {
+    final installedExtensions = await managers.bnextBlenderInstalledExtensions
+        .filter((f) => f.blenderVersionNumber.equals(blenderVersion))
+        .get();
+
+    final extensions = await managers.bnextExtensions
+        .filter((e) =>
+            e.extId.isIn(installedExtensions.map((ee) => ee.extId).toList()))
+        .get();
+
+    final versions = await managers.bnextExtensionVersions
+        .filter((ev) =>
+            ev.version.isIn(
+                installedExtensions.map((ee) => ee.extVersionNumber).toList()) &
+            ev.ext.extId
+                .isIn(installedExtensions.map((ee) => ee.extId).toList()))
+        .get();
+
+    final result = <Map<BnextExtension, BnextExtensionVersion>>[];
+
+    for (var ext in extensions) {
+      result.add({ext: versions.where((e) => e.ext == ext.id).first});
+    }
+
+    return result;
+  }
+
+  Future<List<BnextBlenderInstalledExtension>> getBlenderInstalledExtensionId(
+      String extId) async {
+    return await managers.bnextBlenderInstalledExtensions
+        .filter((f) => f.extId.equals(extId))
+        .get();
+  }
+
+  Future<List<BnextExtension>> getBlenderInstalledExtensionsByExtensionId(
+      String extId) async {
+    final extensons = await managers.bnextBlenderInstalledExtensions
+        .filter((f) => f.extId.equals(extId))
+        .get();
+
+    return await managers.bnextExtensions
+        .filter((f) => f.extId.isIn(extensons.map((e) => e.extId)))
+        .get();
+  }
+
+  Future deleteBlenderInstalledExtensionsByExtensionId(
+      List<String> extId) async {
+    await managers.bnextBlenderInstalledExtensions
+        .filter((f) => f.extId.isIn(extId))
+        .delete();
   }
 
   Future<List<BnextExtensionVersion>> installedExtensions(

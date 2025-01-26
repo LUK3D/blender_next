@@ -7,7 +7,7 @@ import 'package:signals/signals_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'Components/bn_file_dialog_input.dart';
 import 'Components/bn_select.dart';
-import 'Components/btn_row.dart';
+import 'Components/bn_row.dart';
 
 class GeneralSettings extends StatelessWidget {
   const GeneralSettings({super.key});

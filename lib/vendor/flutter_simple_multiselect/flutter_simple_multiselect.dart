@@ -507,148 +507,83 @@ class FlutterMultiselectState<T> extends State<FlutterMultiselect<T>> {
                   ),
                 LayoutId(
                     id: FlutterMultiselectLayoutDelegate.textFieldId,
-                    child: widget.multiselect
-                        ? (widget.length == 0 || _isFocused
-                            ? TextFormField(
-                                key: textFormKey,
-                                onTap: () {
-                                  if (_isFocused) {
-                                    _onSearchChanged("");
-                                  }
-                                },
-                                validator: (value) {
-                                  if (widget.validator == null) {
-                                    return null;
-                                  }
-                                  setState(() {
-                                    formError = widget.validator!(value);
-                                  });
-                                  return widget.validator!(value);
-                                },
-                                style: widget.textStyle,
-                                focusNode: _focusNode,
-                                enabled: widget.enabled,
-                                controller: _textFieldController,
-                                keyboardType: widget.keyboardType,
-                                keyboardAppearance: widget.keyboardAppearance,
-                                textCapitalization: widget.textCapitalization,
-                                textInputAction: widget.textInputAction,
-                                cursorColor: widget.cursorColor,
-                                autocorrect: widget.autocorrect,
-                                textAlign: widget.textAlign,
-                                textDirection: widget.textDirection,
-                                readOnly: widget.readOnly,
-                                autofocus: widget.autofocus,
-                                maxLines: widget.maxLines,
-                                decoration: decoration.copyWith(
-                                    border: InputBorder.none),
-                                onChanged: _onTextFieldChange,
-                                onFieldSubmitted: _onSubmitted,
-                                inputFormatters: widget.inputFormatters,
-                              )
-                            : SizedBox(
-                                height: widget.collapsedHeight ??
-                                    (isMobile ? 24 : inputHeight),
-                                child: SizedBox(
-                                  height: 0.1,
-                                  child: TextFormField(
-                                    style: const TextStyle(
-                                        fontSize: 0.1,
-                                        color: Colors.transparent),
-                                    readOnly: true,
-                                    enabled: false,
-                                    decoration: widget
-                                            .unfocusedInputDecoration ??
-                                        InputDecoration(
-                                          errorStyle: const TextStyle(
-                                              height: 0.01,
-                                              color: Colors.transparent),
-                                          errorBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: const BorderSide(
-                                                color: Colors.transparent,
-                                                width: 0.01,
-                                              )),
-                                          isDense: true,
-                                          isCollapsed: true,
-                                          contentPadding:
-                                              const EdgeInsets.all(0),
-                                          disabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: const BorderSide(
-                                                color: Colors.transparent,
-                                                width: 0.1,
-                                              )),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: const BorderSide(
-                                                color: Colors.transparent,
-                                                width: 0,
-                                              )),
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              borderSide: const BorderSide(
-                                                color: Colors.transparent,
-                                                width: 0.1,
-                                              )),
-                                        ),
-                                    onTap: () {
-                                      if (_isFocused) {
-                                        _onSearchChanged("");
-                                      }
-                                    },
-                                    validator: (value) {
-                                      if (widget.validator == null) {
-                                        return null;
-                                      }
-                                      setState(() {
-                                        formError = widget.validator!(value);
-                                      });
-                                      return widget.validator!(value);
-                                    },
-                                  ),
-                                ),
-                              ))
-                        : TextFormField(
-                            onTap: () {
-                              if (_isFocused) {
-                                _onSearchChanged("");
-                              }
-                            },
-                            validator: (value) {
-                              if (widget.validator == null) {
-                                return null;
-                              }
-                              setState(() {
-                                formError = widget.validator!(value);
-                              });
-                              return widget.validator!(value);
-                            },
-                            style: widget.textStyle,
-                            focusNode: _focusNode,
-                            enabled: widget.enabled,
-                            controller: _textFieldController,
-                            keyboardType: widget.keyboardType,
-                            keyboardAppearance: widget.keyboardAppearance,
-                            textCapitalization: widget.textCapitalization,
-                            textInputAction: widget.textInputAction,
-                            cursorColor: widget.cursorColor,
-                            autocorrect: widget.autocorrect,
-                            textAlign: widget.textAlign,
-                            textDirection: widget.textDirection,
-                            readOnly: widget.readOnly,
-                            autofocus: widget.autofocus,
-                            maxLines: widget.maxLines,
-                            decoration:
-                                decoration.copyWith(border: InputBorder.none),
-                            onChanged: _onTextFieldChange,
-                            onFieldSubmitted: _onSubmitted,
-                            inputFormatters: widget.inputFormatters,
-                          )),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: widget.multiselect
+                          ? TextFormField(
+                              key: textFormKey,
+                              onTap: () {
+                                if (_isFocused) {
+                                  _onSearchChanged("");
+                                }
+                              },
+                              validator: (value) {
+                                if (widget.validator == null) {
+                                  return null;
+                                }
+                                setState(() {
+                                  formError = widget.validator!(value);
+                                });
+                                return widget.validator!(value);
+                              },
+                              style: widget.textStyle,
+                              focusNode: _focusNode,
+                              enabled: widget.enabled,
+                              controller: _textFieldController,
+                              keyboardType: widget.keyboardType,
+                              keyboardAppearance: widget.keyboardAppearance,
+                              textCapitalization: widget.textCapitalization,
+                              textInputAction: widget.textInputAction,
+                              cursorColor: widget.cursorColor,
+                              autocorrect: widget.autocorrect,
+                              textAlign: widget.textAlign,
+                              textDirection: widget.textDirection,
+                              readOnly: widget.readOnly,
+                              autofocus: widget.autofocus,
+                              maxLines: widget.maxLines,
+                              decoration:
+                                  decoration.copyWith(border: InputBorder.none),
+                              onChanged: _onTextFieldChange,
+                              onFieldSubmitted: _onSubmitted,
+                              inputFormatters: widget.inputFormatters,
+                            )
+                          : TextFormField(
+                              onTap: () {
+                                if (_isFocused) {
+                                  _onSearchChanged("");
+                                }
+                              },
+                              validator: (value) {
+                                if (widget.validator == null) {
+                                  return null;
+                                }
+                                setState(() {
+                                  formError = widget.validator!(value);
+                                });
+                                return widget.validator!(value);
+                              },
+                              style: widget.textStyle,
+                              focusNode: _focusNode,
+                              enabled: widget.enabled,
+                              controller: _textFieldController,
+                              keyboardType: widget.keyboardType,
+                              keyboardAppearance: widget.keyboardAppearance,
+                              textCapitalization: widget.textCapitalization,
+                              textInputAction: widget.textInputAction,
+                              cursorColor: widget.cursorColor,
+                              autocorrect: widget.autocorrect,
+                              textAlign: widget.textAlign,
+                              textDirection: widget.textDirection,
+                              readOnly: widget.readOnly,
+                              autofocus: widget.autofocus,
+                              maxLines: widget.maxLines,
+                              decoration:
+                                  decoration.copyWith(border: InputBorder.none),
+                              onChanged: _onTextFieldChange,
+                              onFieldSubmitted: _onSubmitted,
+                              inputFormatters: widget.inputFormatters,
+                            ),
+                    )),
               ],
             ),
           ),

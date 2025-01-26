@@ -41,6 +41,9 @@ class _InstallersSreenState extends State<InstallersSreen> {
           body: (selectedBlenderVersion.value != null)
               ? BlenderVersionDetail(
                   bVersion: selectedBlenderVersion.value!,
+                  onClose: () {
+                    selectedBlenderVersion.value = null;
+                  },
                 )
               : Column(
                   children: [
@@ -160,7 +163,7 @@ class _InstallersSreenState extends State<InstallersSreen> {
                               itemCount: widget.installers.length,
                               gridDelegate:
                                   const SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 300,
+                                      maxCrossAxisExtent: 330,
                                       mainAxisExtent: 290,
                                       // childAspectRatio: 5 / 5,
                                       mainAxisSpacing: 20,

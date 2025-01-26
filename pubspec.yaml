@@ -43,6 +43,9 @@ dependencies:
   app_links_workspace:
     git:
       url: https://github.com/lijy91/app_links.git
+  elegant_notification: ^2.4.1
+  toml: ^0.16.0
+
 
 dependency_overrides:
   media_kit: 

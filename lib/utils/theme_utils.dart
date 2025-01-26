@@ -14,6 +14,7 @@ final darkTheme = ThemeData.dark().copyWith(
     colorScheme: const ColorScheme.dark(
       primary: Color(0xFFE98316),
       secondary: Color(0xFF206EFF),
+      onSecondary: Colors.white,
       onPrimary: Colors.white,
       surface: Color(0xFF1F2123),
       onSurface: Color(0xFF8A8B8B),

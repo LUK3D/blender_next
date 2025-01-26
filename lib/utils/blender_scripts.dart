@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class BlenderStript {
@@ -29,6 +32,11 @@ class BlenderEngines {
   static String viewport = "VIEWPORT";
 }
 
+class BlenderAddonTypes {
+  static String extensions = "extension";
+  static String addon = "addon";
+}
+
 Future<String> getRenderBlenderFileScript({
   required String filePath,
   required String outPath,
@@ -56,4 +64,14 @@ Future<String> getRenderBlenderFileScript({
       .replaceAll(RegExp(r'\r?\n'), ';');
 
   return val.split("\n").join("; ").replaceAll("\n;", '');
+}
+
+class BlenderPythonFiles {
+  final baseAssetsPath =
+      "${Directory.current.path}\\data\\flutter_assets\\assets\\data\\bpy_scripts";
+  final devBaseAssetsPath =
+      "${Directory.current.path}\\assets\\data\\bpy_scripts";
+  String get enableExtensions {
+    return "${kDebugMode ? devBaseAssetsPath : baseAssetsPath}\\enable_addon.py";
+  }
 }

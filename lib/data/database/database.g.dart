@@ -3923,6 +3923,12 @@ class $BnextExtensionVersionsTable extends BnextExtensionVersions
   late final GeneratedColumn<String> blenderMinVersion =
       GeneratedColumn<String>('blender_min_version', aliasedName, true,
           type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _blenderMinVersionintMeta =
+      const VerificationMeta('blenderMinVersionint');
+  @override
+  late final GeneratedColumn<int> blenderMinVersionint = GeneratedColumn<int>(
+      'blender_min_versionint', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _downloadUrlMeta =
       const VerificationMeta('downloadUrl');
   @override
@@ -3954,6 +3960,7 @@ class $BnextExtensionVersionsTable extends BnextExtensionVersions
         ext,
         version,
         blenderMinVersion,
+        blenderMinVersionint,
         downloadUrl,
         instalationPath,
         releaseNotes,
@@ -3994,6 +4001,12 @@ class $BnextExtensionVersionsTable extends BnextExtensionVersions
           _blenderMinVersionMeta,
           blenderMinVersion.isAcceptableOrUnknown(
               data['blender_min_version']!, _blenderMinVersionMeta));
+    }
+    if (data.containsKey('blender_min_versionint')) {
+      context.handle(
+          _blenderMinVersionintMeta,
+          blenderMinVersionint.isAcceptableOrUnknown(
+              data['blender_min_versionint']!, _blenderMinVersionintMeta));
     }
     if (data.containsKey('download_url')) {
       context.handle(
@@ -4036,6 +4049,8 @@ class $BnextExtensionVersionsTable extends BnextExtensionVersions
           .read(DriftSqlType.string, data['${effectivePrefix}version'])!,
       blenderMinVersion: attachedDatabase.typeMapping.read(
           DriftSqlType.string, data['${effectivePrefix}blender_min_version']),
+      blenderMinVersionint: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}blender_min_versionint']),
       downloadUrl: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}download_url']),
       instalationPath: attachedDatabase.typeMapping.read(
@@ -4060,6 +4075,7 @@ class BnextExtensionVersion extends DataClass
   final int ext;
   final String version;
   final String? blenderMinVersion;
+  final int? blenderMinVersionint;
   final String? downloadUrl;
   final String? instalationPath;
   final String? releaseNotes;
@@ -4070,6 +4086,7 @@ class BnextExtensionVersion extends DataClass
       required this.ext,
       required this.version,
       this.blenderMinVersion,
+      this.blenderMinVersionint,
       this.downloadUrl,
       this.instalationPath,
       this.releaseNotes,
@@ -4087,6 +4104,9 @@ class BnextExtensionVersion extends DataClass
     map['version'] = Variable<String>(version);
     if (!nullToAbsent || blenderMinVersion != null) {
       map['blender_min_version'] = Variable<String>(blenderMinVersion);
+    }
+    if (!nullToAbsent || blenderMinVersionint != null) {
+      map['blender_min_versionint'] = Variable<int>(blenderMinVersionint);
     }
     if (!nullToAbsent || downloadUrl != null) {
       map['download_url'] = Variable<String>(downloadUrl);
@@ -4114,6 +4134,9 @@ class BnextExtensionVersion extends DataClass
       blenderMinVersion: blenderMinVersion == null && nullToAbsent
           ? const Value.absent()
           : Value(blenderMinVersion),
+      blenderMinVersionint: blenderMinVersionint == null && nullToAbsent
+          ? const Value.absent()
+          : Value(blenderMinVersionint),
       downloadUrl: downloadUrl == null && nullToAbsent
           ? const Value.absent()
           : Value(downloadUrl),
@@ -4139,6 +4162,8 @@ class BnextExtensionVersion extends DataClass
       version: serializer.fromJson<String>(json['version']),
       blenderMinVersion:
           serializer.fromJson<String?>(json['blenderMinVersion']),
+      blenderMinVersionint:
+          serializer.fromJson<int?>(json['blenderMinVersionint']),
       downloadUrl: serializer.fromJson<String?>(json['downloadUrl']),
       instalationPath: serializer.fromJson<String?>(json['instalationPath']),
       releaseNotes: serializer.fromJson<String?>(json['releaseNotes']),
@@ -4154,6 +4179,7 @@ class BnextExtensionVersion extends DataClass
       'ext': serializer.toJson<int>(ext),
       'version': serializer.toJson<String>(version),
       'blenderMinVersion': serializer.toJson<String?>(blenderMinVersion),
+      'blenderMinVersionint': serializer.toJson<int?>(blenderMinVersionint),
       'downloadUrl': serializer.toJson<String?>(downloadUrl),
       'instalationPath': serializer.toJson<String?>(instalationPath),
       'releaseNotes': serializer.toJson<String?>(releaseNotes),
@@ -4167,6 +4193,7 @@ class BnextExtensionVersion extends DataClass
           int? ext,
           String? version,
           Value<String?> blenderMinVersion = const Value.absent(),
+          Value<int?> blenderMinVersionint = const Value.absent(),
           Value<String?> downloadUrl = const Value.absent(),
           Value<String?> instalationPath = const Value.absent(),
           Value<String?> releaseNotes = const Value.absent(),
@@ -4179,6 +4206,9 @@ class BnextExtensionVersion extends DataClass
         blenderMinVersion: blenderMinVersion.present
             ? blenderMinVersion.value
             : this.blenderMinVersion,
+        blenderMinVersionint: blenderMinVersionint.present
+            ? blenderMinVersionint.value
+            : this.blenderMinVersionint,
         downloadUrl: downloadUrl.present ? downloadUrl.value : this.downloadUrl,
         instalationPath: instalationPath.present
             ? instalationPath.value
@@ -4197,6 +4227,9 @@ class BnextExtensionVersion extends DataClass
       blenderMinVersion: data.blenderMinVersion.present
           ? data.blenderMinVersion.value
           : this.blenderMinVersion,
+      blenderMinVersionint: data.blenderMinVersionint.present
+          ? data.blenderMinVersionint.value
+          : this.blenderMinVersionint,
       downloadUrl:
           data.downloadUrl.present ? data.downloadUrl.value : this.downloadUrl,
       instalationPath: data.instalationPath.present
@@ -4217,6 +4250,7 @@ class BnextExtensionVersion extends DataClass
           ..write('ext: $ext, ')
           ..write('version: $version, ')
           ..write('blenderMinVersion: $blenderMinVersion, ')
+          ..write('blenderMinVersionint: $blenderMinVersionint, ')
           ..write('downloadUrl: $downloadUrl, ')
           ..write('instalationPath: $instalationPath, ')
           ..write('releaseNotes: $releaseNotes, ')
@@ -4226,8 +4260,17 @@ class BnextExtensionVersion extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(id, createdAt, ext, version,
-      blenderMinVersion, downloadUrl, instalationPath, releaseNotes, metaData);
+  int get hashCode => Object.hash(
+      id,
+      createdAt,
+      ext,
+      version,
+      blenderMinVersion,
+      blenderMinVersionint,
+      downloadUrl,
+      instalationPath,
+      releaseNotes,
+      metaData);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4237,6 +4280,7 @@ class BnextExtensionVersion extends DataClass
           other.ext == this.ext &&
           other.version == this.version &&
           other.blenderMinVersion == this.blenderMinVersion &&
+          other.blenderMinVersionint == this.blenderMinVersionint &&
           other.downloadUrl == this.downloadUrl &&
           other.instalationPath == this.instalationPath &&
           other.releaseNotes == this.releaseNotes &&
@@ -4250,6 +4294,7 @@ class BnextExtensionVersionsCompanion
   final Value<int> ext;
   final Value<String> version;
   final Value<String?> blenderMinVersion;
+  final Value<int?> blenderMinVersionint;
   final Value<String?> downloadUrl;
   final Value<String?> instalationPath;
   final Value<String?> releaseNotes;
@@ -4260,6 +4305,7 @@ class BnextExtensionVersionsCompanion
     this.ext = const Value.absent(),
     this.version = const Value.absent(),
     this.blenderMinVersion = const Value.absent(),
+    this.blenderMinVersionint = const Value.absent(),
     this.downloadUrl = const Value.absent(),
     this.instalationPath = const Value.absent(),
     this.releaseNotes = const Value.absent(),
@@ -4271,6 +4317,7 @@ class BnextExtensionVersionsCompanion
     required int ext,
     required String version,
     this.blenderMinVersion = const Value.absent(),
+    this.blenderMinVersionint = const Value.absent(),
     this.downloadUrl = const Value.absent(),
     this.instalationPath = const Value.absent(),
     this.releaseNotes = const Value.absent(),
@@ -4283,6 +4330,7 @@ class BnextExtensionVersionsCompanion
     Expression<int>? ext,
     Expression<String>? version,
     Expression<String>? blenderMinVersion,
+    Expression<int>? blenderMinVersionint,
     Expression<String>? downloadUrl,
     Expression<String>? instalationPath,
     Expression<String>? releaseNotes,
@@ -4294,6 +4342,8 @@ class BnextExtensionVersionsCompanion
       if (ext != null) 'ext': ext,
       if (version != null) 'version': version,
       if (blenderMinVersion != null) 'blender_min_version': blenderMinVersion,
+      if (blenderMinVersionint != null)
+        'blender_min_versionint': blenderMinVersionint,
       if (downloadUrl != null) 'download_url': downloadUrl,
       if (instalationPath != null) 'instalation_path': instalationPath,
       if (releaseNotes != null) 'release_notes': releaseNotes,
@@ -4307,6 +4357,7 @@ class BnextExtensionVersionsCompanion
       Value<int>? ext,
       Value<String>? version,
       Value<String?>? blenderMinVersion,
+      Value<int?>? blenderMinVersionint,
       Value<String?>? downloadUrl,
       Value<String?>? instalationPath,
       Value<String?>? releaseNotes,
@@ -4317,6 +4368,7 @@ class BnextExtensionVersionsCompanion
       ext: ext ?? this.ext,
       version: version ?? this.version,
       blenderMinVersion: blenderMinVersion ?? this.blenderMinVersion,
+      blenderMinVersionint: blenderMinVersionint ?? this.blenderMinVersionint,
       downloadUrl: downloadUrl ?? this.downloadUrl,
       instalationPath: instalationPath ?? this.instalationPath,
       releaseNotes: releaseNotes ?? this.releaseNotes,
@@ -4342,6 +4394,9 @@ class BnextExtensionVersionsCompanion
     if (blenderMinVersion.present) {
       map['blender_min_version'] = Variable<String>(blenderMinVersion.value);
     }
+    if (blenderMinVersionint.present) {
+      map['blender_min_versionint'] = Variable<int>(blenderMinVersionint.value);
+    }
     if (downloadUrl.present) {
       map['download_url'] = Variable<String>(downloadUrl.value);
     }
@@ -4365,10 +4420,388 @@ class BnextExtensionVersionsCompanion
           ..write('ext: $ext, ')
           ..write('version: $version, ')
           ..write('blenderMinVersion: $blenderMinVersion, ')
+          ..write('blenderMinVersionint: $blenderMinVersionint, ')
           ..write('downloadUrl: $downloadUrl, ')
           ..write('instalationPath: $instalationPath, ')
           ..write('releaseNotes: $releaseNotes, ')
           ..write('metaData: $metaData')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BnextBlenderInstalledExtensionsTable
+    extends BnextBlenderInstalledExtensions
+    with
+        TableInfo<$BnextBlenderInstalledExtensionsTable,
+            BnextBlenderInstalledExtension> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BnextBlenderInstalledExtensionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, true,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, true,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  static const VerificationMeta _extIdMeta = const VerificationMeta('extId');
+  @override
+  late final GeneratedColumn<String> extId = GeneratedColumn<String>(
+      'ext_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _extVersionNumberMeta =
+      const VerificationMeta('extVersionNumber');
+  @override
+  late final GeneratedColumn<String> extVersionNumber = GeneratedColumn<String>(
+      'ext_version_number', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _blenderVersionNumberMeta =
+      const VerificationMeta('blenderVersionNumber');
+  @override
+  late final GeneratedColumn<String> blenderVersionNumber =
+      GeneratedColumn<String>('blender_version_number', aliasedName, false,
+          type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _instalationFolderPathMeta =
+      const VerificationMeta('instalationFolderPath');
+  @override
+  late final GeneratedColumn<String> instalationFolderPath =
+      GeneratedColumn<String>('instalation_folder_path', aliasedName, false,
+          type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        createdAt,
+        extId,
+        extVersionNumber,
+        blenderVersionNumber,
+        instalationFolderPath
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'bnext_blender_installed_extensions';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<BnextBlenderInstalledExtension> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    }
+    if (data.containsKey('ext_id')) {
+      context.handle(
+          _extIdMeta, extId.isAcceptableOrUnknown(data['ext_id']!, _extIdMeta));
+    } else if (isInserting) {
+      context.missing(_extIdMeta);
+    }
+    if (data.containsKey('ext_version_number')) {
+      context.handle(
+          _extVersionNumberMeta,
+          extVersionNumber.isAcceptableOrUnknown(
+              data['ext_version_number']!, _extVersionNumberMeta));
+    } else if (isInserting) {
+      context.missing(_extVersionNumberMeta);
+    }
+    if (data.containsKey('blender_version_number')) {
+      context.handle(
+          _blenderVersionNumberMeta,
+          blenderVersionNumber.isAcceptableOrUnknown(
+              data['blender_version_number']!, _blenderVersionNumberMeta));
+    } else if (isInserting) {
+      context.missing(_blenderVersionNumberMeta);
+    }
+    if (data.containsKey('instalation_folder_path')) {
+      context.handle(
+          _instalationFolderPathMeta,
+          instalationFolderPath.isAcceptableOrUnknown(
+              data['instalation_folder_path']!, _instalationFolderPathMeta));
+    } else if (isInserting) {
+      context.missing(_instalationFolderPathMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  BnextBlenderInstalledExtension map(Map<String, dynamic> data,
+      {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BnextBlenderInstalledExtension(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id']),
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at']),
+      extId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ext_id'])!,
+      extVersionNumber: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}ext_version_number'])!,
+      blenderVersionNumber: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}blender_version_number'])!,
+      instalationFolderPath: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}instalation_folder_path'])!,
+    );
+  }
+
+  @override
+  $BnextBlenderInstalledExtensionsTable createAlias(String alias) {
+    return $BnextBlenderInstalledExtensionsTable(attachedDatabase, alias);
+  }
+}
+
+class BnextBlenderInstalledExtension extends DataClass
+    implements Insertable<BnextBlenderInstalledExtension> {
+  final int? id;
+  final DateTime? createdAt;
+  final String extId;
+  final String extVersionNumber;
+  final String blenderVersionNumber;
+  final String instalationFolderPath;
+  const BnextBlenderInstalledExtension(
+      {this.id,
+      this.createdAt,
+      required this.extId,
+      required this.extVersionNumber,
+      required this.blenderVersionNumber,
+      required this.instalationFolderPath});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (!nullToAbsent || id != null) {
+      map['id'] = Variable<int>(id);
+    }
+    if (!nullToAbsent || createdAt != null) {
+      map['created_at'] = Variable<DateTime>(createdAt);
+    }
+    map['ext_id'] = Variable<String>(extId);
+    map['ext_version_number'] = Variable<String>(extVersionNumber);
+    map['blender_version_number'] = Variable<String>(blenderVersionNumber);
+    map['instalation_folder_path'] = Variable<String>(instalationFolderPath);
+    return map;
+  }
+
+  BnextBlenderInstalledExtensionsCompanion toCompanion(bool nullToAbsent) {
+    return BnextBlenderInstalledExtensionsCompanion(
+      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
+      createdAt: createdAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdAt),
+      extId: Value(extId),
+      extVersionNumber: Value(extVersionNumber),
+      blenderVersionNumber: Value(blenderVersionNumber),
+      instalationFolderPath: Value(instalationFolderPath),
+    );
+  }
+
+  factory BnextBlenderInstalledExtension.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BnextBlenderInstalledExtension(
+      id: serializer.fromJson<int?>(json['id']),
+      createdAt: serializer.fromJson<DateTime?>(json['createdAt']),
+      extId: serializer.fromJson<String>(json['extId']),
+      extVersionNumber: serializer.fromJson<String>(json['extVersionNumber']),
+      blenderVersionNumber:
+          serializer.fromJson<String>(json['blenderVersionNumber']),
+      instalationFolderPath:
+          serializer.fromJson<String>(json['instalationFolderPath']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int?>(id),
+      'createdAt': serializer.toJson<DateTime?>(createdAt),
+      'extId': serializer.toJson<String>(extId),
+      'extVersionNumber': serializer.toJson<String>(extVersionNumber),
+      'blenderVersionNumber': serializer.toJson<String>(blenderVersionNumber),
+      'instalationFolderPath': serializer.toJson<String>(instalationFolderPath),
+    };
+  }
+
+  BnextBlenderInstalledExtension copyWith(
+          {Value<int?> id = const Value.absent(),
+          Value<DateTime?> createdAt = const Value.absent(),
+          String? extId,
+          String? extVersionNumber,
+          String? blenderVersionNumber,
+          String? instalationFolderPath}) =>
+      BnextBlenderInstalledExtension(
+        id: id.present ? id.value : this.id,
+        createdAt: createdAt.present ? createdAt.value : this.createdAt,
+        extId: extId ?? this.extId,
+        extVersionNumber: extVersionNumber ?? this.extVersionNumber,
+        blenderVersionNumber: blenderVersionNumber ?? this.blenderVersionNumber,
+        instalationFolderPath:
+            instalationFolderPath ?? this.instalationFolderPath,
+      );
+  BnextBlenderInstalledExtension copyWithCompanion(
+      BnextBlenderInstalledExtensionsCompanion data) {
+    return BnextBlenderInstalledExtension(
+      id: data.id.present ? data.id.value : this.id,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      extId: data.extId.present ? data.extId.value : this.extId,
+      extVersionNumber: data.extVersionNumber.present
+          ? data.extVersionNumber.value
+          : this.extVersionNumber,
+      blenderVersionNumber: data.blenderVersionNumber.present
+          ? data.blenderVersionNumber.value
+          : this.blenderVersionNumber,
+      instalationFolderPath: data.instalationFolderPath.present
+          ? data.instalationFolderPath.value
+          : this.instalationFolderPath,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BnextBlenderInstalledExtension(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('extId: $extId, ')
+          ..write('extVersionNumber: $extVersionNumber, ')
+          ..write('blenderVersionNumber: $blenderVersionNumber, ')
+          ..write('instalationFolderPath: $instalationFolderPath')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, createdAt, extId, extVersionNumber,
+      blenderVersionNumber, instalationFolderPath);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BnextBlenderInstalledExtension &&
+          other.id == this.id &&
+          other.createdAt == this.createdAt &&
+          other.extId == this.extId &&
+          other.extVersionNumber == this.extVersionNumber &&
+          other.blenderVersionNumber == this.blenderVersionNumber &&
+          other.instalationFolderPath == this.instalationFolderPath);
+}
+
+class BnextBlenderInstalledExtensionsCompanion
+    extends UpdateCompanion<BnextBlenderInstalledExtension> {
+  final Value<int?> id;
+  final Value<DateTime?> createdAt;
+  final Value<String> extId;
+  final Value<String> extVersionNumber;
+  final Value<String> blenderVersionNumber;
+  final Value<String> instalationFolderPath;
+  const BnextBlenderInstalledExtensionsCompanion({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.extId = const Value.absent(),
+    this.extVersionNumber = const Value.absent(),
+    this.blenderVersionNumber = const Value.absent(),
+    this.instalationFolderPath = const Value.absent(),
+  });
+  BnextBlenderInstalledExtensionsCompanion.insert({
+    this.id = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    required String extId,
+    required String extVersionNumber,
+    required String blenderVersionNumber,
+    required String instalationFolderPath,
+  })  : extId = Value(extId),
+        extVersionNumber = Value(extVersionNumber),
+        blenderVersionNumber = Value(blenderVersionNumber),
+        instalationFolderPath = Value(instalationFolderPath);
+  static Insertable<BnextBlenderInstalledExtension> custom({
+    Expression<int>? id,
+    Expression<DateTime>? createdAt,
+    Expression<String>? extId,
+    Expression<String>? extVersionNumber,
+    Expression<String>? blenderVersionNumber,
+    Expression<String>? instalationFolderPath,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (createdAt != null) 'created_at': createdAt,
+      if (extId != null) 'ext_id': extId,
+      if (extVersionNumber != null) 'ext_version_number': extVersionNumber,
+      if (blenderVersionNumber != null)
+        'blender_version_number': blenderVersionNumber,
+      if (instalationFolderPath != null)
+        'instalation_folder_path': instalationFolderPath,
+    });
+  }
+
+  BnextBlenderInstalledExtensionsCompanion copyWith(
+      {Value<int?>? id,
+      Value<DateTime?>? createdAt,
+      Value<String>? extId,
+      Value<String>? extVersionNumber,
+      Value<String>? blenderVersionNumber,
+      Value<String>? instalationFolderPath}) {
+    return BnextBlenderInstalledExtensionsCompanion(
+      id: id ?? this.id,
+      createdAt: createdAt ?? this.createdAt,
+      extId: extId ?? this.extId,
+      extVersionNumber: extVersionNumber ?? this.extVersionNumber,
+      blenderVersionNumber: blenderVersionNumber ?? this.blenderVersionNumber,
+      instalationFolderPath:
+          instalationFolderPath ?? this.instalationFolderPath,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (extId.present) {
+      map['ext_id'] = Variable<String>(extId.value);
+    }
+    if (extVersionNumber.present) {
+      map['ext_version_number'] = Variable<String>(extVersionNumber.value);
+    }
+    if (blenderVersionNumber.present) {
+      map['blender_version_number'] =
+          Variable<String>(blenderVersionNumber.value);
+    }
+    if (instalationFolderPath.present) {
+      map['instalation_folder_path'] =
+          Variable<String>(instalationFolderPath.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BnextBlenderInstalledExtensionsCompanion(')
+          ..write('id: $id, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('extId: $extId, ')
+          ..write('extVersionNumber: $extVersionNumber, ')
+          ..write('blenderVersionNumber: $blenderVersionNumber, ')
+          ..write('instalationFolderPath: $instalationFolderPath')
           ..write(')'))
         .toString();
   }
@@ -4388,6 +4821,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $BnextProjectExtensionsTable(this);
   late final $BnextExtensionVersionsTable bnextExtensionVersions =
       $BnextExtensionVersionsTable(this);
+  late final $BnextBlenderInstalledExtensionsTable
+      bnextBlenderInstalledExtensions =
+      $BnextBlenderInstalledExtensionsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4399,7 +4835,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         bnexProjects,
         bnextExtensions,
         bnextProjectExtensions,
-        bnextExtensionVersions
+        bnextExtensionVersions,
+        bnextBlenderInstalledExtensions
       ];
 }
 
@@ -6790,6 +7227,7 @@ typedef $$BnextExtensionVersionsTableCreateCompanionBuilder
   required int ext,
   required String version,
   Value<String?> blenderMinVersion,
+  Value<int?> blenderMinVersionint,
   Value<String?> downloadUrl,
   Value<String?> instalationPath,
   Value<String?> releaseNotes,
@@ -6802,6 +7240,7 @@ typedef $$BnextExtensionVersionsTableUpdateCompanionBuilder
   Value<int> ext,
   Value<String> version,
   Value<String?> blenderMinVersion,
+  Value<int?> blenderMinVersionint,
   Value<String?> downloadUrl,
   Value<String?> instalationPath,
   Value<String?> releaseNotes,
@@ -6848,6 +7287,10 @@ class $$BnextExtensionVersionsTableFilterComposer
 
   ColumnFilters<String> get blenderMinVersion => $composableBuilder(
       column: $table.blenderMinVersion,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get blenderMinVersionint => $composableBuilder(
+      column: $table.blenderMinVersionint,
       builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get downloadUrl => $composableBuilder(
@@ -6906,6 +7349,10 @@ class $$BnextExtensionVersionsTableOrderingComposer
       column: $table.blenderMinVersion,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<int> get blenderMinVersionint => $composableBuilder(
+      column: $table.blenderMinVersionint,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get downloadUrl => $composableBuilder(
       column: $table.downloadUrl, builder: (column) => ColumnOrderings(column));
 
@@ -6961,6 +7408,9 @@ class $$BnextExtensionVersionsTableAnnotationComposer
 
   GeneratedColumn<String> get blenderMinVersion => $composableBuilder(
       column: $table.blenderMinVersion, builder: (column) => column);
+
+  GeneratedColumn<int> get blenderMinVersionint => $composableBuilder(
+      column: $table.blenderMinVersionint, builder: (column) => column);
 
   GeneratedColumn<String> get downloadUrl => $composableBuilder(
       column: $table.downloadUrl, builder: (column) => column);
@@ -7027,6 +7477,7 @@ class $$BnextExtensionVersionsTableTableManager extends RootTableManager<
             Value<int> ext = const Value.absent(),
             Value<String> version = const Value.absent(),
             Value<String?> blenderMinVersion = const Value.absent(),
+            Value<int?> blenderMinVersionint = const Value.absent(),
             Value<String?> downloadUrl = const Value.absent(),
             Value<String?> instalationPath = const Value.absent(),
             Value<String?> releaseNotes = const Value.absent(),
@@ -7038,6 +7489,7 @@ class $$BnextExtensionVersionsTableTableManager extends RootTableManager<
             ext: ext,
             version: version,
             blenderMinVersion: blenderMinVersion,
+            blenderMinVersionint: blenderMinVersionint,
             downloadUrl: downloadUrl,
             instalationPath: instalationPath,
             releaseNotes: releaseNotes,
@@ -7049,6 +7501,7 @@ class $$BnextExtensionVersionsTableTableManager extends RootTableManager<
             required int ext,
             required String version,
             Value<String?> blenderMinVersion = const Value.absent(),
+            Value<int?> blenderMinVersionint = const Value.absent(),
             Value<String?> downloadUrl = const Value.absent(),
             Value<String?> instalationPath = const Value.absent(),
             Value<String?> releaseNotes = const Value.absent(),
@@ -7060,6 +7513,7 @@ class $$BnextExtensionVersionsTableTableManager extends RootTableManager<
             ext: ext,
             version: version,
             blenderMinVersion: blenderMinVersion,
+            blenderMinVersionint: blenderMinVersionint,
             downloadUrl: downloadUrl,
             instalationPath: instalationPath,
             releaseNotes: releaseNotes,
@@ -7123,6 +7577,202 @@ typedef $$BnextExtensionVersionsTableProcessedTableManager
         (BnextExtensionVersion, $$BnextExtensionVersionsTableReferences),
         BnextExtensionVersion,
         PrefetchHooks Function({bool ext})>;
+typedef $$BnextBlenderInstalledExtensionsTableCreateCompanionBuilder
+    = BnextBlenderInstalledExtensionsCompanion Function({
+  Value<int?> id,
+  Value<DateTime?> createdAt,
+  required String extId,
+  required String extVersionNumber,
+  required String blenderVersionNumber,
+  required String instalationFolderPath,
+});
+typedef $$BnextBlenderInstalledExtensionsTableUpdateCompanionBuilder
+    = BnextBlenderInstalledExtensionsCompanion Function({
+  Value<int?> id,
+  Value<DateTime?> createdAt,
+  Value<String> extId,
+  Value<String> extVersionNumber,
+  Value<String> blenderVersionNumber,
+  Value<String> instalationFolderPath,
+});
+
+class $$BnextBlenderInstalledExtensionsTableFilterComposer
+    extends Composer<_$AppDatabase, $BnextBlenderInstalledExtensionsTable> {
+  $$BnextBlenderInstalledExtensionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get extId => $composableBuilder(
+      column: $table.extId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get extVersionNumber => $composableBuilder(
+      column: $table.extVersionNumber,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get blenderVersionNumber => $composableBuilder(
+      column: $table.blenderVersionNumber,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get instalationFolderPath => $composableBuilder(
+      column: $table.instalationFolderPath,
+      builder: (column) => ColumnFilters(column));
+}
+
+class $$BnextBlenderInstalledExtensionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BnextBlenderInstalledExtensionsTable> {
+  $$BnextBlenderInstalledExtensionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get extId => $composableBuilder(
+      column: $table.extId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get extVersionNumber => $composableBuilder(
+      column: $table.extVersionNumber,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get blenderVersionNumber => $composableBuilder(
+      column: $table.blenderVersionNumber,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get instalationFolderPath => $composableBuilder(
+      column: $table.instalationFolderPath,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$BnextBlenderInstalledExtensionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BnextBlenderInstalledExtensionsTable> {
+  $$BnextBlenderInstalledExtensionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<String> get extId =>
+      $composableBuilder(column: $table.extId, builder: (column) => column);
+
+  GeneratedColumn<String> get extVersionNumber => $composableBuilder(
+      column: $table.extVersionNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get blenderVersionNumber => $composableBuilder(
+      column: $table.blenderVersionNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get instalationFolderPath => $composableBuilder(
+      column: $table.instalationFolderPath, builder: (column) => column);
+}
+
+class $$BnextBlenderInstalledExtensionsTableTableManager
+    extends RootTableManager<
+        _$AppDatabase,
+        $BnextBlenderInstalledExtensionsTable,
+        BnextBlenderInstalledExtension,
+        $$BnextBlenderInstalledExtensionsTableFilterComposer,
+        $$BnextBlenderInstalledExtensionsTableOrderingComposer,
+        $$BnextBlenderInstalledExtensionsTableAnnotationComposer,
+        $$BnextBlenderInstalledExtensionsTableCreateCompanionBuilder,
+        $$BnextBlenderInstalledExtensionsTableUpdateCompanionBuilder,
+        (
+          BnextBlenderInstalledExtension,
+          BaseReferences<_$AppDatabase, $BnextBlenderInstalledExtensionsTable,
+              BnextBlenderInstalledExtension>
+        ),
+        BnextBlenderInstalledExtension,
+        PrefetchHooks Function()> {
+  $$BnextBlenderInstalledExtensionsTableTableManager(
+      _$AppDatabase db, $BnextBlenderInstalledExtensionsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BnextBlenderInstalledExtensionsTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BnextBlenderInstalledExtensionsTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BnextBlenderInstalledExtensionsTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            Value<String> extId = const Value.absent(),
+            Value<String> extVersionNumber = const Value.absent(),
+            Value<String> blenderVersionNumber = const Value.absent(),
+            Value<String> instalationFolderPath = const Value.absent(),
+          }) =>
+              BnextBlenderInstalledExtensionsCompanion(
+            id: id,
+            createdAt: createdAt,
+            extId: extId,
+            extVersionNumber: extVersionNumber,
+            blenderVersionNumber: blenderVersionNumber,
+            instalationFolderPath: instalationFolderPath,
+          ),
+          createCompanionCallback: ({
+            Value<int?> id = const Value.absent(),
+            Value<DateTime?> createdAt = const Value.absent(),
+            required String extId,
+            required String extVersionNumber,
+            required String blenderVersionNumber,
+            required String instalationFolderPath,
+          }) =>
+              BnextBlenderInstalledExtensionsCompanion.insert(
+            id: id,
+            createdAt: createdAt,
+            extId: extId,
+            extVersionNumber: extVersionNumber,
+            blenderVersionNumber: blenderVersionNumber,
+            instalationFolderPath: instalationFolderPath,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$BnextBlenderInstalledExtensionsTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $BnextBlenderInstalledExtensionsTable,
+        BnextBlenderInstalledExtension,
+        $$BnextBlenderInstalledExtensionsTableFilterComposer,
+        $$BnextBlenderInstalledExtensionsTableOrderingComposer,
+        $$BnextBlenderInstalledExtensionsTableAnnotationComposer,
+        $$BnextBlenderInstalledExtensionsTableCreateCompanionBuilder,
+        $$BnextBlenderInstalledExtensionsTableUpdateCompanionBuilder,
+        (
+          BnextBlenderInstalledExtension,
+          BaseReferences<_$AppDatabase, $BnextBlenderInstalledExtensionsTable,
+              BnextBlenderInstalledExtension>
+        ),
+        BnextBlenderInstalledExtension,
+        PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7143,4 +7793,8 @@ class $AppDatabaseManager {
   $$BnextExtensionVersionsTableTableManager get bnextExtensionVersions =>
       $$BnextExtensionVersionsTableTableManager(
           _db, _db.bnextExtensionVersions);
+  $$BnextBlenderInstalledExtensionsTableTableManager
+      get bnextBlenderInstalledExtensions =>
+          $$BnextBlenderInstalledExtensionsTableTableManager(
+              _db, _db.bnextBlenderInstalledExtensions);
 }

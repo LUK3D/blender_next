@@ -4,7 +4,7 @@ import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:blender_next/components/video_player.dart';
 import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/features/home/screens/settings/Components/bn_select.dart';
-import 'package:blender_next/features/home/screens/settings/Components/btn_row.dart';
+import 'package:blender_next/features/home/screens/settings/Components/bn_row.dart';
 import 'package:blender_next/services/exntesions_service.dart';
 import 'package:blender_next/utils/utils.dart';
 import 'package:carousel_slider/carousel_slider.dart';

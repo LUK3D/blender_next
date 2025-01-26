@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:archive/archive.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 String formatBytes(int bytes, int decimals) {
@@ -70,4 +72,54 @@ bool isVideo(String path) {
   final videoExtensions = ['mp4', 'mov', 'wmv', 'avi', 'mkv', 'flv', 'webm'];
   final extension = path.split('.').last.toLowerCase();
   return videoExtensions.contains(extension);
+}
+
+String extractFileNameFromExtension(String fileName) {
+  final regex = RegExp(r'^(.*?)(?:-\d+\.\d+\.\d+)?(?:\.zip)?$');
+  final match = regex.firstMatch(fileName);
+  if (match != null) {
+    return match.group(1) ?? fileName;
+  }
+  return fileName; // Return the original name if no match
+}
+
+Future<void> extractZipFile(String zipFilePath, String outputFolderPath) async {
+  try {
+    // Read the ZIP file
+    final zipFile = File(zipFilePath);
+    final bytes = await zipFile.readAsBytes();
+
+    // Decode the ZIP file
+    final archive = ZipDecoder().decodeBytes(bytes);
+
+    // Check if the archive contains a single root folder
+    final entries = archive.map((file) => file.name.split('/').first).toSet();
+    final hasSingleRootFolder = entries.length == 1 &&
+        archive.every((file) => file.name.startsWith('${entries.first}/'));
+
+    // Ensure the output folder exists
+    final outputFolder = Directory(outputFolderPath);
+    if (!outputFolder.existsSync()) {
+      outputFolder.createSync(recursive: true);
+    }
+
+    // Extract files
+    for (final file in archive) {
+      final filePath = hasSingleRootFolder
+          ? '$outputFolderPath/${file.name.substring(entries.first.length + 1)}'
+          : '$outputFolderPath/${file.name}';
+
+      if (file.isFile) {
+        final outputFile = File(filePath);
+        await outputFile.create(recursive: true);
+        await outputFile.writeAsBytes(file.content as List<int>);
+      } else if (file.isDirectory) {
+        Directory(filePath).createSync(recursive: true);
+      }
+    }
+
+    Logger().i('Extraction completed: $outputFolderPath');
+  } catch (e) {
+    Logger().e('Error extracting ZIP file: $e');
+  }
 }

@@ -1,16 +1,25 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
+import 'package:blender_next/components/bn_confirmation_dialog.dart';
 import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/data/local_db_access_layer.dart';
 import 'package:blender_next/services/downloader_service.dart';
 import 'package:blender_next/services/settings_service.dart';
+import 'package:blender_next/utils/blender_scripts.dart';
 import 'package:blender_next/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as md;
 import 'package:html/parser.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:process_run/process_run.dart';
+
+import 'system_process_service.dart';
 
 class ExntesionsService {
   static final ExntesionsService _singleton = ExntesionsService._internal();
@@ -27,6 +36,8 @@ class ExntesionsService {
   int currentPage = 5;
 
   Map<String, dynamic> extensionsDownloadQueue = <String, dynamic>{};
+
+  Map<String, BnexProcess?> runningBlender = {};
 
   Future<ExntesionsService> initializeData() async {
     getExtensions();
@@ -272,6 +283,12 @@ class ExntesionsService {
       final extDetailInfo =
           details.querySelectorAll(".ext-detail-info .dl-row");
 
+      final version = downloadUrl
+          ?.split("blender_version_min=")
+          .lastOrNull
+          ?.split("-")
+          .firstOrNull;
+
       return BnextExtensionVersion(
         ext: ext.id!,
         version: details
@@ -284,11 +301,9 @@ class ExntesionsService {
             "",
         releaseNotes: mdDescription,
         downloadUrl: downloadUrl,
-        blenderMinVersion: downloadUrl
-            ?.split("blender_version_min=")
-            .lastOrNull
-            ?.split("-")
-            .firstOrNull,
+        blenderMinVersion: version,
+        blenderMinVersionint:
+            int.tryParse((version ?? "0").substring(0, 3).split(".").join()),
         metaData: jsonEncode({
           "downloads": extDetailInfo
               .elementAtOrNull(1)
@@ -377,6 +392,8 @@ class ExntesionsService {
     return BnextExtensionVersion(
       ext: ext.id!,
       version: ext.version ?? "",
+      blenderMinVersionint: int.tryParse(
+          (ext.blenderMinVersion ?? "0").substring(0, 3).split(".").join()),
       blenderMinVersion: ext.blenderMinVersion,
       downloadUrl: "/${ext.downloadUrl?.split(".org/").lastOrNull}",
       releaseNotes: ext.mdDescriptio,
@@ -418,6 +435,448 @@ class ExntesionsService {
         instalationPath: const Value(''),
       ),
     );
+  }
+
+  Future addExtensionsToBlender(
+    BlenderVersion blender,
+    List<Map<BnextExtension, BnextExtensionVersion>> extensionsWithVesions,
+    List<Map<BnextExtension, BnextExtensionVersion>> extensionsToUninstall, {
+    required BuildContext context,
+    required Function(String title, String message) onError,
+    required Function(String title, String message) onInfo,
+    required Function(String title, String message) onSuccess,
+    required Function onDone,
+  }) async {
+    Logger().i("Start Adding extensions to blender");
+
+    if (runningBlender[blender.sha] != null) {
+      onError("Process already running",
+          "There is already a process running on this blender version. Please, try again later.");
+      return;
+    }
+
+    List<int> notInstalledIds = [];
+    List<BnextExtensionVersion> installedExtensions = [];
+
+    for (var element in extensionsWithVesions.map((e) => e.values.first)) {
+      final result = await db.database
+          .getExtensionVersionByExtensionIdAndVersion(
+              element.ext, element.version);
+      if (result.first.instalationPath == null ||
+          result.first.instalationPath!.isEmpty) {
+        notInstalledIds.add(element.id!);
+      } else {
+        installedExtensions.add(result.first);
+      }
+    }
+
+    final notInstalledExtensions = extensionsWithVesions
+        .where((e) => notInstalledIds.contains(e.values.first.id))
+        .toList();
+
+    if (notInstalledExtensions.isNotEmpty || extensionsToUninstall.isNotEmpty) {
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            clipBehavior: Clip.antiAlias,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 700,
+                maxWidth: 800,
+              ),
+              child: ConfimationDialog(
+                title: "Extensions Changes!",
+                message: "",
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: (extensionsToUninstall.isNotEmpty) ? 300 : 400,
+                  ),
+                  child: md.Column(
+                    children: [
+                      if (notInstalledExtensions.isNotEmpty)
+                        Expanded(
+                          child: md.Column(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                    "The following extensions needs to be downloaded before installation:"),
+                              ),
+                              Divider(
+                                height: 1,
+                                color: Theme.of(context).dividerColor,
+                              ),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: md.Column(
+                                    children: [
+                                      ...notInstalledExtensions.map((e) {
+                                        final ext = e.keys.first;
+                                        final extVersion = e.values.first;
+                                        return ListTile(
+                                          leading: Image.network(
+                                              ext.icon ?? ext.cover!),
+                                          title: Text(ext.name!),
+                                          subtitle: Text(extVersion.version),
+                                          trailing: Text(ext.size ?? ""),
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if (extensionsToUninstall.isNotEmpty)
+                        Expanded(
+                          child: md.Column(
+                            children: [
+                              Divider(
+                                height: 1,
+                                color: Theme.of(context).dividerColor,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                    "The following extensions will be uninstalled from this blender:"),
+                              ),
+                              Divider(
+                                height: 1,
+                                color: Theme.of(context).dividerColor,
+                              ),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: md.Column(
+                                    children: [
+                                      ...extensionsToUninstall.map((e) {
+                                        final ext = e.keys.first;
+                                        final extVersion = e.values.first;
+                                        return ListTile(
+                                          leading: Image.network(
+                                              ext.icon ?? ext.cover!),
+                                          title: Text(ext.name!),
+                                          subtitle: Text(extVersion.version),
+                                          trailing: Text(ext.size ?? ""),
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Divider(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ],
+                  ),
+                ),
+                onConfirm: () async {
+                  if (extensionsToUninstall.isNotEmpty) {
+                    await uninstallExtensions(
+                      extensionsToUninstall,
+                      context,
+                      silent: true,
+                    );
+                  }
+
+                  downloadAndInstallExtension(
+                    notInstalledExtensions,
+                    // ignore: use_build_context_synchronously
+                    context: context,
+                    onError: onError,
+                    onInfo: onInfo,
+                    onSuccess: onSuccess,
+                    onDone: (toBeInstalled) {
+                      installExtensions(
+                        blender: blender,
+                        [...toBeInstalled, ...installedExtensions],
+                        onError: onError,
+                        onInfo: onInfo,
+                        onSuccess: onSuccess,
+                        onDone: onDone,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      );
+      Logger().i(
+          "THE FOLLOWING EXTENSIONS ARE NOT INSTALLED: ${notInstalledExtensions.map((e) => e.keys.first.name).toList()}");
+    } else {
+      installExtensions(
+        blender: blender,
+        installedExtensions,
+        onError: onError,
+        onInfo: onInfo,
+        onSuccess: onSuccess,
+        onDone: onDone,
+      );
+    }
+
+    Logger().i("End Adding extensions to blender");
+  }
+
+  Future downloadAndInstallExtension(
+    List<Map<BnextExtension, BnextExtensionVersion>> extensionsVersion, {
+    required BuildContext context,
+    required Function(String title, String message) onError,
+    required Function(String title, String message) onInfo,
+    required Function(
+      String title,
+      String message,
+    ) onSuccess,
+    required Function(List<BnextExtensionVersion> toBeInstalled) onDone,
+  }) async {
+    onInfo("Downloading (${extensionsVersion.length}) extensions",
+        "We will let you know when the download is done");
+
+    int fails = 0;
+
+    final List<BnextExtensionVersion> toBeInstalled = [];
+
+    for (var item in extensionsVersion) {
+      await downloadExtention(
+        item.keys.first,
+        item.values.first,
+        onDone: (file) async {
+          if (file == null || !(await file.exists())) {
+            fails += 1;
+            onError(
+                "Error", "Error downloading ${item.keys.first.name} extension");
+          } else {
+            final extv =
+                item.values.first.copyWith(instalationPath: Value(file.path));
+            toBeInstalled.add(extv);
+            onSuccess("Success",
+                "Finished downloading ${item.keys.first.name} extension");
+          }
+        },
+      );
+    }
+
+    if (fails > 0) {
+      onError("Error",
+          "Error downloading $fails of ${extensionsVersion.length} extensions");
+    } else {
+      onInfo("Donwload finished",
+          "Finished downloading ${extensionsVersion.length} extensions");
+    }
+    onDone(toBeInstalled);
+  }
+
+  Future uninstallExtensions(
+      List<Map<BnextExtension, BnextExtensionVersion>> extensionsToUninstall,
+      BuildContext context,
+      {bool silent = true}) async {
+    removeExtensions() async {
+      for (var element in extensionsToUninstall) {
+        final result = await db.database
+            .getBlenderInstalledExtensionId(element.keys.first.extId!);
+
+        if (result.isNotEmpty) {
+          final dir = Directory(result.first.instalationFolderPath);
+          dir.exists().then((val) {
+            if (val) {
+              dir.delete(recursive: true);
+              db.database.deleteBlenderInstalledExtensionsByExtensionId(
+                  [result.first.extId]);
+            }
+          });
+        }
+      }
+    }
+
+    if (!silent) {
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            clipBehavior: Clip.antiAlias,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 600,
+                maxWidth: 800,
+              ),
+              child: ConfimationDialog(
+                title: "Extensions uninstallation.",
+                message: "The following extensions will be removed:",
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 300,
+                  ),
+                  child: md.Column(
+                    children: [
+                      Divider(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: md.Column(
+                            children: [
+                              ...extensionsToUninstall.map((e) {
+                                final ext = e.keys.first;
+                                final extVersion = e.values.first;
+                                return ListTile(
+                                  leading:
+                                      Image.network(ext.icon ?? ext.cover!),
+                                  title: Text(ext.name!),
+                                  subtitle: Text(extVersion.version),
+                                  trailing: Text(ext.size ?? ""),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Divider(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ],
+                  ),
+                ),
+                onConfirm: () {
+                  removeExtensions();
+                },
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      await removeExtensions();
+    }
+  }
+
+  Future installExtensions(
+    List<BnextExtensionVersion> extensionsToInstall, {
+    required Function(String title, String message) onError,
+    required Function(String title, String message) onInfo,
+    required Function(String title, String message) onSuccess,
+    required BlenderVersion blender,
+    required Function onDone,
+  }) async {
+    try {
+      for (var extensionVersion in extensionsToInstall) {
+        final ext = await db.database.getExtensionById(extensionVersion.ext);
+
+        final splitedPath = extensionVersion.instalationPath!.split(".zip");
+        splitedPath.removeLast();
+        final folderPath = splitedPath.join(".zip");
+
+        final blenderManifestFile = await extractSingleFile(
+            extensionVersion.instalationPath!,
+            "blender_manifest.toml",
+            "$folderPath\\blender_manifest.toml");
+
+        final extensionFile = File(extensionVersion.instalationPath!);
+        final directory = await getApplicationSupportDirectory();
+
+        final fileName = extractFileNameFromExtension(
+            extensionFile.path.split("\\").last.split("/").last);
+        final roamigPath = "${directory.path.split("Roaming").first}Roaming";
+
+        String finalFolder = "";
+
+        final blenderService =
+            BnexProcess(blender: blender, shell: Shell(), args: [
+          "--background",
+          "--python",
+          BlenderPythonFiles().enableExtensions,
+          "--",
+          fileName,
+        ]);
+
+        if (blenderManifestFile == null ||
+            !(await blenderManifestFile.exists())) {
+          finalFolder =
+              "$roamigPath\\Blender Foundation\\Blender\\${blender.version.substring(0, 3)}\\scripts\\addons\\$fileName";
+          final dir = Directory(finalFolder);
+          if (await dir.exists()) {
+            Logger().w("Deleting existing extension on: $finalFolder");
+            await dir.delete(recursive: true);
+          }
+          await extractZipFile(extensionVersion.instalationPath!, finalFolder);
+          blenderService.args.add(BlenderAddonTypes.addon);
+          await blenderService.runInProcessBackground();
+        } else {
+          finalFolder =
+              "$roamigPath\\Blender Foundation\\Blender\\${blender.version.substring(0, 3)}\\extensions\\blender_org\\$fileName";
+          final dir = Directory(finalFolder);
+          if (await dir.exists()) {
+            Logger().w("Deleting existing extension on: $finalFolder");
+            await dir.delete(recursive: true);
+          }
+
+          await extractZipFile(extensionVersion.instalationPath!, finalFolder);
+          blenderService.args.add(BlenderAddonTypes.extensions);
+          await blenderService.runInProcessBackground();
+        }
+
+        db.database.insertBlenderInstalledExtensions(
+          [
+            BnextBlenderInstalledExtension(
+              blenderVersionNumber: blender.version,
+              extVersionNumber: extensionVersion.version,
+              extId: ext.first.extId!,
+              instalationFolderPath: finalFolder,
+            )
+          ],
+          blender.version,
+        );
+      }
+
+      onInfo("Installation done.", "Extension installation finished.");
+      onDone();
+    } catch (e) {
+      Logger().e(e);
+    }
+
+    runningBlender[blender.sha]?.process?.kill();
+    runningBlender[blender.sha] = null;
+  }
+
+  Future<File?> extractSingleFile(
+    String zipPath,
+    String fileName,
+    String outputPath,
+  ) async {
+    // Read the ZIP file
+    final bytes = File(zipPath).readAsBytesSync();
+
+    // Decode the ZIP file
+    final archive = ZipDecoder().decodeBytes(bytes);
+
+    // Find the file in the archive
+    for (final file in archive) {
+      if (file.name.endsWith(fileName)) {
+        // Extract the file content
+        final extractedFile = File(outputPath)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(file.content as List<int>);
+        return extractedFile;
+      }
+    }
+    return null;
   }
 }
 
