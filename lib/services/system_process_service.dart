@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:blender_next/data/database/database.dart';
+import 'package:logger/logger.dart';
 import 'package:process_run/process_run.dart';
 
 class BnexProcess {
@@ -15,7 +16,14 @@ class BnexProcess {
         return ([], []);
       }
       final result = await shell!.run(
-          "${blender!.installationPath!.split("/").join('\\')}\\blender.exe ${args.join(" ")}");
+          "${blender!.installationPath!.split("/").join('\\')}\\blender.exe ${args.join(" ")}"
+              .split(":;")
+              .join(":")
+              .split(";;")
+              .join(";"));
+
+      Logger().i(result.map((res) => res.stdout).toList());
+      Logger().e(result.map((res) => res.stderr).toList());
 
       return (
         result.map((res) => res.stdout).toList(),
@@ -36,6 +44,9 @@ class BnexProcess {
         args,
         runInShell: true,
       );
+
+      Logger().i(result.stdout);
+      Logger().e(result.stdout);
 
       return ([result.stdout], [result.stderr]);
     } catch (e) {

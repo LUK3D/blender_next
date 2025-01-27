@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class BlenderStript {
-  List<String> scripts = ['import bpy;'];
+  List<String> scripts = ['import bpy'];
 
   BlenderStript addScript(String script) {
     scripts.add(script);
@@ -13,13 +13,19 @@ class BlenderStript {
 
   /// Save the file in the given path
   /// @param absFileName the absolute path of the file without the extension
-  static String saveBlenderFile(String absFileName) {
+  static String saveBlenderFile(String absFileName, {String? template}) {
     return 'bpy.ops.wm.save_as_mainfile(filepath=r\'$absFileName.blend\')';
+  }
+
+  /// Save the file in the given path
+  /// @param absFileName the absolute path of the file without the extension
+  static String newFileFromtemplate(String template) {
+    return 'bpy.ops.wm.read_homefile(app_template=\'$template\')';
   }
 
   @override
   toString() {
-    return scripts.join(' ');
+    return scripts.join('; ').split(":;").join(":").split(";;").join(";");
   }
 }
 
@@ -35,6 +41,19 @@ class BlenderEngines {
 class BlenderAddonTypes {
   static String extensions = "extension";
   static String addon = "addon";
+}
+
+enum BlenderProjectFactoryTemplate {
+  animation2D("2D_Animation"),
+  sculpting("Sculpting"),
+  vFX("VFX"),
+  videoEditing("Video_Editing"),
+  texturePaint("Texture_Paint"),
+  general("General");
+
+  final String val;
+
+  const BlenderProjectFactoryTemplate(this.val);
 }
 
 Future<String> getRenderBlenderFileScript({
@@ -63,7 +82,14 @@ Future<String> getRenderBlenderFileScript({
       .join(samples.toString())
       .replaceAll(RegExp(r'\r?\n'), ';');
 
-  return val.split("\n").join("; ").replaceAll("\n;", '');
+  return val
+      .split("\n")
+      .join("; ")
+      .replaceAll("\n;", '')
+      .split(":;")
+      .join(":")
+      .split(";;")
+      .join(";");
 }
 
 class BlenderPythonFiles {

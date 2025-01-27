@@ -69,5 +69,8 @@
     "exitApp": "Sair da aplicação",
     "hide": "Ocultar",
     "minimize": "Minimizar",
-    "minimizeToSystemtry": "Minimizar para a bandeja do sistema"
+    "minimizeToSystemtry": "Minimizar para a bandeja do sistema",
+    "sculpting": "Escultura",
+    "vfx": "VFX",
+    "videoEditing": "Video Editing"
 }

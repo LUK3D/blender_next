@@ -334,6 +334,8 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                   ),
                                 ),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "${AppLocalizations.of(context)!.size}: ${project.size ?? ''}",
@@ -341,7 +343,35 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                         fontSize: 12,
                                       ),
                                     ),
+                                    if (project.template != null)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 4,
+                                          vertical: 1,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                        ),
+                                        child: Text(
+                                          (project.template ?? "")
+                                              .split("_")
+                                              .join(" "),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onPrimaryContainer,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
                                   ],
+                                ),
+                                const SizedBox(
+                                  height: 4,
                                 ),
                                 Row(
                                   mainAxisAlignment:
@@ -373,19 +403,19 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                                         vertical: 1,
                                       ),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Theme.of(context).primaryColor,
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Theme.of(context).canvasColor,
                                       ),
                                       child: Text(
                                         "Blender ${project.blenderVersion}",
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .onPrimaryContainer,
+                                              .onSurface,
                                           fontSize: 12,
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 )
                               ],

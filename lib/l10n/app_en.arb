@@ -72,5 +72,8 @@
     "exitApp": "Exit application",
     "hide": "Hide",
     "minimize": "Minimize",
-    "minimizeToSystemtry": "Minimize to system tray"
+    "minimizeToSystemtry": "Minimize to system tray",
+    "sculpting": "Sculpting",
+    "vfx": "VFX",
+    "videoEditing": "Edição de Video"
 }

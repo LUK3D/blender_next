@@ -82,15 +82,18 @@ class ProjectManagerService {
     );
     final process = runningBlender['${blender.version}-${project.id}'];
     await Directory('${project.dir}/${project.name}').create(recursive: true);
-    final bscript = useBlenderScript().addScript(
-      BlenderStript.saveBlenderFile(
-        '${project.dir}/${project.name}/${project.name}',
-      ),
-    );
+    final bscript = useBlenderScript()
+        .addScript(BlenderStript.newFileFromtemplate(
+            project.template ?? BlenderProjectFactoryTemplate.general.val))
+        .addScript(
+          BlenderStript.saveBlenderFile(
+            '${project.dir}/${project.name}/${project.name}',
+          ),
+        );
     final args = saveNewFile
         ? '--python-expr "${bscript.toString()}"'
         : ' "${project.dir}/${project.name}/${project.name}.blend"';
-    await process!.shell!.run('${blender.installationPath}/blender.exe $args');
+    await process!.shell!.run('${blender.installationPath}/blender.exe  $args');
     await generateThumbnail(project);
   }
 

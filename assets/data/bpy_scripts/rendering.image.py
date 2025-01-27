@@ -1,4 +1,5 @@
 import bpy
+bpy.context.scene.camera = [obj for obj in bpy.context.scene.objects if obj.type == "CAMERA"][0] if any(obj.type == "CAMERA" for obj in bpy.context.scene.objects) else (bpy.data.objects.new("Camera", bpy.data.cameras.new("Camera")) if not (camera := bpy.data.objects.new("Camera", bpy.data.cameras.new("Camera"))) else camera)
 frame_to_render = {{frame}}
 bpy.context.scene.frame_set(frame_to_render)
 bpy.context.scene.render.engine = "{{engine}}"

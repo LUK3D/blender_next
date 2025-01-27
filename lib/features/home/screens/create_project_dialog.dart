@@ -6,6 +6,7 @@ import 'package:blender_next/data/database/database.dart';
 import 'package:blender_next/services/blender_service.dart';
 import 'package:blender_next/services/project_manager_service.dart';
 import 'package:blender_next/services/settings_service.dart';
+import 'package:blender_next/utils/blender_scripts.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
@@ -218,7 +219,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                                       e.label,
                                       style: TextStyle(
                                         color:
-                                            project.value["template"] == e.label
+                                            project.value["template"] == e.value
                                                 ? Theme.of(context)
                                                     .colorScheme
                                                     .primary
@@ -229,11 +230,11 @@ class _CreateProjectDialogState extends State<CreateProjectDialog>
                                     onClick: () {
                                       project.value = {
                                         ...project.value,
-                                        "template": e.label,
+                                        "template": e.value,
                                       };
                                     },
                                     selected:
-                                        project.value["template"] == e.label,
+                                        project.value["template"] == e.value,
                                   ))
                               .toList()),
                     )),
@@ -402,40 +403,36 @@ List<BlenderNextTemplate> getTemplates(BuildContext context) {
     BlenderNextTemplate(
       label: AppLocalizations.of(context)!.modeling,
       icon: LucideIcons.box,
+      value: BlenderProjectFactoryTemplate.general.val,
     ),
     BlenderNextTemplate(
-      label: "3D - ${AppLocalizations.of(context)!.animation}",
-      icon: LucideIcons.file_video,
+      label: AppLocalizations.of(context)!.sculpting,
+      icon: LucideIcons.donut,
+      value: BlenderProjectFactoryTemplate.sculpting.val,
     ),
     BlenderNextTemplate(
       label: "2D - ${AppLocalizations.of(context)!.animation}",
       icon: LucideIcons.file_video,
+      value: BlenderProjectFactoryTemplate.animation2D.val,
     ),
     BlenderNextTemplate(
-      label: AppLocalizations.of(context)!.riging,
-      icon: LucideIcons.bone,
+      label: AppLocalizations.of(context)!.vfx,
+      icon: LucideIcons.party_popper,
+      value: BlenderProjectFactoryTemplate.vFX.val,
     ),
     BlenderNextTemplate(
-      label: AppLocalizations.of(context)!.texturing,
-      icon: LucideIcons.brush,
+      label: AppLocalizations.of(context)!.videoEditing,
+      icon: LucideIcons.clapperboard,
+      value: BlenderProjectFactoryTemplate.videoEditing.val,
     ),
   ];
-
-  // List<Map<String, dynamic>> testData = [
-  //   {"id": 1, "name": "Cycles Render Engine"},
-  //   {"id": 2, "name": "FBX format"},
-  //   {"id": 3, "name": "glTF"},
-  //   {"id": 4, "name": "Node wrangler"},
-  //   {"id": 5, "name": "OCD"},
-  //   {"id": 6, "name": "Rigify"},
-  //   {"id": 7, "name": "Scalable Vector Graphic"},
-  //   {"id": 8, "name": "UV Layout"}
-  // ];
 }
 
 class BlenderNextTemplate {
   final String label;
   final IconData icon;
+  final String value;
 
-  BlenderNextTemplate({required this.label, required this.icon});
+  BlenderNextTemplate(
+      {required this.value, required this.label, required this.icon});
 }
